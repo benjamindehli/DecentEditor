@@ -7,23 +7,26 @@ import "@/app/globals.css";
 
 // Theme
 import theme from "@/theme";
+import { DecentSamplerContextProvider } from "@/store/DecentSamplerContext";
 
 export const metadata = {
-  title: "DecentEditor",
-  description: "Editor for DecentSampler preset files",
+    title: "DecentEditor",
+    description: "Editor for DecentSampler preset files"
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
+    return (
+        <html lang="en">
             <body>
                 <AppRouterCacheProvider options={{ enableCssLayer: true }}>
                     <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        {children}
+                        <DecentSamplerContextProvider>
+                            <CssBaseline />
+                            {children}
+                        </DecentSamplerContextProvider>
                     </ThemeProvider>
                 </AppRouterCacheProvider>
             </body>
         </html>
-  );
+    );
 }
