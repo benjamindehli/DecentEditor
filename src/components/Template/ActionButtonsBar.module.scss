@@ -1,0 +1,30 @@
+.actionButtonsBar {
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    button {
+        display: inline-flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        justify-content: center;
+        position: relative;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        background-color: transparent;
+        outline: 0px;
+        border: 0px;
+        margin: 0px;
+        border-radius: 0px;
+        cursor: pointer;
+        user-select: none;
+        vertical-align: middle;
+        appearance: none;
+        text-decoration: none;
+        padding: 0px 12px;
+        min-width: 80px;
+        max-width: 168px;
+        flex-direction: column;
+        flex: 1 1 0%;
+    }
+}
