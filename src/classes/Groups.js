@@ -32,4 +32,13 @@ export class Groups {
             group: this.groups?.map((group) => group.toJson())
         };
     }
+    newGroup() {
+        this.groups.push(new Group({}));
+    }
+    addGroup(group) {
+        this.groups.push(group);
+    }
+    removeGroup(groupId) {
+        this.groups = this.groups.filter((group) => group.id !== groupId);
+    }
 }
