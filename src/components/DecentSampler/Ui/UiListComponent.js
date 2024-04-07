@@ -5,9 +5,10 @@ export function UiListComponent({ uiList }) {
     function handleUpdateUiList(updatedUiItem) {
         console.log({ updatedUiItem });
     }
+    
     return (
         <Fragment>
-            {uiList?.length &&
+            {!!uiList?.length &&
                 uiList.map((uiItem) => (
                     <UiItemComponent uiItem={uiItem} onUpdateGroupsItem={handleUpdateUiList} key={uiItem.id} />
                 ))}
