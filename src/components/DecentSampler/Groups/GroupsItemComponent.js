@@ -6,47 +6,47 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 
 // Dependencies
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 
 // Classes
 import { Group } from "@/classes/Group";
 
 // Components
 import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Topic } from "@mui/icons-material";
+import { ChevronRight, CreateNewFolder, ExpandMore, Folder, Topic } from "@mui/icons-material";
 import { SettingsMenu } from "../../Template/SettingsMenu";
 import { GroupListComponent } from "../Group/GroupListComponent";
+import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { IconAdd } from "@/components/Template/Icons/IconAdd";
 
 export function GroupsItemComponent({ groupsItem }) {
+    const decentSamplerContext = useContext(DecentSamplerContext);
+
     const [isExpanded, setIsExpanded] = useState(false);
 
     const settingsMenuItems = (
         <Fragment>
             <MenuItem
                 onClick={() => {
-                    console.log("Edit clicked");
+                    groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
+                    decentSamplerContext.updateGroupsItem(groupsItem);
                 }}
                 disableRipple
             >
-                <EditIcon />
-                Edit
-            </MenuItem>
-            <MenuItem disableRipple>
-                <FileCopyIcon />
-                Duplicate
+                <IconAdd>
+                    <Folder />
+                </IconAdd>
+                Add group
             </MenuItem>
             <MenuItem
                 onClick={() => {
-                    handleAddGroup();
+                    groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
+                    decentSamplerContext.updateGroupsItem(groupsItem);
                 }}
                 disableRipple
             >
-                <ArchiveIcon />
-                Add group
-            </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
+                <Folder />
+                Add multiple groups
             </MenuItem>
         </Fragment>
     );
