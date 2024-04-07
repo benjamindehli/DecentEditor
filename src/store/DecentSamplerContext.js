@@ -6,18 +6,24 @@ import { createContext, useState } from "react";
 const DecentSamplerContext = createContext({
     groupsList: [],
     uiList: [],
+    updateUiList: function (uiList) {},
     updateGroupsList: function (groupsList) {},
     updateGroupsItem: function (groupsItem) {},
     updateGroupList: function (groupList) {},
+    addGroupItem: function (groupItem) {},
+    removeGroupItem: function (groupItem) {},
     updateGroupItem: function (groupItem) {},
     updateSampleList: function (sampleList) {},
     updateSampleItem: function (sampleItem) {}
 });
 
 export function DecentSamplerContextProvider({ children }) {
-    const [activeNotification, setActiveNotification] = useState();
-    const [groupsList, setGroupsList] = useState([]);
     const [uiList, setUiList] = useState([]);
+    const [groupsList, setGroupsList] = useState([]);
+
+    function updateUiListHandler(updatedUiList) {
+        setUiList([...updatedUiList]);
+    }
 
     function updateGroupsListHandler(updatedGroupsList) {
         setGroupsList([...updatedGroupsList]);
@@ -34,6 +40,19 @@ export function DecentSamplerContextProvider({ children }) {
         const groupsItemCopy = groupsList[0];
         groupsItemCopy.groups = updatedGroupList;
         updateGroupsItemHandler(groupsItemCopy);
+    }
+
+    function addGroupItemHandler(newGroupItem) {
+        const groupListCopy = groupsList[0].groups;
+        groupListCopy.push(newGroupItem);
+        updateGroupListHandler(groupListCopy);
+    }
+
+    function removeGroupItemHandler(groupItem) {
+        const groupListCopy = groupsList[0].groups;
+        const groupIndex = groupListCopy.findIndex((group) => group.id === groupItem.id);
+        groupListCopy.splice(groupIndex, 1);
+        updateGroupListHandler(groupListCopy);
     }
 
     function updateGroupItemHandler(updatedGroupItem) {
@@ -60,12 +79,17 @@ export function DecentSamplerContextProvider({ children }) {
         updateGroupListHandler(groupListCopy);
     }
 
+    
+
     const context = {
-        groupsList: groupsList,
         uiList: uiList,
+        groupsList: groupsList,
+        updateUiList: updateUiListHandler,
         updateGroupsList: updateGroupsListHandler,
         updateGroupsItem: updateGroupsItemHandler,
         updateGroupList: updateGroupListHandler,
+        addGroupItem: addGroupItemHandler,
+        removeGroupItem: removeGroupItemHandler,
         updateGroupItem: updateGroupItemHandler,
         updateSampleList: updateSampleListHandler,
         updateSampleItem: updateSampleItemHandler
