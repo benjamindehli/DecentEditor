@@ -5,18 +5,13 @@ import { Fragment, useContext, useState } from "react";
 import {
     AudioFile,
     ChevronRight,
-    ExpandLess,
     ExpandMore,
     Folder,
     FolderOff,
-    StarBorder,
     Tune
 } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import {
     Chip,
     Collapse,
@@ -37,8 +32,6 @@ import { SampleListComponent } from "../Sample/SampleListComponent";
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { IconRemove } from "@/components/Template/Icons/IconRemove";
-import { IconDuplicate } from "@/components/Template/Icons/IconDuplicate";
-import { Group } from "@/classes/Group";
 
 export function GroupItemComponent({ groupItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -54,7 +47,9 @@ export function GroupItemComponent({ groupItem }) {
         setEditGroupItemDialogIsOpen(false);
     };
 
-    const secondaryText = `${groupItem?.samples?.length || 0} samples, ${groupItem?.effects?.length || 0} effects`;
+    const secondaryText = `${groupItem?.samples?.length || 0} ${
+        groupItem?.samples?.length === 1 ? "sample" : "samples"
+    }, ${groupItem?.effects?.length || 0} ${groupItem?.effects?.length === 1 ? "effect" : "effects"}`;
 
     const tagList = !!groupItem?.tags?.length ? (
         <Fragment>
@@ -70,6 +65,10 @@ export function GroupItemComponent({ groupItem }) {
         <Fragment>
             <MenuItem
                 onClick={() => {
+                    if (!groupItem?.samples?.length && !groupItem?.effects?.length) {
+                        // Automatically expand the group if it's the first sample or effect
+                        setIsExpanded(true);
+                    }
                     groupItem.newSample();
                     decentSamplerContext.updateGroupItem(groupItem);
                 }}
@@ -82,6 +81,10 @@ export function GroupItemComponent({ groupItem }) {
             </MenuItem>
             <MenuItem
                 onClick={() => {
+                    if (!groupItem?.samples?.length && !groupItem?.effects?.length) {
+                        // Automatically expand the group if it's the first sample or effect
+                        setIsExpanded(true);
+                    }
                     groupItem.newSample();
                     decentSamplerContext.updateGroupItem(groupItem);
                 }}

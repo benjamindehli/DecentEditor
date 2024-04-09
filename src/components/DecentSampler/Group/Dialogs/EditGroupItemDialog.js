@@ -15,17 +15,19 @@ import {
     Switch,
     Tab,
     Tabs,
-    TextField
 } from "@mui/material";
 import { Folder, FolderOff, SettingsInputSvideo, ShowChart, Tune } from "@mui/icons-material";
 
 // Components
 import { TabPanel } from "@/components/Template/TabPanel";
 
+// Template
+import { DefaultTextField } from "@/components/Template/DefaultTextField";
+
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
-// Clases
+// Classes
 import { Group } from "@/classes/Group";
 
 export function EditGroupItemDialog({ groupItem, open, onClose }) {
@@ -54,7 +56,6 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
-                    console.log({ formJson });
                     const stateProps = {
                         enabled: enabled ? "1" : "0"
                     };
@@ -76,7 +77,7 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                     centered
                     variant="fullWidth"
                     onChange={handleTabChange}
-                    aria-label="icon label tabs example"
+                    aria-label="tabs for editing group item"
                 >
                     <Tab icon={<Tune />} label="GENERAL" {...a11yProps(0)} />
                     <Tab icon={<ShowChart />} label="ENVELOPE" {...a11yProps(1)} />
@@ -96,79 +97,101 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                                 color="primary"
                             />
                         }
-                        label="enabled"
+                        label="Enabled"
                     />
-                    <FormHelperText component="span" sx={{display: "block"}}>
+                    <FormHelperText component="span" sx={{ display: "block" }}>
                         Whether or not this group is enabled. Possible values: true, false. Default: true
                     </FormHelperText>
-                    <TextField
+                    <DefaultTextField
                         autoFocus
                         required
-                        margin="dense"
-                        id="tags"
                         name="tags"
-                        label="Tags"
-                        type="text"
                         defaultValue={groupItem.tags}
-                        fullWidth
                         helperText="A comma-separated list of tags. Example: tags=”rt,mic1”. These are useful when controlling volumes using tags. See Appendix D."
-                        variant="standard"
                     />
-                    <TextField
-                        margin="dense"
-                        id="volume"
+                    <DefaultTextField
                         name="volume"
-                        label="Volume"
                         type="number"
-                        inputProps={{ step: "0.1", min: "0", max: "10" }}
+                        inputProps={{ step: "0.1", min: "0" }}
                         defaultValue={groupItem.volume}
-                        fullWidth
                         helperText="The volume of the group. Value can be in linear 0.0-1.0 or in decibels. If it’s in decibels you must append dB after the value (example: “3dB”). Default: 1.0"
-                        variant="standard"
                     />
-                    <TextField
-                        margin="dense"
-                        id="ampVelTrack"
+                    <DefaultTextField
                         name="ampVelTrack"
-                        label="ampVelTrack"
+                        label="Amplitude velocity tracking"
                         type="number"
                         inputProps={{ step: "0.01", min: "0", max: "1" }}
                         defaultValue={groupItem.ampVelTrack}
-                        fullWidth
                         helperText="The degree to which the velocity of the incoming notes affects the volume of the samples in this group. 0 = not at all. 1 = volume is completely determined by incoming velocity. When the value is 1, a velocity of 127 (max velocity) yields a gain 1.0 (full volume), a velocity of 63 (half velocity) yields a gain of 0.5 (half volume), etc."
-                        variant="standard"
                     />
-                    <TextField
-                        margin="dense"
-                        id="groupTuning"
+                    <DefaultTextField
                         name="groupTuning"
-                        label="groupTuning"
+                        label="Group tuning"
                         type="number"
                         inputProps={{ step: "0.5" }}
                         defaultValue={groupItem.groupTuning}
-                        fullWidth
                         helperText="Group-level pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up and -1 would a half-step down. Default: 0"
-                        variant="standard"
                     />
                 </TabPanel>
                 <TabPanel value={selectedTab} index={1}>
-                    <TextField
-                        margin="dense"
-                        id="attack"
+                    <DefaultTextField
                         name="attack"
-                        label="Attack"
                         type="number"
                         defaultValue={groupItem.attack}
-                        fullWidth
                         helperText="The attack time in seconds of the amplitude envelope of this zone. This can also be set at the <sample> or <groups> levels."
-                        variant="standard"
                     />
+                    <DefaultTextField
+                        name="decay"
+                        type="number"
+                        defaultValue={groupItem.decay}
+                        helperText="The decay time in seconds of the amplitude envelope of this zone. This can also be set at the <sample> or <groups> levels."
+                    />
+                    <DefaultTextField
+                        name="sustain"
+                        type="number"
+                        inputProps={{ step: "0.01", min: "0", max: "1" }}
+                        defaultValue={groupItem.sustain}
+                        helperText="The sustain level (0.0 - 1.0) of the amplitude envelope of this zone. This can also be set at the <sample> or <groups> levels."
+                    />
+                    <DefaultTextField
+                        name="release"
+                        type="number"
+                        defaultValue={groupItem.release}
+                        helperText="The release time in seconds of the amplitude envelope of this zone. This can also be set at the <sample> or <groups> levels."
+                    />
+                    <DefaultTextField
+                        name="attackCurve"
+                        label="Attack curve"
+                        type="number"
+                        inputProps={{ step: "1", min: "-100", max: "100" }}
+                        defaultValue={groupItem.attackCurve}
+                        helperText="A value from -100 to 100 that determines the shape of the attack curve. This can also be set at the <sample> or <groups> levels."
+                    />
+                    <DefaultTextField
+                        name="decayCurve"
+                        label="Decay curve"
+                        type="number"
+                        inputProps={{ step: "1", min: "-100", max: "100" }}
+                        defaultValue={groupItem.decayCurve}
+                        helperText="A value from -100 to 100 that determines the shape of the decay curve. This can also be set at the <sample> or <groups> levels."
+                    />
+                    <DefaultTextField
+                        name="releaseCurve"
+                        label="Release curve"
+                        type="number"
+                        inputProps={{ step: "1", min: "-100", max: "100" }}
+                        defaultValue={groupItem.decayCurve}
+                        helperText="A value from -100 to 100 that determines the shape of the release curves. This can also be set at the <sample> or <groups> levels."
+                    />
+                </TabPanel>
+                <TabPanel value={selectedTab} index={2}>
+                    
                 </TabPanel>
             </DialogContent>
 
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button type="submit">Subscribe</Button>
+                <Button type="submit">Save</Button>
             </DialogActions>
         </Dialog>
     );

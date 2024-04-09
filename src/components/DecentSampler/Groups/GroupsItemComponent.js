@@ -24,10 +24,16 @@ export function GroupsItemComponent({ groupsItem }) {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const secondaryText = `${groupsItem?.groups?.length || 0} ${groupsItem?.groups?.length === 1 ? "group" : "groups"}`;
+
     const settingsMenuItems = (
         <Fragment>
             <MenuItem
                 onClick={() => {
+                    if (!groupsItem.groups.length) {
+                        // Automatically expand the group if it's the first group
+                        setIsExpanded(true);
+                    }
                     groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
                     decentSamplerContext.updateGroupsItem(groupsItem);
                 }}
@@ -40,6 +46,10 @@ export function GroupsItemComponent({ groupsItem }) {
             </MenuItem>
             <MenuItem
                 onClick={() => {
+                    if (!groupsItem.groups.length) {
+                        // Automatically expand the group if it's the first group
+                        setIsExpanded(true);
+                    }
                     groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
                     decentSamplerContext.updateGroupsItem(groupsItem);
                 }}
@@ -50,6 +60,10 @@ export function GroupsItemComponent({ groupsItem }) {
             </MenuItem>
         </Fragment>
     );
+
+    function hasChildren() {
+        return !!groupsItem?.groups?.length;
+    }
 
     return (
         <Fragment>
@@ -69,12 +83,12 @@ export function GroupsItemComponent({ groupsItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton onClick={() => setIsExpanded(!isExpanded)}>
-                    {isExpanded ? <ExpandMore /> : <ChevronRight />}
+                <ListItemButton sx={{ pl: hasChildren() ? 2 : 5 }} onClick={() => setIsExpanded(!isExpanded)}>
+                    {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon>
                         <Topic />
                     </ListItemIcon>
-                    <ListItemText primary={`Groups (${groupsItem?.groups?.length || 0})`} />
+                    <ListItemText primary="Groups" secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
