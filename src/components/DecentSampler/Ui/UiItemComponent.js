@@ -1,23 +1,27 @@
+// Dependencies
+import { Fragment, useState } from "react";
+
+// Material UI
 import { Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { Accordion } from "../../Template/Accordion";
-import { ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
-import { SettingsMenu } from "../../Template/SettingsMenu";
+import { ChevronRight, ExpandMore } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { Fragment, useState } from "react";
+
+// Components
 import { KeyboardListComponent } from "../Keyboard/KeyboardListComponent";
 
-export function UiItemComponent({ uiItem, onUpdateUiItem }) {
+// Template
+import { SettingsMenu } from "../../Template/SettingsMenu";
+
+export function UiItemComponent({ uiItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    /*}
-    function handleUpdateUiItem(updatedUiItem) {
-        onUpdateUiItem(updatedUiItem);
+    function hasChildren() {
+        return !!uiItem?.keyboard?.length || !!uiItem?.tab?.length;
     }
-*/
 
     const settingsMenuItems = (
         <Fragment>
@@ -52,8 +56,8 @@ export function UiItemComponent({ uiItem, onUpdateUiItem }) {
                 disablePadding
                 secondaryAction={<SettingsMenu elementItem={uiItem} menuItems={settingsMenuItems}></SettingsMenu>}
             >
-                <ListItemButton onClick={() => setIsExpanded(!isExpanded)}>
-                    {isExpanded ? <ExpandLess /> : <ChevronRight />}
+                <ListItemButton sx={{ pl: hasChildren() ? 2 : 5 }} onClick={() => setIsExpanded(!isExpanded)}>
+                    {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
@@ -62,7 +66,7 @@ export function UiItemComponent({ uiItem, onUpdateUiItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                <KeyboardListComponent keyboardList={uiItem?.keyboard} />
+                    <KeyboardListComponent keyboardList={uiItem?.keyboard} />
                 </List>
             </Collapse>
         </Fragment>
