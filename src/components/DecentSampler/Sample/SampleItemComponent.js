@@ -1,14 +1,20 @@
-// Components
-import { AudioFile, ExpandLess, ExpandMore, RestorePage, Settings } from "@mui/icons-material";
-import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+// Dependencies
 import { Fragment, useState } from "react";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+
+// Material UI
+import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { SettingsMenu } from "../../Template/SettingsMenu";
+import { AudioFile, RestorePage } from "@mui/icons-material";
+
+// Components
 import { EditSampleItemDialog } from "./Dialogs/EditSampleItemDialog";
+
+// Template
+import { SettingsMenu } from "../../Template/SettingsMenu";
+import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
 export function SampleItemComponent({ sampleItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -48,7 +54,13 @@ export function SampleItemComponent({ sampleItem }) {
         </Fragment>
     );
 
-    const secondaryText = `${sampleItem.path}`;
+    function getFileNameFromPath(path) {
+        return path?.split("/").pop();
+    }
+
+    const secondaryText = sampleItem.path && (
+        <ListItemSecondaryText>{getFileNameFromPath(sampleItem.path)}</ListItemSecondaryText>
+    );
 
     return (
         <Fragment>
@@ -68,7 +80,7 @@ export function SampleItemComponent({ sampleItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton sx={{ pl: 8 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton sx={{ pl: 9 }} onClick={() => setIsExpanded(!isExpanded)}>
                     <ListItemIcon>{sampleItem.loopEnabled === "1" ? <RestorePage /> : <AudioFile />}</ListItemIcon>
                     <ListItemText primary="Sample" secondary={secondaryText} />
                 </ListItemButton>
