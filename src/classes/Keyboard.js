@@ -3,9 +3,9 @@ import { Color } from "./Color";
 
 export class Keyboard {
     constructor(props, color) {
-        this.id = props.id || uuidv4();
+        this.id = props?.id || uuidv4();
         this.elementType = "keyboard";
-        this.colors = props.colors || color?.map((color) => new Color({ ...color.$ }, color.color));
+        this.colors = props?.colors || color?.map((color) => new Color({ ...color.$ }, color.color));
     }
     toJson() {
         return {

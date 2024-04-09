@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import { Keyboard } from "./Keyboard";
+import { Tab } from "./Tab";
 
 export class Ui {
-    constructor(props, keyboardList, tab) {
+    constructor(props, keyboardList, tabList) {
         this.id = uuidv4();
         this.elementType = "ui";
         this.coverArt = props?.coverArt;
@@ -13,6 +14,7 @@ export class Ui {
         this.layoutMode = props?.layoutMode;
         this.bgMode = props?.bgMode;
         this.keyboard = keyboardList?.map((keyboard) => new Keyboard({ ...keyboard.$ }, keyboard.color));
+        this.tab = tabList?.map((tab) => new Tab({ ...tab.$ }, tab.button, tab.control, tab.image,  tab.label, tab["labeled-knob"], tab.menu,));
     }
     toJson() {
         return {
