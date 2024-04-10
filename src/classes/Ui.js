@@ -1,4 +1,7 @@
+// Dependencies
 import { v4 as uuidv4 } from "uuid";
+
+// Classes
 import { Keyboard } from "./Keyboard";
 import { Tab } from "./Tab";
 
@@ -14,7 +17,9 @@ export class Ui {
         this.layoutMode = props?.layoutMode;
         this.bgMode = props?.bgMode;
         this.keyboard = keyboardList?.map((keyboard) => new Keyboard({ ...keyboard.$ }, keyboard.color));
-        this.tab = tabList?.map((tab) => new Tab({ ...tab.$ }, tab.button, tab.control, tab.image,  tab.label, tab["labeled-knob"], tab.menu,));
+        this.tab = tabList?.map(
+            (tab) => new Tab({ ...tab.$ }, tab.button, tab.control, tab.image, tab.label, tab["labeled-knob"], tab.menu)
+        );
     }
     toJson() {
         return {
@@ -25,9 +30,10 @@ export class Ui {
                 width: this.width,
                 height: this.height,
                 layoutMode: this.layoutMode,
-                bgMode: this.bgMode,
+                bgMode: this.bgMode
             },
-            keyboard: this.keyboard?.map((keyboard) => keyboard.toJson())
+            keyboard: this.keyboard?.map((keyboard) => keyboard.toJson()),
+            tab: this.tab?.map((tab) => tab.toJson())
         };
     }
 }
