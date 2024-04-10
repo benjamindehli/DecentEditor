@@ -16,7 +16,7 @@ import {
     Tab,
     Tabs,
 } from "@mui/material";
-import { Folder, FolderOff, SettingsInputSvideo, ShowChart, Tune } from "@mui/icons-material";
+import { Folder, FolderOff, MiscellaneousServices, SettingsInputSvideo, ShowChart, Tune } from "@mui/icons-material";
 
 // Components
 import { TabPanel } from "@/components/Template/TabPanel";
@@ -79,7 +79,7 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                     onChange={handleTabChange}
                     aria-label="tabs for editing group item"
                 >
-                    <Tab icon={<Tune />} label="GENERAL" {...a11yProps(0)} />
+                    <Tab icon={<MiscellaneousServices />} label="GENERAL" {...a11yProps(0)} />
                     <Tab icon={<ShowChart />} label="ENVELOPE" {...a11yProps(1)} />
                     <Tab icon={<SettingsInputSvideo />} label="MIDI" {...a11yProps(1)} />
                 </Tabs>
