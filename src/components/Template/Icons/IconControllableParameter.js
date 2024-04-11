@@ -1,11 +1,15 @@
 // Material UI
 import {
+    CheckBox,
     DisplaySettings,
     Folder,
+    LocalOffer,
     MusicNote,
     Piano,
     Settings,
     SettingsInputSvideo,
+    Speed,
+    ToggleOff,
     ToggleOn,
     Tune,
     VolumeUp
@@ -29,6 +33,8 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
                 return <DisplaySettings {...iconProps} />;
             case "midi":
                 return <SettingsInputSvideo {...iconProps} />;
+            case "tag":
+                return <LocalOffer {...iconProps} />;
             default:
                 return "";
         }
@@ -50,8 +56,13 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
                 return <ToggleOn {...iconProps} />;
             case "note_sequence":
                 return <QueueMusicIcon {...iconProps} />;
+            case "note":
             case "note_binding":
                 return <MusicNote {...iconProps} />;
+            case "velocity_binding":
+                return <Speed {...iconProps} />;
+            case "button_state_binding":
+                return <CheckBox {...iconProps} />;
             default:
                 return "";
         }

@@ -5,7 +5,7 @@ import match from "autosuggest-highlight/match";
 
 // Material UI
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -22,16 +22,36 @@ export default function BindingParameterSelect() {
         return new ControllableParameter(controllableParameter);
     });
 
+    const filterOptions = createFilterOptions({
+        stringify: (option) => `${option.description} ${option.secondaryDescription} ${option.level} ${option.type}`
+    });
+
     return (
         <Autocomplete
             id="controllable-parameters-select"
             fullWidth
             options={controllableParameters}
+            filterOptions={filterOptions}
             getOptionLabel={(option) => option.description}
+            onChange={(event, newValue) => {
+                console.log(newValue);
+              }}
             renderInput={(params) => <TextField {...params} label="Controllable parameter" margin="normal" />}
             renderOption={(props, option, { inputValue }) => {
-                const matches = match(option.description, inputValue, { insideWords: true });
-                const parts = parse(option.description, matches);
+                const descriptionMatches = match(option.description, inputValue, { insideWords: true });
+                const descriptionParts = parse(option.description, descriptionMatches);
+
+                const secondaryDescriptionMatches =
+                    option.secondaryDescription &&
+                    match(option.secondaryDescription, inputValue, { insideWords: true });
+                const secondaryDescriptionParts =
+                    option.secondaryDescription && parse(option.secondaryDescription, secondaryDescriptionMatches);
+
+                const levelMatches = match(option.level, inputValue, { insideWords: true });
+                const levelParts = parse(option.level, levelMatches);
+
+                const typeMatches = match(option.type, inputValue, { insideWords: true });
+                const typeParts = parse(option.type, typeMatches);
 
                 return (
                     <li {...props} key={option.id}>
@@ -40,7 +60,7 @@ export default function BindingParameterSelect() {
                                 <IconControllableParameter parameterType={option.type} parameterLevel={option.level} />
                             </Grid>
                             <Grid item sx={{ width: "calc(100% - 64px)", wordWrap: "break-word" }}>
-                                {parts.map((part, index) => (
+                                {descriptionParts.map((part, index) => (
                                     <Box
                                         key={index}
                                         component="span"
@@ -49,15 +69,53 @@ export default function BindingParameterSelect() {
                                         {part.text}
                                     </Box>
                                 ))}
+                                {option.secondaryDescription && (
+                                    <Typography variant="body2" color="text.primary">
+                                        {secondaryDescriptionParts.map((part, index) => (
+                                            <Box
+                                                key={index}
+                                                component="span"
+                                                sx={{ fontWeight: part.highlight ? "bold" : "regular" }}
+                                            >
+                                                {part.text}
+                                            </Box>
+                                        ))}
+                                    </Typography>
+                                )}
+
                                 <Grid container>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                         <Typography variant="body2" color="text.secondary">
-                                            Level: {option.level}
+                                            Level:{" "}
+                                            {levelParts.map((part, index) => (
+                                                <Box
+                                                    key={index}
+                                                    component="span"
+                                                    sx={{
+                                                        fontWeight: part.highlight ? "bold" : "regular",
+                                                        color: part.highlight ? "text.primary" : "text.secondary"
+                                                    }}
+                                                >
+                                                    {part.text}
+                                                </Box>
+                                            ))}
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={8}>
                                         <Typography variant="body2" color="text.secondary">
-                                            Type: {option.type}
+                                            Type:{" "}
+                                            {typeParts.map((part, index) => (
+                                                <Box
+                                                    key={index}
+                                                    component="span"
+                                                    sx={{
+                                                        fontWeight: part.highlight ? "bold" : "regular",
+                                                        color: part.highlight ? "text.primary" : "text.secondary"
+                                                    }}
+                                                >
+                                                    {part.text}
+                                                </Box>
+                                            ))}
                                         </Typography>
                                     </Grid>
                                 </Grid>
