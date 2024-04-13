@@ -69,7 +69,7 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
     }
 
     return (
-        <Stack direction="row" spacing={0}>
+        <Stack direction="row" spacing={0} sx={{minWidth: "56px"}}>
             {renderParameterLevelIcon(parameterLevel)}
             {renderParameterTypeIcon(parameterType)}
         </Stack>
