@@ -1,24 +1,22 @@
-import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-
 // Dependencies
 import { Fragment, useContext, useState } from "react";
 
-// Classes
-import { Group } from "@/classes/Group";
+// Material UI
+import MenuItem from "@mui/material/MenuItem";
+import EditIcon from "@mui/icons-material/Edit";
+import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { ChevronRight, ExpandMore, Folder, Piano } from "@mui/icons-material";
 
 // Components
-import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, CreateNewFolder, ExpandMore, Folder, Piano, Topic } from "@mui/icons-material";
-import { SettingsMenu } from "../../Template/SettingsMenu";
-import { GroupListComponent } from "../Group/GroupListComponent";
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ColorListComponent } from "../Color/ColorListComponent";
+
+// Template
+import { SettingsMenu } from "@/components/Template/SettingsMenu";
+import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+
+// Store
+import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function KeyboardItemComponent({ keyboardItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -56,6 +54,13 @@ export function KeyboardItemComponent({ keyboardItem }) {
         return !!keyboardItem?.colors?.length;
     }
 
+    const primaryText = "Keyboard";
+    const secondaryText = (
+        <ListItemSecondaryText>
+            {keyboardItem?.colors?.length || 0} {keyboardItem?.colors?.length === 1 ? "color" : "colors"}
+        </ListItemSecondaryText>
+    );
+
     return (
         <Fragment>
             <ListItem
@@ -76,10 +81,10 @@ export function KeyboardItemComponent({ keyboardItem }) {
             >
                 <ListItemButton sx={{ pl: hasChildren() ? 4 : 7 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {isExpanded ? <ExpandMore /> : <ChevronRight />}
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "32px" }}>
                         <Piano />
                     </ListItemIcon>
-                    <ListItemText primary="Keyboard" />
+                    <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>

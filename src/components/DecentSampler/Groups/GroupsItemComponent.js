@@ -1,30 +1,27 @@
-import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-
 // Dependencies
 import { Fragment, useContext, useState } from "react";
 
-// Classes
-import { Group } from "@/classes/Group";
+// Material UI
+import MenuItem from "@mui/material/MenuItem";
+import EditIcon from "@mui/icons-material/Edit";
+import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
 
 // Components
-import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, CreateNewFolder, ExpandMore, Folder, Topic } from "@mui/icons-material";
-import { SettingsMenu } from "../../Template/SettingsMenu";
 import { GroupListComponent } from "../Group/GroupListComponent";
-import DecentSamplerContext from "@/store/DecentSamplerContext";
+
+// Template
+import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+
+// Store
+import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function GroupsItemComponent({ groupsItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
-
-    const secondaryText = `${groupsItem?.groups?.length || 0} ${groupsItem?.groups?.length === 1 ? "group" : "groups"}`;
 
     const settingsMenuItems = (
         <Fragment>
@@ -65,6 +62,13 @@ export function GroupsItemComponent({ groupsItem }) {
         return !!groupsItem?.groups?.length;
     }
 
+    const primaryText = "Groups";
+    const secondaryText = (
+        <ListItemSecondaryText>
+            {groupsItem?.groups?.length || 0} {groupsItem?.groups?.length === 1 ? "group" : "groups"}
+        </ListItemSecondaryText>
+    );
+
     return (
         <Fragment>
             <ListItem
@@ -85,10 +89,10 @@ export function GroupsItemComponent({ groupsItem }) {
             >
                 <ListItemButton sx={{ pl: hasChildren() ? 2 : 5 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "32px" }}>
                         <Topic />
                     </ListItemIcon>
-                    <ListItemText primary="Groups" secondary={secondaryText} />
+                    <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>

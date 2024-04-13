@@ -12,9 +12,11 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 
 // Components
 import { KeyboardListComponent } from "../Keyboard/KeyboardListComponent";
+import { TabListComponent } from "../Tab/TabListComponent";
 
 // Template
-import { SettingsMenu } from "../../Template/SettingsMenu";
+import { SettingsMenu } from "@/components/Template/SettingsMenu";
+import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
 export function UiItemComponent({ uiItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -49,6 +51,13 @@ export function UiItemComponent({ uiItem }) {
         </Fragment>
     );
 
+    const primaryText = "UI";
+    const secondaryText = uiItem?.width && uiItem?.height && (
+        <ListItemSecondaryText>
+            {uiItem?.width}px x {uiItem?.height}px
+        </ListItemSecondaryText>
+    );
+
     return (
         <Fragment>
             {/* <UiItemSettingsComponent uiItem={uiItem} onUpdateUiItem={handleUpdateUiItem} />*/}
@@ -58,15 +67,18 @@ export function UiItemComponent({ uiItem }) {
             >
                 <ListItemButton sx={{ pl: hasChildren() ? 2 : 5 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "32px" }}>
                         <InboxIcon />
                     </ListItemIcon>
-                    <ListItemText primary={`UI (${uiItem?.groups?.length || 0})`} />
+                    <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
                     <KeyboardListComponent keyboardList={uiItem?.keyboard} />
+                </List>
+                <List dense component="div" disablePadding>
+                    <TabListComponent tabList={uiItem?.tab} />
                 </List>
             </Collapse>
         </Fragment>
