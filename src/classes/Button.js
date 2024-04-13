@@ -18,7 +18,7 @@ export class Button {
         this.hoverImage = props?.hoverImage;
         this.clickImage = props?.clickImage;
         this.visible = props?.visible;
-        this.state = stateList?.map((state) => new State({ ...state.$ }, state.binding));
+        this.states = stateList?.map((state) => new State({ ...state.$ }, state.binding));
     }
     toJson() {
         return {
@@ -34,7 +34,7 @@ export class Button {
                 clickImage: this.clickImage,
                 visible: this.visible
             },
-            state: this.state?.map((state) => state.toJson())
+            state: this.states?.map((state) => state.toJson())
         };
     }
 }

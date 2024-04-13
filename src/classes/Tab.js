@@ -9,7 +9,7 @@ export class Tab {
         this.id = props?.id || uuidv4();
         this.elementType = "tab";
         this.name = props?.name;
-        this.button = buttonList?.map((button) => new Button({ ...button.$ }, button.state));
+        this.buttons = buttonList?.map((button) => new Button({ ...button.$ }, button.state));
     }
     toJson() {
         const jsonObject = {
@@ -17,8 +17,8 @@ export class Tab {
                 name: this.name
             }
         };
-        if (this.button?.length) {
-            jsonObject.button = this.button?.map((button) => button.toJson());
+        if (this.buttons?.length) {
+            jsonObject.button = this.buttons?.map((button) => button.toJson());
         }
         return jsonObject;
         

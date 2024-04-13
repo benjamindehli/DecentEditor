@@ -12,7 +12,7 @@ export class State {
         this.mainImage = props?.mainImage;
         this.hoverImage = props?.hoverImage;
         this.clickImage = props?.clickImage;
-        this.binding = bindingList?.map((binding) => new Binding({ ...binding.$ }));
+        this.bindings = bindingList?.map((binding) => new Binding({ ...binding.$ }));
     }
     toJson() {
         return {
@@ -23,7 +23,7 @@ export class State {
                 clickImage: this.clickImage,
                 visible: this.visible
             },
-            binding: this.binding?.map((binding) => binding.toJson())
+            binding: this.bindings?.map((binding) => binding.toJson())
         };
     }
 }
