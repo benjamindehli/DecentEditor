@@ -961,6 +961,221 @@ const controllableParametersData = [
         },
         modulatable: false,
         additionalParams: ["controlIndex"]
+    },
+    {
+        description: "UI Control Minimum Value",
+        type: "control",
+        level: "ui",
+        parameter: "MIN_VALUE",
+        inputProps: {
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["controlIndex"]
+    },
+    {
+        description: "UI Control Maximum Value",
+        type: "control",
+        level: "ui",
+        parameter: "MAX_VALUE",
+        inputProps: {
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["controlIndex"]
+    },
+    {
+        description: "UI Control Value Type",
+        type: "control",
+        level: "ui",
+        parameter: "VALUE_TYPE",
+        inputProps: {
+            type: "select",
+            options: [
+                { label: "Float", value: "float" },
+                { label: "Integer", value: "integer" },
+                { label: "Musical time", value: "musical_time" }
+            ]
+        },
+        modulatable: false,
+        additionalParams: ["controlIndex"]
+    },
+    {
+        description: "UI Image Control Path",
+        type: "control",
+        level: "ui",
+        parameter: "PATH",
+        inputProps: {
+            type: "text"
+        },
+        modulatable: false,
+        additionalParams: ["controlIndex"]
+    },
+    {
+        description: "UI Keyboard Coloring Enable / Disable",
+        type: "keyboard_color",
+        level: "ui",
+        parameter: "ENABLED",
+        inputProps: {
+            type: "boolean"
+        },
+        modulatable: false,
+        additionalParams: ["colorIndex"]
+    },
+    {
+        description: "Modulator Amount (Depth)",
+        type: "modulator",
+        level: "instrument",
+        parameter: "MOD_AMOUNT",
+        inputProps: {
+            minValue: "0",
+            maxValue: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "LFO Modulator Rate (or Frequency)",
+        type: "modulator",
+        level: "instrument",
+        parameter: "FREQUENCY",
+        inputProps: {
+            minValue: "0",
+            maxValue: "22000",
+            step: "1",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Envelope Modulator",
+        secondaryDescription: "Attack",
+        type: "modulator",
+        level: "instrument",
+        parameter: "ENV_ATTACK",
+        inputProps: {
+            minValue: "0",
+            maxValue: "10",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Envelope Modulator",
+        secondaryDescription: "Attack Curve Shape",
+        type: "modulator",
+        level: "instrument",
+        parameter: "ENV_ATTACK_CURVE",
+        inputProps: {
+            minValue: "-100",
+            maxValue: "100",
+            step: "1",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Envelope Modulator",
+        secondaryDescription: "Decay",
+        type: "modulator",
+        level: "instrument",
+        parameter: "ENV_DECAY",
+        inputProps: {
+            minValue: "0",
+            maxValue: "25",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Envelope Modulator",
+        secondaryDescription: "Decay Curve Shape",
+        type: "modulator",
+        level: "instrument",
+        parameter: "ENV_DECAY_CURVE",
+        inputProps: {
+            minValue: "-100",
+            maxValue: "100",
+            step: "1",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Envelope Modulator",
+        secondaryDescription: "Sustain",
+        type: "modulator",
+        level: "instrument",
+        parameter: "ENV_SUSTAIN",
+        inputProps: {
+            minValue: "0",
+            maxValue: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Envelope Modulator",
+        secondaryDescription: "Release",
+        type: "modulator",
+        level: "instrument",
+        parameter: "ENV_RELEASE",
+        inputProps: {
+            minValue: "0",
+            maxValue: "25",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Envelope Modulator",
+        secondaryDescription: "Release Curve Shape",
+        type: "modulator",
+        level: "instrument",
+        parameter: "ENV_RELEASE_CURVE",
+        inputProps: {
+            minValue: "-100",
+            maxValue: "100",
+            step: "1",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["modulatorIndex"]
+    },
+    {
+        description: "Sequence Rate",
+        type: "note_sequence",
+        level: "instrument",
+        parameter: "RATE",
+        inputProps: {
+            minValue: "0.01",
+            maxValue: "100",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: false,
+        additionalParams: ["seqIndex"]
+    },
+    {
+        description: "All Notes Off",
+        type: "general",
+        level: "instrument",
+        parameter: "ALL_NOTES_OFF"
     }
 ];
 
