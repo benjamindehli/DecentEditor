@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Group } from "./Group";
 
 export class Groups {
-    constructor(props, groups) {
+    constructor(props, groupList) {
         this.id = props?.id || uuidv4();
         this.elementType = "groups";
         this.attack = props?.attack;
@@ -15,7 +15,7 @@ export class Groups {
         this.volume = props?.volume;
         this.ampVelTrack = props?.ampVelTrack;
         this.groups =
-            props?.groups || groups?.map((group) => new Group({ ...group.$ }, groups.effects, group.sample)) || [];
+            props?.groups || groupList?.map((group) => new Group({ ...group.$ }, group.effects, group.sample)) || [];
     }
     toJson() {
         return {

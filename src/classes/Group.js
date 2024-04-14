@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import { Sample } from "./Sample";
+import { Effects } from "./Effects";
 
 export class Group {
-    constructor(props, effects, sample) {
+    constructor(props, effectsList, sampleList) {
         this.id = props?.id || uuidv4();
         this.elementType = "group";
         this.enabled = props?.enabled;
@@ -19,14 +20,17 @@ export class Group {
         this.attackCurve = props?.attackCurve;
         this.decayCurve = props?.decayCurve;
         this.releaseCurve = props?.releaseCurve;
-        this.effects = [];
+        this.effects =
+            props?.effects ||
+            effectsList?.map((effects) => new Effects({ ...effects.$, groupId: this.id }, effects.effect)) ||
+            [];
         this.samples =
             props?.samples ||
-            sample?.map((sample) => new Sample({ ...sample.$, groupId: this.id }, sample.sample)) ||
+            sampleList?.map((sample) => new Sample({ ...sample.$, groupId: this.id }, sample.sample)) ||
             [];
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 enabled: this.enabled,
                 tags: this.tags,
@@ -42,9 +46,15 @@ export class Group {
                 attackCurve: this.attackCurve,
                 decayCurve: this.decayCurve,
                 releaseCurve: this.releaseCurve
-            },
-            sample: this.samples?.map((sample) => sample.toJson())
+            }
         };
+        if (this.samples?.length) {
+            jsonObject.sample = this.samples?.map((sample) => sample.toJson());
+        }
+        if (this.effects?.length) {
+            jsonObject.effects = this.effects?.map((effects) => effects.toJson());
+        }
+        return jsonObject;
     }
     newSample() {
         this.samples.push(new Sample());
