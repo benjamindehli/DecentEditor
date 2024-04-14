@@ -616,6 +616,17 @@ const controllableParametersData = [
         additionalParams: ["groupIndex"]
     },
     {
+        description: "Group Enabled / Disabled",
+        type: "general",
+        level: "group",
+        parameter: "ENABLED",
+        inputProps: {
+            type: "boolean"
+        },
+        modulatable: false,
+        additionalParams: ["groupIndex"]
+    },
+    {
         description: "Group Volume",
         type: "amp",
         level: "group",
