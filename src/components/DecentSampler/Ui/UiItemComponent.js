@@ -3,12 +3,11 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { ChevronRight, ExpandMore } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Web } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 
 // Components
 import { KeyboardListComponent } from "../Keyboard/KeyboardListComponent";
@@ -68,7 +67,7 @@ export function UiItemComponent({ uiItem }) {
                 <ListItemButton sx={{ pl: hasChildren() ? 2 : 5 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
-                        <InboxIcon />
+                        <Web />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

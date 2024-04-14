@@ -5,7 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
 import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Piano, Topic } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Folder, Piano, SmartButton, Topic } from "@mui/icons-material";
 
 // Components
 import { StateListComponent } from "@/components/DecentSampler/State/StateListComponent";
@@ -82,7 +82,7 @@ export function ButtonItemComponent({ buttonItem }) {
                 <ListItemButton sx={{ pl: hasChildren() ? 6 : 9 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
-                        <Piano />
+                        <SmartButton />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

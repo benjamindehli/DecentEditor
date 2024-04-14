@@ -21,6 +21,7 @@ import {
 // Components
 import { EditGroupItemDialog } from "./Dialogs/EditGroupItemDialog";
 import { SampleListComponent } from "../Sample/SampleListComponent";
+import { EffectsListComponent } from "../Effects/EffectsListComponent";
 
 // Template
 import { IconRemove } from "@/components/Template/Icons/IconRemove";
@@ -170,13 +171,7 @@ export function GroupItemComponent({ groupItem }) {
             {hasChildren() && (
                 <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader">
-                            Effects
-                        </ListSubheader>
-                        {!!groupItem?.effects?.length &&
-                            groupItem.effects.map((effect) => {
-                                return "Effect";
-                            })}
+                        <EffectsListComponent effectsList={groupItem?.effects} />
                     </List>
                     <List dense component="div" disablePadding>
                         <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader">

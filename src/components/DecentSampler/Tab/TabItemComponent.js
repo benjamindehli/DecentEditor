@@ -14,10 +14,11 @@ import {
     ListItemText,
     ListSubheader
 } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Piano } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Folder, Tab } from "@mui/icons-material";
 
 // Components
 import { ButtonListComponent } from "../Button/ButtonListComponent";
+import { MenuListComponent } from "../Menu/MenuListComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
@@ -26,6 +27,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { ImageListComponent } from "../Image/ImageListComponent";
 
 export function TabItemComponent({ tabItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -116,17 +118,29 @@ export function TabItemComponent({ tabItem }) {
                 <ListItemButton sx={{ pl: hasChildren() ? 4 : 7 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
-                        <Piano />
+                        <Tab />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader">
+                    <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader-buttons">
                         Buttons
                     </ListSubheader>
                     <ButtonListComponent buttonList={tabItem?.buttons} />
+                </List>
+                <List dense component="div" disablePadding>
+                    <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader-images">
+                        Images
+                    </ListSubheader>
+                    <ImageListComponent imageList={tabItem?.images} />
+                </List>
+                <List dense component="div" disablePadding>
+                    <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader-menus">
+                        Menus
+                    </ListSubheader>
+                    <MenuListComponent menuList={tabItem?.menus} />
                 </List>
             </Collapse>
         </Fragment>

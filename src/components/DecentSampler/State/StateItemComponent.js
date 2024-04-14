@@ -5,7 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
 import { Chip, Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Piano } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Folder, ToggleOn } from "@mui/icons-material";
 
 // Components
 import { BindingListComponent } from "../Binding/BindingListComponent";
@@ -85,7 +85,7 @@ export function StateItemComponent({ stateItem }) {
                 <ListItemButton sx={{ pl: hasChildren() ? 8 : 11 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
-                        <Piano />
+                        <ToggleOn />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

@@ -28,8 +28,6 @@ export function SampleItemComponent({ sampleItem }) {
         setEditSampleItemDialogIsOpen(false);
     };
 
-    
-
     const settingsMenuItems = (
         <Fragment>
             <MenuItem onClick={() => console.log("Edit clicked")} disableRipple>
@@ -85,7 +83,9 @@ export function SampleItemComponent({ sampleItem }) {
                 }
             >
                 <ListItemButton sx={{ pl: 9 }} onClick={() => setIsExpanded(!isExpanded)}>
-                    <ListItemIcon>{sampleItem.loopEnabled === "1" ? <RestorePage /> : <AudioFile />}</ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                        {sampleItem.loopEnabled === "1" ? <RestorePage /> : <AudioFile />}
+                    </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
