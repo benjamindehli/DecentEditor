@@ -1,4 +1,6 @@
+// Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 export class Sample {
     constructor(props) {
@@ -43,9 +45,11 @@ export class Sample {
         this.silencingMode = props?.silencingMode;
         this.previousNotes = props?.previousNotes;
         this.legatoInterval = props?.legatoInterval;
+        this.glideTime = props?.glideTime;
+        this.glideMode = props?.glideMode;
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 path: this.path,
                 rootNote: this.rootNote,
@@ -84,8 +88,55 @@ export class Sample {
                 silencedByTags: this.silencedByTags,
                 silencingMode: this.silencingMode,
                 previousNotes: this.previousNotes,
-                legatoInterval: this.legatoInterval
+                legatoInterval: this.legatoInterval,
+                glideTime: this.glideTime,
+                glideMode: this.glideMode
             }
         };
+        return jsonObject;
     }
 }
+
+Sample.propTypes = {
+    groupId: PropTypes.string,
+    path: PropTypes.string.isRequired,
+    rootNote: PropTypes.number.isRequired,
+    loNote: PropTypes.number,
+    hiNote: PropTypes.number,
+    loVel: PropTypes.number,
+    hiVel: PropTypes.number,
+    loCCN: PropTypes.number,
+    hiCCN: PropTypes.number,
+    start: PropTypes.number,
+    end: PropTypes.number,
+    tuning: PropTypes.number,
+    volume: PropTypes.number,
+    pan: PropTypes.number,
+    pitchKeyTrack: PropTypes.number,
+    trigger: PropTypes.oneOf(["attack", "release", "first", "legato"]),
+    tags: PropTypes.string,
+    onLoCCN: PropTypes.number,
+    onHiCCN: PropTypes.number,
+    playbackMode: PropTypes.oneOf(["memory", "disk_streaming", "auto"]),
+    loopStart: PropTypes.number,
+    loopEnd: PropTypes.number,
+    loopCrossfade: PropTypes.number,
+    loopCrossfadeMode: PropTypes.oneOf(["linear", "equal_power"]),
+    loopEnabled: PropTypes.bool,
+    attack: PropTypes.number,
+    decay: PropTypes.number,
+    sustain: PropTypes.number,
+    release: PropTypes.number,
+    attackCurve: PropTypes.number,
+    decayCurve: PropTypes.number,
+    releaseCurve: PropTypes.number,
+    seqMode: PropTypes.oneOf(["random", "true_random", "round_robin", "allways"]),
+    seqLength: PropTypes.number,
+    seqPosition: PropTypes.number,
+    silencedByTags: PropTypes.string,
+    silencingMode: PropTypes.oneOf(["fast", "normal"]),
+    previousNotes: PropTypes.string,
+    legatoInterval: PropTypes.number,
+    glideTime: PropTypes.number,
+    glideMode: PropTypes.oneOf(["always", "legato", "off"])
+};

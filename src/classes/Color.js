@@ -1,4 +1,6 @@
+// Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 export class Color {
     constructor(props) {
@@ -9,12 +11,20 @@ export class Color {
         this.color = props?.color;
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
-                hiNote: this.hiNote,
                 loNote: this.loNote,
+                hiNote: this.hiNote,
                 color: this.color
             }
         };
+        return jsonObject;
     }
 }
+
+Color.propTypes = {
+    id: PropTypes.string,
+    loNote: PropTypes.number,
+    hiNote: PropTypes.number,
+    color: PropTypes.string
+};

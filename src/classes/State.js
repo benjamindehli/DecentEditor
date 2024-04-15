@@ -1,5 +1,6 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 // Classes
 import { Binding } from "./Binding";
@@ -15,15 +16,28 @@ export class State {
         this.bindings = bindingList?.map((binding) => new Binding({ ...binding.$ }));
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 name: this.name,
                 mainImage: this.mainImage,
                 hoverImage: this.hoverImage,
                 clickImage: this.clickImage,
                 visible: this.visible
-            },
-            binding: this.bindings?.map((binding) => binding.toJson())
+            }
         };
+        if (this.bindings?.length) {
+            jsonObject.binding = this.bindings?.map((binding) => binding.toJson());
+        }
+        return jsonObject;
     }
 }
+
+State.propTypes = {
+    id: PropTypes.string,
+    name: PropTypes.string,
+    mainImage: PropTypes.string,
+    hoverImage: PropTypes.string,
+    clickImage: PropTypes.string,
+    visible: PropTypes.bool,
+    bindings: PropTypes.arrayOf(PropTypes.instanceOf(Binding))
+};

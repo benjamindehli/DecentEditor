@@ -1,5 +1,6 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 // Classes
 import { Option } from "./Option";
@@ -17,7 +18,7 @@ export class Menu {
         this.options = optionList?.map((option) => new Option({ ...option.$ }, option.binding));
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 x: this.x,
                 y: this.y,
@@ -25,8 +26,22 @@ export class Menu {
                 height: this.height,
                 value: this.value,
                 visible: this.visible
-            },
-            option: this.options?.map((option) => option.toJson())
+            }
         };
+        if (this.options?.length) {
+            jsonObject.option = this.options?.map((option) => option.toJson());
+        }
+        return jsonObject;
     }
 }
+
+Menu.propTypes = {
+    id: PropTypes.string,
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    value: PropTypes.number,
+    visible: PropTypes.bool,
+    options: PropTypes.arrayOf(PropTypes.instanceOf(Option))
+};

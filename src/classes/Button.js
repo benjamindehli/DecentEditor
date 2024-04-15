@@ -1,5 +1,6 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 // Classes
 import { State } from "./State";
@@ -21,7 +22,7 @@ export class Button {
         this.states = stateList?.map((state) => new State({ ...state.$ }, state.binding));
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 x: this.x,
                 y: this.y,
@@ -33,8 +34,26 @@ export class Button {
                 hoverImage: this.hoverImage,
                 clickImage: this.clickImage,
                 visible: this.visible
-            },
-            state: this.states?.map((state) => state.toJson())
+            }
         };
+        if (this.states?.length) {
+            jsonObject.state = this.states?.map((state) => state.toJson());
+        }
+        return jsonObject;
     }
 }
+
+Button.propTypes = {
+    id: PropTypes.string,
+    x: PropTypes.number,
+    y: PropTypes.number,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    value: PropTypes.string,
+    style: PropTypes.string,
+    mainImage: PropTypes.string,
+    hoverImage: PropTypes.string,
+    clickImage: PropTypes.string,
+    visible: PropTypes.bool,
+    states: PropTypes.arrayOf(PropTypes.instanceOf(State))
+};

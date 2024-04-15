@@ -1,4 +1,8 @@
+// Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
+
+// Classes
 import { Group } from "./Group";
 
 export class Groups {
@@ -14,11 +18,16 @@ export class Groups {
         this.releaseCurve = props?.releaseCurve;
         this.volume = props?.volume;
         this.ampVelTrack = props?.ampVelTrack;
+        this.globalTuning = props?.globalTuning;
+        this.glideTime = props?.glideTime;
+        this.glideMode = props?.glideMode;
+        this.seqMode = props?.seqMode;
+        this.seqLength = props?.seqLength;
         this.groups =
             props?.groups || groupList?.map((group) => new Group({ ...group.$ }, group.effects, group.sample)) || [];
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 attack: this.attack,
                 decay: this.decay,
@@ -28,10 +37,18 @@ export class Groups {
                 decayCurve: this.decayCurve,
                 releaseCurve: this.releaseCurve,
                 volume: this.volume,
-                ampVelTrack: this.ampVelTrack
-            },
-            group: this.groups?.map((group) => group.toJson())
+                ampVelTrack: this.ampVelTrack,
+                globalTuning: this.globalTuning,
+                glideTime: this.glideTime,
+                glideMode: this.glideMode,
+                seqMode: this.seqMode,
+                seqLength: this.seqLength
+            }
         };
+        if (this.groups?.length) {
+            jsonObject.group = this.groups?.map((group) => group.toJson());
+        }
+        return jsonObject;
     }
     newGroup() {
         this.groups.push(new Group());
@@ -43,3 +60,22 @@ export class Groups {
         this.groups = this.groups.filter((group) => group.id !== groupId);
     }
 }
+
+Groups.propTypes = {
+    id: PropTypes.string,
+    attack: PropTypes.number,
+    decay: PropTypes.number,
+    sustain: PropTypes.number,
+    release: PropTypes.number,
+    attackCurve: PropTypes.number,
+    decayCurve: PropTypes.number,
+    releaseCurve: PropTypes.number,
+    volume: PropTypes.number,
+    ampVelTrack: PropTypes.number,
+    globalTuning: PropTypes.number,
+    glideTime: PropTypes.number,
+    glideMode: PropTypes.oneOf(["always", "legato", "off"]),
+    seqMode: PropTypes.oneOf(["random", "true_random", "round_robin", "allways"]),
+    seqLength: PropTypes.number,
+    groups: PropTypes.arrayOf(PropTypes.instanceOf(Group))
+};

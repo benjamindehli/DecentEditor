@@ -1,5 +1,6 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 export class Image {
     constructor(props) {
@@ -14,7 +15,7 @@ export class Image {
         this.visible = props?.visible;
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 x: this.x,
                 y: this.y,
@@ -25,5 +26,18 @@ export class Image {
                 visible: this.visible
             }
         };
+
+        return jsonObject;
     }
 }
+
+Image.propTypes = {
+    id: PropTypes.string,
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    path: PropTypes.string.isRequired,
+    aspectRatioMode: PropTypes.oneOf(["preserve", "stretch"]).isRequired,
+    visible: PropTypes.bool
+};

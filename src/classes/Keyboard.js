@@ -1,4 +1,8 @@
+// Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
+
+// Classes
 import { Color } from "./Color";
 
 export class Keyboard {
@@ -8,9 +12,11 @@ export class Keyboard {
         this.colors = props?.colors || color?.map((color) => new Color({ ...color.$ }, color.color));
     }
     toJson() {
-        return {
-            color: this.colors?.map((color) => color.toJson())
-        };
+        const jsonObject = {};
+        if (this.colors?.length) {
+            jsonObject.color = this.colors?.map((color) => color.toJson());
+        }
+        return jsonObject;
     }
     newSample() {
         this.colors.push(new Color({}));
@@ -19,3 +25,8 @@ export class Keyboard {
         this.colors.push(color);
     }
 }
+
+Keyboard.propTypes = {
+    id: PropTypes.string,
+    colors: PropTypes.arrayOf(PropTypes.instanceOf(Color))
+};

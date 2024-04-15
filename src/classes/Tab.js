@@ -1,5 +1,6 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 // Classes
 import { Button } from "./Button";
@@ -33,3 +34,11 @@ export class Tab {
         return jsonObject;
     }
 }
+
+Tab.propTypes = {
+    id: PropTypes.string,
+    name: PropTypes.string,
+    buttons: PropTypes.arrayOf(PropTypes.instanceOf(Button)),
+    images: PropTypes.arrayOf(PropTypes.instanceOf(Image)),
+    menus: PropTypes.arrayOf(PropTypes.instanceOf(Menu))
+};
