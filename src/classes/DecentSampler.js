@@ -7,7 +7,7 @@ import { Groups } from "./Groups";
 import { Ui } from "./Ui";
 
 // Functions
-import { jsonToXml } from "@/functions/converters";
+import { createXmlDoc, jsonToXml } from "@/functions/converters";
 
 export class DecentSampler {
     constructor(props, childElements, elementType) {
@@ -38,7 +38,9 @@ export class DecentSampler {
         return jsonObject;
     }
     toXml() {
-        return jsonToXml(this.toJson());
+        const xmlBody = jsonToXml(this.toJson());
+        const xmlDoc = createXmlDoc(xmlBody);
+        return xmlDoc;
     }
 }
 
