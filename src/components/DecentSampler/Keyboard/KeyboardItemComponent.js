@@ -8,7 +8,7 @@ import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, Lis
 import { ChevronRight, ExpandMore, Folder, Piano } from "@mui/icons-material";
 
 // Components
-import { ColorListComponent } from "../Color/ColorListComponent";
+import { ColorItemComponent } from "../Color/ColorItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -17,7 +17,6 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { ColorItemComponent } from "../Color/ColorItemComponent";
 
 export function KeyboardItemComponent({ keyboardItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);

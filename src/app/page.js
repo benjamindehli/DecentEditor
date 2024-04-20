@@ -28,8 +28,6 @@ import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 // Components
 import { generateCssBgColors } from "@/functions/styles";
-import { GroupsListComponent } from "@/components/DecentSampler/Groups/GroupsListComponent";
-import { UiListComponent } from "@/components/DecentSampler/Ui/UiListComponent";
 
 // Stylesheets
 import style from "./page.module.scss";
