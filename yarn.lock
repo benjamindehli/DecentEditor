@@ -1461,6 +1461,7 @@ __metadata:
     react-dom: ^18
     sass: ^1.72.0
     uuid: ^9.0.1
+    xml-formatter: ^3.6.2
     xml2js: ^0.6.2
   languageName: unknown
   linkType: soft
@@ -4442,6 +4443,22 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 159da4805f7e84a3d003d8841557196034155008f817172d4e986bd591f74aa82aa7db55929a54222309e01079a65a92a9e6414da5a6aa4b01ee44a511ac3ee5
+  languageName: node
+  linkType: hard
+
+"xml-formatter@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "xml-formatter@npm:3.6.2"
+  dependencies:
+    xml-parser-xo: ^4.1.0
+  checksum: 6ca632b136d47f68b12be88e5543f859cdc754c9e1c1386c68b8c7803f9b894c8ec19f51bdcbfa957d782358aa19778b2ef46702f4120a78920661b683033290
+  languageName: node
+  linkType: hard
+
+"xml-parser-xo@npm:^4.1.0":
+  version: 4.1.1
+  resolution: "xml-parser-xo@npm:4.1.1"
+  checksum: f726f4416d501eb9b197a7a34178aeaee9ba9a53babf61e78265240f8a6f44bd099a15c76d2610a9519c9d1dcc812bb773ae8a00df39019f911f24e1ecff0cdf
   languageName: node
   linkType: hard
 
