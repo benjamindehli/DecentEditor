@@ -7,9 +7,12 @@ import { Sample } from "./Sample";
 import { Effects } from "./Effects";
 
 export class Group {
-    constructor(props, effectsList, sampleList) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "group";
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.enabled = props?.enabled;
         this.tags = props?.tags;
         this.silencingMode = props?.silencingMode;
@@ -29,14 +32,21 @@ export class Group {
         this.seqMode = props?.seqMode;
         this.seqLength = props?.seqLength;
         this.seqPosition = props?.seqPosition;
-        this.effects =
-            props?.effects ||
-            effectsList?.map((effects) => new Effects({ ...effects.$, groupId: this.id }, effects.effect)) ||
-            [];
-        this.samples =
-            props?.samples ||
-            sampleList?.map((sample) => new Sample({ ...sample.$, groupId: this.id }, sample.sample)) ||
-            [];
+        this.childElements =
+            props?.childElements ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "effects":
+                            return new Effects(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "sample":
+                            return new Sample(childElement.$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -62,11 +72,9 @@ export class Group {
                 seqPosition: this.seqPosition
             }
         };
-        if (this.samples?.length) {
-            jsonObject.sample = this.samples?.map((sample) => sample.toJson());
-        }
-        if (this.effects?.length) {
-            jsonObject.effects = this.effects?.map((effects) => effects.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -99,6 +107,5 @@ Group.propTypes = {
     seqMode: PropTypes.oneOf(["random", "true_random", "round_robin", "allways"]),
     seqLength: PropTypes.number,
     seqPosition: PropTypes.number,
-    effects: PropTypes.arrayOf(PropTypes.instanceOf(Effects)),
-    samples: PropTypes.arrayOf(PropTypes.instanceOf(Sample))
+    childElements: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(Effects), PropTypes.instanceOf(Sample)]))
 };

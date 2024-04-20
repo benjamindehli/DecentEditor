@@ -6,14 +6,29 @@ import PropTypes from "prop-types";
 import { Binding } from "./Binding";
 
 export class State {
-    constructor(props, bindingList) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "state";
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.name = props?.name;
         this.mainImage = props?.mainImage;
         this.hoverImage = props?.hoverImage;
         this.clickImage = props?.clickImage;
-        this.bindings = bindingList?.map((binding) => new Binding({ ...binding.$ }));
+        this.childElements =
+            props?.childElement ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "binding":
+                            return new Binding(childElement.$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -25,8 +40,9 @@ export class State {
                 visible: this.visible
             }
         };
-        if (this.bindings?.length) {
-            jsonObject.binding = this.bindings?.map((binding) => binding.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -39,5 +55,5 @@ State.propTypes = {
     hoverImage: PropTypes.string,
     clickImage: PropTypes.string,
     visible: PropTypes.bool,
-    bindings: PropTypes.arrayOf(PropTypes.instanceOf(Binding))
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Binding))
 };

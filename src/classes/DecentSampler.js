@@ -6,24 +6,39 @@ import PropTypes from "prop-types";
 import { Groups } from "./Groups";
 import { Ui } from "./Ui";
 
+// Functions
+import { jsonToXml } from "@/functions/converters";
+
 export class DecentSampler {
-    constructor(decentSampler) {
-        this.id = uuidv4();
-        this.elementType = "decentSampler";
-        this.updateGroupsList = decentSampler?.updateGroupsList;
-        this.updateUiList = decentSampler?.updateUiList;
-        this.groupsList = decentSampler?.groupsList;
-        this.uiList = decentSampler?.uiList;
+    constructor(props, childElements, elementType) {
+        this.id = props?.id || uuidv4();
+        this.elementType = props?.elementType || elementType;
+        this.childElements =
+            props?.childElements ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "ui":
+                            return new Ui(childElement.$, childElement.$$, childElement["#name"]);
+                        case "groups":
+                            return new Groups(childElement.$, childElement.$$, childElement["#name"]);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {};
-        if (this.uiList?.length && Object.keys(this.uiList?.[0])?.length) {
-            jsonObject.ui = { ...this.uiList?.[0]?.toJson() };
-        }
-        if (this.groupsList?.length && Object.keys(this.groupsList?.[0])?.length) {
-            jsonObject.groups = { ...this.groupsList?.[0]?.toJson() };
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
+    }
+    toXml() {
+        return jsonToXml(this.toJson());
     }
 }
 

@@ -1,5 +1,15 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
+
+// Data
+import {
+    bindingAdditionalParams,
+    bindingInputTypes,
+    bindingLevels,
+    bindingParameters,
+    bindingTypes
+} from "@/data/bindingPropValues";
 
 export class ControllableParameter {
     constructor(props) {
@@ -22,3 +32,27 @@ export class ControllableParameter {
         this.helperText = props?.helperText;
     }
 }
+
+ControllableParameter.propTypes = {
+    id: PropTypes.string,
+    description: PropTypes.string,
+    secondaryDescription: PropTypes.string,
+    type: PropTypes.oneOf(bindingTypes),
+    level: PropTypes.oneOf(bindingLevels),
+    parameter: PropTypes.oneOf(bindingParameters),
+    inputProps: PropTypes.shape({
+        minValue: PropTypes.number,
+        maxValue: PropTypes.number,
+        step: PropTypes.number,
+        type: PropTypes.oneOf(bindingInputTypes),
+        options: PropTypes.arrayOf(
+            PropTypes.shape({
+                value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+                label: PropTypes.string
+            })
+        )
+    }),
+    modulatable: PropTypes.bool,
+    additionalParams: PropTypes.arrayOf(PropTypes.oneOf(bindingAdditionalParams)),
+    helperText: PropTypes.string
+};

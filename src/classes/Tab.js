@@ -6,15 +6,46 @@ import PropTypes from "prop-types";
 import { Button } from "./Button";
 import { Menu } from "./Menu";
 import { Image } from "./Image";
+import { Control } from "./Control";
+import { Label } from "./Label";
+import { LabeledKnob } from "./LabeledKnob";
 
 export class Tab {
-    constructor(props, buttonList, controlList, imageList, labelList, labeledKnobList, menuList) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "tab";
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.name = props?.name;
-        this.buttons = buttonList?.map((button) => new Button({ ...button.$ }, button.state));
-        this.images = imageList?.map((image) => new Image({ ...image.$ }));
-        this.menus = menuList?.map((menu) => new Menu({ ...menu.$ }, menu.option));
+        this.childElements =
+            props?.childElements ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "button":
+                            return new Button(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "control":
+                            return new Control(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "image":
+                            return new Image(childElement.$, childElement["#name"], hierarchyPath);
+                        case "label":
+                            return new Label(childElement.$, childElement["#name"], hierarchyPath);
+                        case "labeled-knob":
+                            return new LabeledKnob(
+                                childElement.$,
+                                childElement.$$,
+                                childElement["#name"],
+                                hierarchyPath
+                            );
+                        case "menu":
+                            return new Menu(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -22,14 +53,9 @@ export class Tab {
                 name: this.name
             }
         };
-        if (this.buttons?.length) {
-            jsonObject.button = this.buttons?.map((button) => button.toJson());
-        }
-        if (this.images?.length) {
-            jsonObject.image = this.images?.map((image) => image.toJson());
-        }
-        if (this.menus?.length) {
-            jsonObject.menu = this.menus?.map((menu) => menu.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -37,8 +63,16 @@ export class Tab {
 
 Tab.propTypes = {
     id: PropTypes.string,
+    parentRefs: PropTypes.arrayOf(PropTypes.string),
     name: PropTypes.string,
-    buttons: PropTypes.arrayOf(PropTypes.instanceOf(Button)),
-    images: PropTypes.arrayOf(PropTypes.instanceOf(Image)),
-    menus: PropTypes.arrayOf(PropTypes.instanceOf(Menu))
+    childElements: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.instanceOf(Button),
+            PropTypes.instanceOf(Control),
+            PropTypes.instanceOf(Image),
+            PropTypes.instanceOf(Label),
+            PropTypes.instanceOf(LabeledKnob),
+            PropTypes.instanceOf(Menu)
+        ])
+    )
 };

@@ -1,10 +1,14 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 export class Label {
-    constructor(props) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "label";
+    constructor(props, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.x = props?.x;
         this.y = props?.y;
         this.text = props?.text;
@@ -31,6 +35,7 @@ export class Label {
                 visible: this.visible
             }
         };
+        jsonObject["#name"] = this.elementType;
         return jsonObject;
     }
 }

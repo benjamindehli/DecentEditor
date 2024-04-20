@@ -3,9 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 export class Color {
-    constructor(props) {
-        this.id = props.id || uuidv4();
-        this.elementType = "color";
+    constructor(props, elementType, parentHierarchyPath) {
+        const id = props.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.loNote = props?.loNote;
         this.hiNote = props?.hiNote;
         this.color = props?.color;
@@ -18,6 +21,7 @@ export class Color {
                 color: this.color
             }
         };
+        jsonObject["#name"] = this.elementType;
         return jsonObject;
     }
 }

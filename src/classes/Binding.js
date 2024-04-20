@@ -1,10 +1,17 @@
 // Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
+
+// Data
+import { bindingLevels, bindingParameters, bindingTypes } from "@/data/bindingPropValues";
 
 export class Binding {
-    constructor(props) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "binding";
+    constructor(props, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.type = props?.type;
         this.level = props?.level;
         this.position = props?.position;
@@ -32,7 +39,7 @@ export class Binding {
         this.seqLoopMode = props?.seqLoopMode;
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 type: this.type,
                 level: this.level,
@@ -61,5 +68,36 @@ export class Binding {
                 seqLoopMode: this.seqLoopMode
             }
         };
+        jsonObject["#name"] = this.elementType;
+        return jsonObject;
     }
 }
+
+Binding.propTypes = {
+    id: PropTypes.string,
+    type: PropTypes.oneOf(bindingTypes),
+    level: PropTypes.oneOf(bindingLevels),
+    position: PropTypes.number,
+    controlIndex: PropTypes.number,
+    groupIndex: PropTypes.number,
+    effectIndex: PropTypes.number,
+    modulatorIndex: PropTypes.number,
+    tags: PropTypes.string,
+    enabled: PropTypes.bool,
+    identifier: PropTypes.string,
+    parameter: PropTypes.oneOf(bindingParameters),
+    translation: PropTypes.string,
+    translationOutputMin: PropTypes.number,
+    translationOutputMax: PropTypes.number,
+    translationReversed: PropTypes.bool,
+    translationTable: PropTypes.string,
+    translationValue: PropTypes.number,
+    seqIndex: PropTypes.number,
+    seqTriggerBehavior: PropTypes.string,
+    seqPlayerIdentifier: PropTypes.string,
+    seqTrackMidiInputVelocity: PropTypes.number,
+    seqTranspose: PropTypes.number,
+    seqTransposeWithRootNote: PropTypes.bool,
+    seqPlaybackRate: PropTypes.number,
+    seqLoopMode: PropTypes.string
+};

@@ -6,9 +6,12 @@ import PropTypes from "prop-types";
 import { State } from "./State";
 
 export class Button {
-    constructor(props, stateList) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "button";
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.x = props?.x;
         this.y = props?.y;
         this.width = props?.width;
@@ -19,7 +22,19 @@ export class Button {
         this.hoverImage = props?.hoverImage;
         this.clickImage = props?.clickImage;
         this.visible = props?.visible;
-        this.states = stateList?.map((state) => new State({ ...state.$ }, state.binding));
+        this.childElements =
+            props?.childElement ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "state":
+                            return new State(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -36,8 +51,9 @@ export class Button {
                 visible: this.visible
             }
         };
-        if (this.states?.length) {
-            jsonObject.state = this.states?.map((state) => state.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -55,5 +71,5 @@ Button.propTypes = {
     hoverImage: PropTypes.string,
     clickImage: PropTypes.string,
     visible: PropTypes.bool,
-    states: PropTypes.arrayOf(PropTypes.instanceOf(State))
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(State))
 };

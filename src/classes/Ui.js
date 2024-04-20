@@ -7,9 +7,12 @@ import { Keyboard } from "./Keyboard";
 import { Tab } from "./Tab";
 
 export class Ui {
-    constructor(props, keyboardList, tabList) {
-        this.id = uuidv4();
-        this.elementType = "ui";
+    constructor(props, childElements, elementType) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = [id];
+        this.id = id;
+        this.hierarchyPath = props?.hierarchyPath || hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.coverArt = props?.coverArt;
         this.bgImage = props?.bgImage;
         this.bgColor = props?.bgColor;
@@ -17,10 +20,21 @@ export class Ui {
         this.height = props?.height;
         this.layoutMode = props?.layoutMode;
         this.bgMode = props?.bgMode;
-        this.keyboard = keyboardList?.map((keyboard) => new Keyboard({ ...keyboard.$ }, keyboard.color));
-        this.tab = tabList?.map(
-            (tab) => new Tab({ ...tab.$ }, tab.button, tab.control, tab.image, tab.label, tab["labeled-knob"], tab.menu)
-        );
+        this.childElements =
+            props?.childElement ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "keyboard":
+                            return new Keyboard(null, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "tab":
+                            return new Tab(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -34,11 +48,9 @@ export class Ui {
                 bgMode: this.bgMode
             }
         };
-        if (this.keyboard?.length) {
-            jsonObject.keyboard = this.keyboard?.map((keyboard) => keyboard.toJson());
-        }
-        if (this.tab?.length) {
-            jsonObject.tab = this.tab?.map((tab) => tab.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -48,10 +60,9 @@ Ui.propTypes = {
     coverArt: PropTypes.string,
     bgImage: PropTypes.string,
     bgColor: PropTypes.string,
-    width: PropTypes.number,
-    height: PropTypes.number,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
     layoutMode: PropTypes.string,
     bgMode: PropTypes.string,
-    keyboard: PropTypes.arrayOf(PropTypes.instanceOf(Keyboard)),
-    tab: PropTypes.arrayOf(PropTypes.instanceOf(Tab))
+    childElements: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(Keyboard), PropTypes.instanceOf(Tab)]))
 };

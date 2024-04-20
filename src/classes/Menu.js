@@ -6,16 +6,31 @@ import PropTypes from "prop-types";
 import { Option } from "./Option";
 
 export class Menu {
-    constructor(props, optionList) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "menu";
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.x = props?.x;
         this.y = props?.y;
         this.width = props?.width;
         this.height = props?.height;
         this.value = props?.value;
         this.visible = props?.visible;
-        this.options = optionList?.map((option) => new Option({ ...option.$ }, option.binding));
+        this.childElements =
+            props?.childElement ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "option":
+                            return new Option(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -28,8 +43,9 @@ export class Menu {
                 visible: this.visible
             }
         };
-        if (this.options?.length) {
-            jsonObject.option = this.options?.map((option) => option.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -43,5 +59,5 @@ Menu.propTypes = {
     height: PropTypes.number.isRequired,
     value: PropTypes.number,
     visible: PropTypes.bool,
-    options: PropTypes.arrayOf(PropTypes.instanceOf(Option))
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Option))
 };

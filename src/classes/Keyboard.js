@@ -6,15 +6,31 @@ import PropTypes from "prop-types";
 import { Color } from "./Color";
 
 export class Keyboard {
-    constructor(props, color) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "keyboard";
-        this.colors = props?.colors || color?.map((color) => new Color({ ...color.$ }, color.color));
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
+        this.childElements =
+            props?.childElement ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "color":
+                            return new Color(childElement.$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {};
-        if (this.colors?.length) {
-            jsonObject.color = this.colors?.map((color) => color.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -28,5 +44,5 @@ export class Keyboard {
 
 Keyboard.propTypes = {
     id: PropTypes.string,
-    colors: PropTypes.arrayOf(PropTypes.instanceOf(Color))
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Color))
 };

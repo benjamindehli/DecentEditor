@@ -6,16 +6,31 @@ import PropTypes from "prop-types";
 import { Effect } from "./Effect";
 
 export class Effects {
-    constructor(props, effectList) {
-        this.id = props?.id || uuidv4();
-        this.groupId = props?.groupId;
-        this.elementType = "effects";
-        this.effects = props?.effects || effectList?.map((effect) => new Effect({ ...effect.$ })) || [];
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
+        this.childElements =
+            props?.childElements ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "effect":
+                            return new Effect(childElement.$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {};
-        if (this.effects?.length) {
-            jsonObject.effect = this.effects?.map((effect) => effect.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -23,6 +38,5 @@ export class Effects {
 
 Effects.propTypes = {
     id: PropTypes.string,
-    groupId: PropTypes.string,
-    effects: PropTypes.arrayOf(PropTypes.instanceOf(Effect))
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Effect))
 };

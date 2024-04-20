@@ -3,10 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 export class Sample {
-    constructor(props) {
-        this.id = uuidv4();
-        this.groupId = props?.groupId;
-        this.elementType = "sample";
+    constructor(props, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.path = props?.path;
         this.rootNote = props?.rootNote;
         this.loNote = props?.loNote;
@@ -93,12 +95,12 @@ export class Sample {
                 glideMode: this.glideMode
             }
         };
+        jsonObject["#name"] = this.elementType;
         return jsonObject;
     }
 }
 
 Sample.propTypes = {
-    groupId: PropTypes.string,
     path: PropTypes.string.isRequired,
     rootNote: PropTypes.number.isRequired,
     loNote: PropTypes.number,

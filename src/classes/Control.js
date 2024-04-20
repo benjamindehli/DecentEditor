@@ -5,9 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 import { Binding } from "./Binding";
 
 export class Control {
-    constructor(props, bindingList) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "control";
+    constructor(props, childElements, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.x = props?.x;
         this.y = props?.y;
         this.width = props?.width;
@@ -30,7 +33,19 @@ export class Control {
         this.customSkinNumFrames = props?.customSkinNumFrames;
         this.customSkinImageOrientation = props?.customSkinImageOrientation;
         this.mouseDragSensitivity = props?.mouseDragSensitivity;
-        this.bindings = bindingList?.map((binding) => new Binding({ ...binding.$ }));
+        this.childElements =
+            props?.childElement ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "binding":
+                            return new Binding(childElement.$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -59,8 +74,9 @@ export class Control {
                 mouseDragSensitivity: this.mouseDragSensitivity
             }
         };
-        if (this.bindings?.length) {
-            jsonObject.binding = this.bindings?.map((binding) => binding.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }

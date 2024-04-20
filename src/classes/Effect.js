@@ -1,10 +1,14 @@
+// Dependencies
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 export class Effect {
-    constructor(props) {
-        this.id = uuidv4();
-        this.groupId = props?.groupId;
-        this.elementType = "effect";
+    constructor(props, elementType, parentHierarchyPath) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
+        this.id = id;
+        this.hierarchyPath = hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.type = props?.type;
         this.resonance = props?.resonance;
         this.frequency = props?.frequency;
@@ -30,7 +34,7 @@ export class Effect {
         this.highQuality = props?.highQuality;
     }
     toJson() {
-        return {
+        const jsonObject = {
             $: {
                 type: this.type,
                 resonance: this.resonance,
@@ -57,5 +61,49 @@ export class Effect {
                 highQuality: this.highQuality
             }
         };
+        jsonObject["#name"] = this.elementType;
+        return jsonObject;
     }
 }
+
+Effect.propTypes = {
+    type: PropTypes.oneOf([
+        "lowpass",
+        "lowpass_4pl",
+        "lowpass_1pl",
+        "bandpass",
+        "highpass",
+        "notch",
+        "peak",
+        "gain",
+        "reverb",
+        "delay",
+        "chorus",
+        "phaser",
+        "convolution",
+        "wave_folder",
+        "wave_shaper"
+    ]).isRequired,
+    resonance: PropTypes.number,
+    frequency: PropTypes.number,
+    q: PropTypes.number,
+    gain: PropTypes.number,
+    level: PropTypes.number,
+    roomSize: PropTypes.number,
+    damping: PropTypes.number,
+    wetLevel: PropTypes.number,
+    delayTimeFormat: PropTypes.oneOf(["seconds", "musical_time"]),
+    delayTime: PropTypes.number,
+    feedback: PropTypes.number,
+    stereoOffset: PropTypes.number,
+    mix: PropTypes.number,
+    modDepth: PropTypes.number,
+    modRate: PropTypes.number,
+    centerFrequency: PropTypes.number,
+    irFile: PropTypes.string,
+    drive: PropTypes.number,
+    threshold: PropTypes.number,
+    driveBoost: PropTypes.number,
+    outputLevel: PropTypes.number,
+    highQuality: PropTypes.bool
+};

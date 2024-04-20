@@ -6,9 +6,12 @@ import PropTypes from "prop-types";
 import { Group } from "./Group";
 
 export class Groups {
-    constructor(props, groupList) {
-        this.id = props?.id || uuidv4();
-        this.elementType = "groups";
+    constructor(props, childElements, elementType) {
+        const id = props?.id || uuidv4();
+        const hierarchyPath = [id];
+        this.id = id;
+        this.hierarchyPath = props?.hierarchyPath || hierarchyPath;
+        this.elementType = props?.elementType || elementType;
         this.attack = props?.attack;
         this.decay = props?.decay;
         this.sustain = props?.sustain;
@@ -23,8 +26,19 @@ export class Groups {
         this.glideMode = props?.glideMode;
         this.seqMode = props?.seqMode;
         this.seqLength = props?.seqLength;
-        this.groups =
-            props?.groups || groupList?.map((group) => new Group({ ...group.$ }, group.effects, group.sample)) || [];
+        this.childElements =
+            props?.childElement ||
+            childElements
+                ?.map((childElement) => {
+                    const childElementType = childElement["#name"];
+                    switch (childElementType) {
+                        case "group":
+                            return new Group(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        default:
+                            return null;
+                    }
+                })
+                .filter((childElement) => childElement);
     }
     toJson() {
         const jsonObject = {
@@ -45,8 +59,9 @@ export class Groups {
                 seqLength: this.seqLength
             }
         };
-        if (this.groups?.length) {
-            jsonObject.group = this.groups?.map((group) => group.toJson());
+        jsonObject["#name"] = this.elementType;
+        if (this.childElements?.length) {
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
         }
         return jsonObject;
     }
@@ -77,5 +92,5 @@ Groups.propTypes = {
     glideMode: PropTypes.oneOf(["always", "legato", "off"]),
     seqMode: PropTypes.oneOf(["random", "true_random", "round_robin", "allways"]),
     seqLength: PropTypes.number,
-    groups: PropTypes.arrayOf(PropTypes.instanceOf(Group))
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Group))
 };
