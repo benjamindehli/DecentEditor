@@ -1,5 +1,8 @@
+// Material UI
 import { Add } from "@mui/icons-material";
 import { green, common } from "@mui/material/colors";
+
+// Stylesheets
 import style from "./Icons.module.scss";
 
 export function IconAdd({ children }) {

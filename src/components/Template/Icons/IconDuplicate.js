@@ -1,5 +1,8 @@
+// Material UI
 import { Add } from "@mui/icons-material";
 import { blue, common } from "@mui/material/colors";
+
+// Stylesheets
 import style from "./Icons.module.scss";
 
 export function IconDuplicate({ children }) {

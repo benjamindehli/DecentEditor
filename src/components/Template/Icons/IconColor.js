@@ -1,3 +1,4 @@
+// Stylesheets
 import style from "./IconColor.module.scss";
 
 export function IconColor({ color }) {
