@@ -43,6 +43,7 @@ export function DefaultTextField({
             <OutlinedInput
                 id={idWithFallback}
                 type={type}
+                name={name}
                 defaultValue={defaultValue}
                 inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
                 aria-describedby={helperTextId}
@@ -66,30 +67,5 @@ export function DefaultTextField({
                 <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
             </Collapse>
         </FormControl>
-        /*<Fragment>
-            <Grid container spacing={2}>
-                <Grid item xs={10}>
-                    <TextField
-                        margin="dense"
-                        id={id || name}
-                        name={name}
-                        label={label || capitalizeFirstLetter(name)}
-                        type={type}
-                        defaultValue={defaultValue}
-                        fullWidth
-                        variant="standard"
-                        inputProps={inputProps}
-                        autoFocus={autoFocus}
-                        required={required}
-                        endAdornment={
-                            <IconButton color="primary" aria-label="add to shopping cart">
-                                <Help />
-                            </IconButton>
-                        }
-                    />
-                </Grid>
-                <Grid item xs={2}></Grid>
-            </Grid>
-        </Fragment>*/
     );
 }
