@@ -27,12 +27,13 @@ import { DecentSampler } from "@/classes/DecentSampler";
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 // Components
-import { generateCssBgColors } from "@/functions/styles";
+import { DecentSamplerItemComponent } from "@/components/DecentSampler/DecentSamplerItemComponent";
 
 // Stylesheets
 import style from "./page.module.scss";
 import { Keyboard } from "@/classes/Keyboard";
 import { Tab } from "@/classes/Tab";
+import BindingParameterSelect from "@/components/Template/BindingParameterSelect";
 
 hljs.registerLanguage("xml", xml);
 
@@ -43,56 +44,42 @@ export default function Home() {
     const [xmlData, setXmlData] = useState(null);
     const [showXmlPreview, setShowXmlPreview] = useState(false);
     const [selectedFileName, setSelectedFileName] = useState(null);
-    const [decentSampler, setDecentSampler] = useState(null);
-
-    function updateJsonData(decentSampler) {
-        const jsonData = { DecentSampler: decentSampler.toJson() };
-        setJsonData(jsonData);
-    }
 
     function toggleXmlPreview() {
         setShowXmlPreview(!showXmlPreview);
     }
 
     useEffect(() => {
-        generateCssBgColors();
-    }, []);
-
-    useEffect(() => {
-        setDecentSampler(new DecentSampler(decentSamplerContext));
+        if (decentSamplerContext?.decentSampler?.toJson) {
+            const jsonData = { DecentSampler: decentSamplerContext.decentSampler.toJson() };
+            setJsonData(jsonData);
+        }
     }, [decentSamplerContext]);
 
     useEffect(() => {
-        if (decentSampler) {
-            updateJsonData(decentSampler);
-        }
-    }, [decentSampler]);
-
-    useEffect(() => {
-        var builder = new xml2js.Builder();
-        if (Object.keys(jsonData).length) {
-            var xml = builder.buildObject(jsonData);
+        if (decentSamplerContext?.decentSampler?.toXml && Object.keys(decentSamplerContext?.decentSampler).length) {
+            const xml = decentSamplerContext.decentSampler.toXml();
             setXmlData(hljs.highlight(xml, { language: "xml" }).value);
         }
-    }, [jsonData]);
+    }, [decentSamplerContext.decentSampler]);
 
     function convertJsonDataToObject(jsonData) {
         const groupsList = jsonData.DecentSampler.groups.map((groupsItem) => {
-            const groupsObject = new Groups({ ...groupsItem.$ }, groupsItem.group);
+            const groupsObject = new Groups({ ...groupsItem.$ }, groupsItem.group, groupsItem.$$);
             return groupsObject;
         });
         const uiList = jsonData.DecentSampler.ui.map((uiItem) => {
-            const uiObject = new Ui({ ...uiItem.$ }, uiItem.keyboard, uiItem.tab);
+            const uiObject = new Ui({ ...uiItem.$ }, uiItem.keyboard, uiItem.tab, uiItem.$$);
             return uiObject;
         });
-        return { groupsList, uiList };
+        return { groupsList, uiList, jsonData };
     }
 
     function handleFileInputChange(e) {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.onload = (e) => {
-            const parser = new xml2js.Parser();
+            const parser = new xml2js.Parser({ preserveChildrenOrder: true, explicitChildren: true });
             parser.parseString(e.target.result, (err, result) => {
                 if (err) {
                     console.error(err);
@@ -100,8 +87,11 @@ export default function Home() {
                 }
                 const objectFromJsonData = convertJsonDataToObject(result);
                 setSelectedFileName(file.name);
-                decentSampler.updateGroupsList(objectFromJsonData.groupsList);
-                decentSampler.updateUiList(objectFromJsonData.uiList);
+                if (result?.DecentSampler) {
+                    decentSamplerContext.initDecentSampler(result.DecentSampler);
+                }
+                // decentSampler.updateGroupsList(objectFromJsonData.groupsList);
+                // decentSampler.updateUiList(objectFromJsonData.uiList);
             });
         };
         reader.readAsText(file);
@@ -157,31 +147,39 @@ export default function Home() {
             </AppBar>
 
             <Box sx={{ display: "flex" }} component="main">
+                {/*                
+              <BindingParameterSelect /> 
+               */}
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6} lg={4}>
-                            <Paper sx={{ p: 0, display: "flex", flexDirection: "column", overflow: "auto", maxHeight: "calc(100vh - 128px)", }}>
-                                <List
-                                    sx={{
-                                        width: "100%",
-                                        bgcolor: "background.paper",
-                                        
-                                    }}
-                                    component="nav"
-                                    disablePadding
-                                    dense
-                                >
-                                    {!!decentSampler?.uiList?.length && (
-                                        <UiListComponent uiList={decentSampler.uiList} />
-                                    )}
-                                    {!!decentSampler?.groupsList?.length && (
-                                        <GroupsListComponent groupsList={decentSampler.groupsList} />
-                                    )}
-                                </List>
+                            <Paper
+                                sx={{
+                                    p: 0,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    overflow: "auto",
+                                    maxHeight: "calc(100vh - 128px)"
+                                }}
+                            >
+                                {!!decentSamplerContext.decentSampler && (
+                                    <DecentSamplerItemComponent
+                                        decentSamplerItem={decentSamplerContext.decentSampler}
+                                    />
+                                )}
                             </Paper>
                         </Grid>
                         <Grid item xs={12} md={6} lg={8}>
-                            <Paper sx={{ p: 0, display: "flex", flexDirection: "column", overflow: "auto", maxHeight: "calc(100vh - 128px)", bgcolor: blueGrey[900] }}>
+                            <Paper
+                                sx={{
+                                    p: 0,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    overflow: "auto",
+                                    maxHeight: "calc(100vh - 128px)",
+                                    bgcolor: blueGrey[900]
+                                }}
+                            >
                                 {showXmlPreview && (
                                     <div className={style.container}>
                                         <div className={style.code}>
