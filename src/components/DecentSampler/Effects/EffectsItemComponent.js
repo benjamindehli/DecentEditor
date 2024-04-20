@@ -17,6 +17,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { EffectItemComponent } from "../Effect/EffectItemComponent";
 
 export function EffectsItemComponent({ effectsItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -68,15 +69,24 @@ export function EffectsItemComponent({ effectsItem }) {
     );
 
     function hasChildren() {
-        return !!effectsItem?.effects?.length;
+        return !!effectsItem?.childElements?.length;
     }
 
     const primaryText = "Effects";
     const secondaryText = (
         <ListItemSecondaryText>
-            {effectsItem?.effects?.length || 0} {effectsItem?.effects?.length === 1 ? "effect" : "effects"}
+            {effectsItem?.childElements?.length || 0} {effectsItem?.childElements?.length === 1 ? "effect" : "effects"}
         </ListItemSecondaryText>
     );
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "effect":
+                return <EffectItemComponent key={childElement.id} effectItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -106,7 +116,8 @@ export function EffectsItemComponent({ effectsItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <EffectListComponent effectList={effectsItem?.effects} />
+                    {effectsItem?.childElements?.length &&
+                        effectsItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

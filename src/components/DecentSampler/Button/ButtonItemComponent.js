@@ -5,10 +5,10 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
 import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Piano, SmartButton, Topic } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Folder, SmartButton } from "@mui/icons-material";
 
 // Components
-import { StateListComponent } from "@/components/DecentSampler/State/StateListComponent";
+import { StateItemComponent } from "../State/StateItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -51,15 +51,24 @@ export function ButtonItemComponent({ buttonItem }) {
     );
 
     function hasChildren() {
-        return !!buttonItem?.states?.length;
+        return !!buttonItem?.childElements?.length;
     }
 
     const primaryText = "Button";
     const secondaryText = (
         <ListItemSecondaryText>
-            {buttonItem?.states?.length || 0} {buttonItem?.states?.length === 1 ? "state" : "states"}
+            {buttonItem?.childElements?.length || 0} {buttonItem?.childElements?.length === 1 ? "state" : "states"}
         </ListItemSecondaryText>
     );
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "state":
+                return <StateItemComponent key={childElement.id} stateItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -89,7 +98,8 @@ export function ButtonItemComponent({ buttonItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <StateListComponent stateList={buttonItem?.states} />
+                    {buttonItem?.childElements?.length &&
+                        buttonItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

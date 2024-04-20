@@ -5,7 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Image, ListAlt } from "@mui/icons-material";
+import { Folder, Image as ImageIcon } from "@mui/icons-material";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -74,7 +74,7 @@ export function ImageItemComponent({ imageItem }) {
             >
                 <ListItemButton sx={{ pl: 9 }} onClick={() => setIsExpanded(!isExpanded)}>
                     <ListItemIcon sx={{ minWidth: "32px" }}>
-                        <Image />
+                        <ImageIcon />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

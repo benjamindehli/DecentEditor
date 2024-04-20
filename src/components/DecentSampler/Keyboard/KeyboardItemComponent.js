@@ -17,6 +17,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { ColorItemComponent } from "../Color/ColorItemComponent";
 
 export function KeyboardItemComponent({ keyboardItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -51,15 +52,24 @@ export function KeyboardItemComponent({ keyboardItem }) {
     );
 
     function hasChildren() {
-        return !!keyboardItem?.colors?.length;
+        return !!keyboardItem?.childElements?.length;
     }
 
     const primaryText = "Keyboard";
     const secondaryText = (
         <ListItemSecondaryText>
-            {keyboardItem?.colors?.length || 0} {keyboardItem?.colors?.length === 1 ? "color" : "colors"}
+            {keyboardItem?.childElements?.length || 0} {keyboardItem?.childElements?.length === 1 ? "color" : "colors"}
         </ListItemSecondaryText>
     );
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "color":
+                return <ColorItemComponent key={childElement.id} colorItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -89,7 +99,8 @@ export function KeyboardItemComponent({ keyboardItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <ColorListComponent colorList={keyboardItem?.colors} />
+                    {keyboardItem?.childElements?.length &&
+                        keyboardItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

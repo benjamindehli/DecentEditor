@@ -8,7 +8,7 @@ import { Chip, Collapse, IconButton, List, ListItem, ListItemButton, ListItemIco
 import { ChevronRight, ExpandMore, Folder, ToggleOn } from "@mui/icons-material";
 
 // Components
-import { BindingListComponent } from "../Binding/BindingListComponent";
+import { BindingItemComponent } from "../Binding/BindingItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -51,7 +51,7 @@ export function StateItemComponent({ stateItem }) {
     );
 
     function hasChildren() {
-        return !!stateItem?.bindings?.length;
+        return !!stateItem?.childElements?.length;
     }
 
     const stateName = stateItem?.name?.length && <Chip component="span" label={stateItem.name} size="small" />;
@@ -60,9 +60,18 @@ export function StateItemComponent({ stateItem }) {
 
     const secondaryText = (
         <ListItemSecondaryText>
-            {stateItem?.bindings?.length || 0} {stateItem?.bindings?.length === 1 ? "binding" : "bindings"}
+            {stateItem?.childElements?.length || 0} {stateItem?.childElements?.length === 1 ? "binding" : "bindings"}
         </ListItemSecondaryText>
     );
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "binding":
+                return <BindingItemComponent key={childElement.id} bindingItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -92,7 +101,8 @@ export function StateItemComponent({ stateItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <BindingListComponent bindingList={stateItem?.bindings} />
+                    {stateItem?.childElements?.length &&
+                        stateItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

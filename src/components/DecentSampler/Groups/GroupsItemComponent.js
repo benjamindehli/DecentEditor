@@ -8,7 +8,7 @@ import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, Lis
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
 
 // Components
-import { GroupListComponent } from "../Group/GroupListComponent";
+import { GroupItemComponent } from "../Group/GroupItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -59,15 +59,24 @@ export function GroupsItemComponent({ groupsItem }) {
     );
 
     function hasChildren() {
-        return !!groupsItem?.groups?.length;
+        return !!groupsItem?.childElements?.length;
     }
 
     const primaryText = "Groups";
     const secondaryText = (
         <ListItemSecondaryText>
-            {groupsItem?.groups?.length || 0} {groupsItem?.groups?.length === 1 ? "group" : "groups"}
+            {groupsItem?.childElements?.length || 0} {groupsItem?.childElements?.length === 1 ? "group" : "groups"}
         </ListItemSecondaryText>
     );
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "group":
+                return <GroupItemComponent key={childElement.id} groupItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -97,7 +106,8 @@ export function GroupsItemComponent({ groupsItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <GroupListComponent groupList={groupsItem?.groups} />
+                    {groupsItem?.childElements?.length &&
+                        groupsItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

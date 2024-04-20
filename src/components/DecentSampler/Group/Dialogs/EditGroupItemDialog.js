@@ -32,7 +32,7 @@ import { Group } from "@/classes/Group";
 
 export function EditGroupItemDialog({ groupItem, open, onClose }) {
     const decentSampler = useContext(DecentSamplerContext);
-    const [enabled, setEnabled] = useState(groupItem.enabled === "1");
+    const [enabled, setEnabled] = useState(groupItem.enabled !== "0");
     const [selectedTab, setSelectedTab] = useState(0);
 
     const handleTabChange = (event, newValue) => {

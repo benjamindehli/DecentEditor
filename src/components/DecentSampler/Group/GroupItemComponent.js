@@ -20,8 +20,8 @@ import {
 
 // Components
 import { EditGroupItemDialog } from "./Dialogs/EditGroupItemDialog";
-import { SampleListComponent } from "../Sample/SampleListComponent";
-import { EffectsListComponent } from "../Effects/EffectsListComponent";
+import { EffectsItemComponent } from "../Effects/EffectsItemComponent";
+import { SampleItemComponent } from "../Sample/SampleItemComponent";
 
 // Template
 import { IconRemove } from "@/components/Template/Icons/IconRemove";
@@ -100,29 +100,34 @@ export function GroupItemComponent({ groupItem }) {
     );
 
     function hasChildren() {
-        return !!groupItem?.samples?.length || !!groupItem?.effects?.length;
+        return !!groupItem?.childElements?.length;
     }
 
-    function renderNumberOfItemsForTypeString(groupItem, type) {
-        const propName = type.plural;
-        if (!groupItem?.[propName]?.length) {
+    function renderNumberOfItemsForTypeString(type, numberOfItemsForType) {
+        if (!numberOfItemsForType) {
             return null;
-        } else if (groupItem?.[propName]?.length === 1) {
-            return `${groupItem[propName].length} ${type.singular}`;
         } else {
-            return `${groupItem[propName].length} ${type.plural}`;
+            return `${numberOfItemsForType} ${type}${numberOfItemsForType > 1 ? "s" : ""}`;
         }
     }
 
     function renderSecondaryTextString(groupItem) {
-        const childElementTypes = [
-            { singular: "sample", plural: "samples" },
-            { singular: "effect", plural: "effects" }
-        ];
+        const childElementTypes = {
+            effect: 0,
+            sample: 0
+        };
+        groupItem.childElements.forEach((childElement) => {
+            if (childElement?.elementType === "sample") {
+                childElementTypes.sample++;
+            } else if (childElement?.elementType === "effects") {
+                childElementTypes.effect += childElement.childElements?.length;
+            }
+        });
         return (
-            childElementTypes
+            Object.keys(childElementTypes)
                 .map((type) => {
-                    return renderNumberOfItemsForTypeString(groupItem, type);
+                    const numberOfItemsForType = childElementTypes[type];
+                    return renderNumberOfItemsForTypeString(type, numberOfItemsForType);
                 })
                 ?.filter((numberOfItemsForTypeString) => numberOfItemsForTypeString)
                 ?.join(", ") || ""
@@ -141,6 +146,17 @@ export function GroupItemComponent({ groupItem }) {
 
     const primaryText = <Fragment>Group {tagList}</Fragment>;
     const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString(groupItem)}</ListItemSecondaryText>;
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "effects":
+                return <EffectsItemComponent key={childElement.id} effectsItem={childElement} />;
+            case "sample":
+                return <SampleItemComponent key={childElement.id} sampleItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -163,21 +179,16 @@ export function GroupItemComponent({ groupItem }) {
                 <ListItemButton sx={{ pl: hasChildren() ? 4 : 7 }} onClick={() => setIsExpanded(!isExpanded)}>
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
-                        {groupItem.enabled === "1" ? <Folder /> : <FolderOff />}
+                        {groupItem.enabled !== "0" ? <Folder /> : <FolderOff />}
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
             {hasChildren() && (
                 <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <EffectsListComponent effectsList={groupItem?.effects} />
-                    </List>
                     <List dense component="div" disablePadding>
-                        <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader">
-                            Samples
-                        </ListSubheader>
-                        <SampleListComponent sampleList={groupItem?.samples} />
+                        {groupItem?.childElements?.length &&
+                            groupItem.childElements.map((childElement) => renderChildElement(childElement))}
                     </List>
                 </Collapse>
             )}

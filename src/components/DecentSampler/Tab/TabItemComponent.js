@@ -17,8 +17,9 @@ import {
 import { ChevronRight, ExpandMore, Folder, Tab } from "@mui/icons-material";
 
 // Components
-import { ButtonListComponent } from "../Button/ButtonListComponent";
-import { MenuListComponent } from "../Menu/MenuListComponent";
+import { ButtonItemComponent } from "../Button/ButtonItemComponent";
+import { ImageItemComponent } from "../Image/ImageItemComponent";
+import { MenuItemComponent } from "../Menu/MenuItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
@@ -27,7 +28,6 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { ImageListComponent } from "../Image/ImageListComponent";
 
 export function TabItemComponent({ tabItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -62,32 +62,35 @@ export function TabItemComponent({ tabItem }) {
     );
 
     function hasChildren() {
-        return !!tabItem?.buttons?.length;
+        return !!tabItem?.childElements?.length;
     }
-    function renderNumberOfItemsForTypeString(tabItem, type) {
-        const propName = type.plural;
-        if (!tabItem?.[propName]?.length) {
+    function renderNumberOfItemsForTypeString(type, numberOfItemsForType) {
+        if (!numberOfItemsForType) {
             return null;
-        } else if (tabItem?.[propName]?.length === 1) {
-            return `${tabItem[propName].length} ${type.singular}`;
         } else {
-            return `${tabItem[propName].length} ${type.plural}`;
+            return `${numberOfItemsForType} ${type}${numberOfItemsForType > 1 ? "s" : ""}`;
         }
     }
 
     function renderSecondaryTextString(tabItem) {
-        const childElementTypes = [
-            { singular: "button", plural: "buttons" },
-            { singular: "control", plural: "controls" },
-            { singular: "image", plural: "images" },
-            { singular: "label", plural: "labels" },
-            { singular: "labeledKnob", plural: "labeledKnobs" },
-            { singular: "menu", plural: "menus" }
-        ];
+        const childElementTypes = {
+            button: 0,
+            control: 0,
+            image: 0,
+            label: 0,
+            labeledKnob: 0,
+            menu: 0
+        };
+        tabItem.childElements.forEach((childElement) => {
+            if (childElementTypes[childElement.elementType] !== undefined) {
+                childElementTypes[childElement.elementType]++;
+            }
+        });
         return (
-            childElementTypes
+            Object.keys(childElementTypes)
                 .map((type) => {
-                    return renderNumberOfItemsForTypeString(tabItem, type);
+                    const numberOfItemsForType = childElementTypes[type];
+                    return renderNumberOfItemsForTypeString(type, numberOfItemsForType);
                 })
                 ?.filter((numberOfItemsForTypeString) => numberOfItemsForTypeString)
                 ?.join(", ") || ""
@@ -97,6 +100,19 @@ export function TabItemComponent({ tabItem }) {
     const primaryText = "Tab";
     const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString(tabItem)}</ListItemSecondaryText>;
 
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "button":
+                return <ButtonItemComponent key={childElement.id} buttonItem={childElement} />;
+            case "image":
+                return <ImageItemComponent key={childElement.id} imageItem={childElement} />;
+            case "menu":
+                return <MenuItemComponent key={childElement.id} menuItem={childElement} />;
+            default:
+                return null;
+        }
+    }
+
     return (
         <Fragment>
             <ListItem
@@ -105,7 +121,7 @@ export function TabItemComponent({ tabItem }) {
                     <Fragment>
                         <IconButton
                             edge="start"
-                            aria-label="tab edit button"
+                            aria-label="edit tab button"
                             id={`${tabItem?.id}-edit-button`}
                             onClick={() => console.log("onClick")}
                         >
@@ -125,22 +141,8 @@ export function TabItemComponent({ tabItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader-buttons">
-                        Buttons
-                    </ListSubheader>
-                    <ButtonListComponent buttonList={tabItem?.buttons} />
-                </List>
-                <List dense component="div" disablePadding>
-                    <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader-images">
-                        Images
-                    </ListSubheader>
-                    <ImageListComponent imageList={tabItem?.images} />
-                </List>
-                <List dense component="div" disablePadding>
-                    <ListSubheader sx={{ pl: 7 }} component="div" id="nested-list-subheader-menus">
-                        Menus
-                    </ListSubheader>
-                    <MenuListComponent menuList={tabItem?.menus} />
+                    {tabItem?.childElements?.length &&
+                        tabItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

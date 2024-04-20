@@ -8,7 +8,7 @@ import { Chip, Collapse, IconButton, List, ListItem, ListItemButton, ListItemIco
 import { ChevronRight, ExpandMore, Folder, MenuOpen } from "@mui/icons-material";
 
 // Components
-import { BindingListComponent } from "../Binding/BindingListComponent";
+import { BindingItemComponent } from "../Binding/BindingItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -51,7 +51,7 @@ export function OptionItemComponent({ optionItem }) {
     );
 
     function hasChildren() {
-        return !!optionItem?.bindings?.length;
+        return !!optionItem?.childElements?.length;
     }
 
     const stateName = optionItem?.name?.length && <Chip component="span" label={optionItem.name} size="small" />;
@@ -60,9 +60,18 @@ export function OptionItemComponent({ optionItem }) {
 
     const secondaryText = (
         <ListItemSecondaryText>
-            {optionItem?.bindings?.length || 0} {optionItem?.bindings?.length === 1 ? "binding" : "bindings"}
+            {optionItem?.childElements?.length || 0} {optionItem?.childElements?.length === 1 ? "binding" : "bindings"}
         </ListItemSecondaryText>
     );
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "binding":
+                return <BindingItemComponent key={childElement.id} bindingItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -92,7 +101,8 @@ export function OptionItemComponent({ optionItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <BindingListComponent bindingList={optionItem?.bindings} />
+                    {optionItem?.childElements?.length &&
+                        optionItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

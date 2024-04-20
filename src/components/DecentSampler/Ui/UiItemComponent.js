@@ -10,8 +10,8 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 // Components
-import { KeyboardListComponent } from "../Keyboard/KeyboardListComponent";
-import { TabListComponent } from "../Tab/TabListComponent";
+import { KeyboardItemComponent } from "../Keyboard/KeyboardItemComponent";
+import { TabItemComponent } from "../Tab/TabItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -21,7 +21,7 @@ export function UiItemComponent({ uiItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
     function hasChildren() {
-        return !!uiItem?.keyboard?.length || !!uiItem?.tab?.length;
+        return !!uiItem?.childElements?.length;
     }
 
     const settingsMenuItems = (
@@ -57,6 +57,17 @@ export function UiItemComponent({ uiItem }) {
         </ListItemSecondaryText>
     );
 
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "keyboard":
+                return <KeyboardItemComponent key={childElement.id} keyboardItem={childElement} />;
+            case "tab":
+                return <TabItemComponent key={childElement.id} tabItem={childElement} />;
+            default:
+                return null;
+        }
+    }
+
     return (
         <Fragment>
             {/* <UiItemSettingsComponent uiItem={uiItem} onUpdateUiItem={handleUpdateUiItem} />*/}
@@ -74,10 +85,8 @@ export function UiItemComponent({ uiItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <KeyboardListComponent keyboardList={uiItem?.keyboard} />
-                </List>
-                <List dense component="div" disablePadding>
-                    <TabListComponent tabList={uiItem?.tab} />
+                    {uiItem?.childElements?.length &&
+                        uiItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

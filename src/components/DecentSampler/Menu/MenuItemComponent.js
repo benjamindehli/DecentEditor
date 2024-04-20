@@ -8,7 +8,7 @@ import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, Lis
 import { ChevronRight, ExpandMore, Folder, ListAlt } from "@mui/icons-material";
 
 // Components
-import { OptionListComponent } from "../Option/OptionListComponent";
+import { OptionItemComponent } from "../Option/OptionItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -51,15 +51,24 @@ export function MenuItemComponent({ menuItem }) {
     );
 
     function hasChildren() {
-        return !!menuItem?.options?.length;
+        return !!menuItem?.childElements?.length;
     }
 
     const primaryText = "Menu";
     const secondaryText = (
         <ListItemSecondaryText>
-            {menuItem?.options?.length || 0} {menuItem?.options?.length === 1 ? "option" : "options"}
+            {menuItem?.childElements?.length || 0} {menuItem?.childElements?.length === 1 ? "option" : "options"}
         </ListItemSecondaryText>
     );
+
+    function renderChildElement(childElement) {
+        switch (childElement?.elementType) {
+            case "option":
+                return <OptionItemComponent key={childElement.id} optionItem={childElement} />;
+            default:
+                return null;
+        }
+    }
 
     return (
         <Fragment>
@@ -89,7 +98,8 @@ export function MenuItemComponent({ menuItem }) {
             </ListItem>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                 <List dense component="div" disablePadding>
-                    <OptionListComponent optionList={menuItem?.options} />
+                    {menuItem?.childElements?.length &&
+                        menuItem.childElements.map((childElement) => renderChildElement(childElement))}
                 </List>
             </Collapse>
         </Fragment>

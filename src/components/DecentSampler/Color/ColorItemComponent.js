@@ -8,6 +8,9 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
+// Components
+import { EditColorItemDialog } from "./EditColorItemDialog";
+
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconColor } from "@/components/Template/Icons/IconColor";
@@ -92,13 +95,11 @@ export function ColorItemComponent({ colorItem }) {
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
-            {/*
             <EditColorItemDialog
                 colorItem={colorItem}
                 open={editColorItemDialogIsOpen}
                 onClose={handleCloseEditColorItemDialog}
             />
-            */}
         </Fragment>
     );
 }
