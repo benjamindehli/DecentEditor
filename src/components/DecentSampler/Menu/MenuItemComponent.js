@@ -20,6 +20,7 @@ import { getIndentSize } from "@/functions/helpers";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 export function MenuItemComponent({ menuItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -76,6 +77,7 @@ export function MenuItemComponent({ menuItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(menuItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -96,7 +98,7 @@ export function MenuItemComponent({ menuItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(menuItem?.elementType) }}>
                         <ListAlt />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

@@ -19,6 +19,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 export function UiItemComponent({ uiItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -75,6 +76,7 @@ export function UiItemComponent({ uiItem }) {
         <Fragment>
             {/* <UiItemSettingsComponent uiItem={uiItem} onUpdateUiItem={handleUpdateUiItem} />*/}
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(uiItem?.elementType) }}
                 disablePadding
                 secondaryAction={<SettingsMenu elementItem={uiItem} menuItems={settingsMenuItems}></SettingsMenu>}
             >
@@ -83,7 +85,7 @@ export function UiItemComponent({ uiItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(uiItem?.elementType) }}>
                         <Web />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

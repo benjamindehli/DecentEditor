@@ -18,6 +18,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 // Data
 import midiNotes from "@/data/midiNotes";
@@ -76,6 +77,7 @@ export function ColorItemComponent({ colorItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(colorItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -92,7 +94,7 @@ export function ColorItemComponent({ colorItem }) {
                 }
             >
                 <ListItemButton sx={{ pl: getIndentSize(colorItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(colorItem?.elementType) }}>
                         <IconColor color={convertColorValueToHex(colorItem.color)} />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

@@ -28,6 +28,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -119,6 +120,7 @@ export function TabItemComponent({ tabItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(tabItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -139,7 +141,7 @@ export function TabItemComponent({ tabItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(tabItem?.elementType) }}>
                         <Tab />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

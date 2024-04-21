@@ -18,6 +18,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 export function SampleItemComponent({ sampleItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -70,6 +71,7 @@ export function SampleItemComponent({ sampleItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(sampleItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -89,7 +91,7 @@ export function SampleItemComponent({ sampleItem }) {
                     sx={{ pl: getIndentSize(sampleItem, false) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(sampleItem?.elementType) }}>
                         {sampleItem.loopEnabled === "1" ? <RestorePage /> : <AudioFile />}
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

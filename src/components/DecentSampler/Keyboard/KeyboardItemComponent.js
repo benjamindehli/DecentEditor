@@ -17,6 +17,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -76,6 +77,7 @@ export function KeyboardItemComponent({ keyboardItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(keyboardItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -96,7 +98,7 @@ export function KeyboardItemComponent({ keyboardItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {isExpanded ? <ExpandMore /> : <ChevronRight />}
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(keyboardItem?.elementType) }}>
                         <Piano />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

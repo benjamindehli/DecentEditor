@@ -18,6 +18,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 // Data
 import effectTypesData from "@/data/effectTypes";
@@ -87,6 +88,7 @@ export function EffectItemComponent({ effectItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(effectItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -106,7 +108,7 @@ export function EffectItemComponent({ effectItem }) {
                     sx={{ pl: getIndentSize(effectItem, false) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(effectItem?.elementType) }}>
                         <RestorePage />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

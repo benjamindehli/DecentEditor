@@ -8,7 +8,7 @@ import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, Lis
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
 
 // Components
-import { EffectListComponent } from "../Effect/EffectListComponent";
+import { EffectItemComponent } from "../Effect/EffectItemComponent";
 
 // Template
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
@@ -17,10 +17,10 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { EffectItemComponent } from "../Effect/EffectItemComponent";
 
 export function EffectsItemComponent({ effectsItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -94,6 +94,7 @@ export function EffectsItemComponent({ effectsItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(effectsItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -114,7 +115,7 @@ export function EffectsItemComponent({ effectsItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(effectsItem?.elementType) }}>
                         <Topic />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

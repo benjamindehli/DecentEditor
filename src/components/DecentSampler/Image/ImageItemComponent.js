@@ -14,6 +14,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -60,6 +61,7 @@ export function ImageItemComponent({ imageItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(imageItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -76,7 +78,7 @@ export function ImageItemComponent({ imageItem }) {
                 }
             >
                 <ListItemButton sx={{ pl: getIndentSize(imageItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(imageItem?.elementType) }}>
                         <ImageIcon />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

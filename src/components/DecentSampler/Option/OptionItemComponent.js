@@ -17,6 +17,7 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
+import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -79,6 +80,7 @@ export function OptionItemComponent({ optionItem }) {
     return (
         <Fragment>
             <ListItem
+                sx={{ bgcolor: getBgColorForElementType(optionItem?.elementType) }}
                 disablePadding
                 secondaryAction={
                     <Fragment>
@@ -99,7 +101,7 @@ export function OptionItemComponent({ optionItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px" }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(optionItem?.elementType) }}>
                         <MenuOpen />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
