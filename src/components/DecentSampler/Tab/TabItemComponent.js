@@ -26,6 +26,9 @@ import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
+// Functions
+import { getIndentSize } from "@/functions/helpers";
+
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
@@ -131,7 +134,10 @@ export function TabItemComponent({ tabItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton sx={{ pl: hasChildren() ? 4 : 7 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton
+                    sx={{ pl: getIndentSize(tabItem, hasChildren()) }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
                         <Tab />

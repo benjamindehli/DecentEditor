@@ -16,6 +16,9 @@ import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconColor } from "@/components/Template/Icons/IconColor";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
+// Functions
+import { getIndentSize } from "@/functions/helpers";
+
 // Data
 import midiNotes from "@/data/midiNotes";
 
@@ -88,7 +91,7 @@ export function ColorItemComponent({ colorItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton sx={{ pl: 9 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton sx={{ pl: getIndentSize(colorItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
                     <ListItemIcon sx={{ minWidth: "32px" }}>
                         <IconColor color={convertColorValueToHex(colorItem.color)} />
                     </ListItemIcon>

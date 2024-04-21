@@ -15,6 +15,9 @@ import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
+// Functions
+import { getIndentSize } from "@/functions/helpers";
+
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
@@ -91,7 +94,10 @@ export function OptionItemComponent({ optionItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton sx={{ pl: hasChildren() ? 8 : 11 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton
+                    sx={{ pl: getIndentSize(optionItem, hasChildren()) }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
                         <MenuOpen />

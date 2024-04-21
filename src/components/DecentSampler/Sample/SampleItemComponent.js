@@ -16,6 +16,9 @@ import { EditSampleItemDialog } from "./Dialogs/EditSampleItemDialog";
 import { SettingsMenu } from "../../Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
+// Functions
+import { getIndentSize } from "@/functions/helpers";
+
 export function SampleItemComponent({ sampleItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [editSampleItemDialogIsOpen, setEditSampleItemDialogIsOpen] = useState(false);
@@ -82,7 +85,10 @@ export function SampleItemComponent({ sampleItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton sx={{ pl: 9 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton
+                    sx={{ pl: getIndentSize(sampleItem, false) }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     <ListItemIcon sx={{ minWidth: "32px" }}>
                         {sampleItem.loopEnabled === "1" ? <RestorePage /> : <AudioFile />}
                     </ListItemIcon>

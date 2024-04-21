@@ -16,6 +16,9 @@ import { AudioFile, RestorePage } from "@mui/icons-material";
 import { SettingsMenu } from "../../Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
+// Functions
+import { getIndentSize } from "@/functions/helpers";
+
 // Data
 import effectTypesData from "@/data/effectTypes";
 
@@ -99,7 +102,10 @@ export function EffectItemComponent({ effectItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton sx={{ pl: 11 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton
+                    sx={{ pl: getIndentSize(effectItem, false) }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     <ListItemIcon sx={{ minWidth: "32px" }}>
                         <RestorePage />
                     </ListItemIcon>

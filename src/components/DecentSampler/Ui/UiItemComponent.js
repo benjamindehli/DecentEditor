@@ -17,6 +17,9 @@ import { TabItemComponent } from "../Tab/TabItemComponent";
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
+// Functions
+import { getIndentSize } from "@/functions/helpers";
+
 export function UiItemComponent({ uiItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -75,7 +78,10 @@ export function UiItemComponent({ uiItem }) {
                 disablePadding
                 secondaryAction={<SettingsMenu elementItem={uiItem} menuItems={settingsMenuItems}></SettingsMenu>}
             >
-                <ListItemButton sx={{ pl: hasChildren() ? 2 : 5 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton
+                    sx={{ pl: getIndentSize(uiItem, hasChildren()) }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon sx={{ minWidth: "32px" }}>
                         <Web />

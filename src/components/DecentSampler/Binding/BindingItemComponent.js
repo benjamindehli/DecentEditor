@@ -13,6 +13,9 @@ import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { SettingsMenu } from "../../Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
+// Functions
+import { getIndentSize } from "@/functions/helpers";
+
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
@@ -92,7 +95,10 @@ export function BindingItemComponent({ bindingItem }) {
                     </Fragment>
                 }
             >
-                <ListItemButton sx={{ pl: 13 }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton
+                    sx={{ pl: getIndentSize(bindingItem, false) }}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     <ListItemIcon>
                         <IconControllableParameter
                             parameterType={bindingItem.type}
