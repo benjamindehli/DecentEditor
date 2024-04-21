@@ -389,6 +389,112 @@ const effectTypesData = [
         ]
     },
     {
+        description: "Chorus",
+        type: "chorus",
+        helperText:
+            "A chorus effect that can be used to thicken the sound by adding a slightly delayed version of the signal to itself.",
+        fields: [
+            {
+                label: "Mix",
+                key: "mix",
+                inputProps: {
+                    minValue: "0",
+                    maxValue: "1",
+                    step: "0.01",
+                    type: "number"
+                },
+                helperText: "The wet/dry mix which controls how much of the chorus signal we hear"
+            },
+            {
+                label: "Modulation depth",
+                key: "modDepth",
+                inputProps: {
+                    minValue: "0",
+                    maxValue: "1",
+                    step: "0.01",
+                    type: "number"
+                },
+                helperText: "The modulation depth of the effect"
+            },
+            {
+                label: "Modulation rate",
+                key: "modRate",
+                inputProps: {
+                    minValue: "0",
+                    maxValue: "10",
+                    step: "0.01",
+                    type: "number"
+                },
+                helperText: "The modulation speed in Hz."
+            }
+        ]
+    },
+    {
+        description: "Phaser",
+        type: "phaser",
+        helperText: "A phaser effect that can be used to add a sweeping, spacey sound to your audio.",
+        fields: [
+            {
+                label: "Mix",
+                key: "mix",
+                inputProps: {
+                    minValue: "0",
+                    maxValue: "1",
+                    step: "0.01",
+                    type: "number"
+                },
+                helperText: "The wet/dry mix which controls how much of the phaser signal we hear"
+            },
+            {
+                label: "Modulation depth",
+                key: "modDepth",
+                inputProps: {
+                    minValue: "0",
+                    maxValue: "1",
+                    step: "0.01",
+                    type: "number"
+                },
+                helperText: "The modulation depth of the effect"
+            },
+            {
+                label: "Modulation rate",
+                key: "modRate",
+                inputProps: {
+                    minValue: "0",
+                    maxValue: "10",
+                    step: "0.01",
+                    type: "number"
+                },
+                helperText: "The modulation speed in Hz."
+            },
+            {
+                label: "Center frequency",
+                key: "centerFrequency",
+                inputProps: {
+                    minValue: "20",
+                    maxValue: "22000",
+                    step: "1",
+                    type: "number",
+                    adornment: {
+                        text: "Hz",
+                        position: "end"
+                    }
+                }
+            },
+            {
+                label: "Feedback",
+                key: "feedback",
+                inputProps: {
+                    minValue: "0",
+                    maxValue: "1",
+                    step: "0.01",
+                    type: "number"
+                },
+                helperText: "The amount of feedback in the phaser loop."
+            }
+        ]
+    },
+    {
         description: "Convolution (Impulse Response)",
         type: "convolution",
         helperText:
