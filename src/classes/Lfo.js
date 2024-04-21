@@ -3,23 +3,27 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 // Classes
-import { Effect } from "./Effect";
+import { Binding } from "./Binding";
 
-export class Effects {
+export class Lfo {
     constructor(props, childElements, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
-        const hierarchyPath = props?.hierarchyPath || parentHierarchyPath ? [...parentHierarchyPath, id] : [id];
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
         this.id = id;
         this.hierarchyPath = hierarchyPath;
         this.elementType = props?.elementType || elementType;
+        this.shape = props?.shape;
+        this.frequency = props?.frequency;
+        this.modAmount = props?.modAmount;
+        this.scope = props?.scope;
         this.childElements =
             props?.childElements ||
             childElements
                 ?.map((childElement) => {
                     const childElementType = childElement["#name"];
                     switch (childElementType) {
-                        case "effect":
-                            return new Effect(childElement.$, childElement["#name"], hierarchyPath);
+                        case "binding":
+                            return new Binding(childElement.$, childElement["#name"], hierarchyPath);
                         default:
                             return null;
                     }
@@ -27,7 +31,14 @@ export class Effects {
                 .filter((childElement) => childElement);
     }
     toJson() {
-        const jsonObject = {};
+        const jsonObject = {
+            $: {
+                shape: this.shape,
+                frequency: this.frequency,
+                modAmount: this.modAmount,
+                scope: this.scope
+            }
+        };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
@@ -36,7 +47,11 @@ export class Effects {
     }
 }
 
-Effects.propTypes = {
+Lfo.propTypes = {
     id: PropTypes.string,
-    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Effect))
+    shape: PropTypes.oneOf(["sine", "square", "saw"]),
+    frequency: PropTypes.number,
+    modAmount: PropTypes.number,
+    scope: PropTypes.oneOf(["global", "voice"]),
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Binding))
 };

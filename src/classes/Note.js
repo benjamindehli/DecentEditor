@@ -3,23 +3,28 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 // Classes
-import { Effect } from "./Effect";
+import { Binding } from "./Binding";
 
-export class Effects {
+export class Note {
     constructor(props, childElements, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
-        const hierarchyPath = props?.hierarchyPath || parentHierarchyPath ? [...parentHierarchyPath, id] : [id];
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
         this.id = id;
         this.hierarchyPath = hierarchyPath;
         this.elementType = props?.elementType || elementType;
+        this.enabled = props?.enabled;
+        this.note = props?.number;
+        this.position = props?.position;
+        this.velocity = props?.velocity;
+        this.length = props?.length;
         this.childElements =
             props?.childElements ||
             childElements
                 ?.map((childElement) => {
                     const childElementType = childElement["#name"];
                     switch (childElementType) {
-                        case "effect":
-                            return new Effect(childElement.$, childElement["#name"], hierarchyPath);
+                        case "binding":
+                            return new Binding(childElement.$, childElement["#name"], hierarchyPath);
                         default:
                             return null;
                     }
@@ -27,7 +32,15 @@ export class Effects {
                 .filter((childElement) => childElement);
     }
     toJson() {
-        const jsonObject = {};
+        const jsonObject = {
+            $: {
+                enabled: this.enabled,
+                note: this.note,
+                position: this.position,
+                velocity: this.velocity,
+                length: this.length
+            }
+        };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
@@ -36,7 +49,12 @@ export class Effects {
     }
 }
 
-Effects.propTypes = {
+Note.propTypes = {
     id: PropTypes.string,
-    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Effect))
+    enabled: PropTypes.bool,
+    note: PropTypes.number,
+    position: PropTypes.number,
+    velocity: PropTypes.number,
+    length: PropTypes.number,
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Binding))
 };

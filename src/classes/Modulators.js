@@ -3,23 +3,26 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 // Classes
-import { Effect } from "./Effect";
+import { Lfo } from "./Lfo";
+import { Envelope } from "./Envelope";
 
-export class Effects {
-    constructor(props, childElements, elementType, parentHierarchyPath) {
+export class Modulators {
+    constructor(props, childElements, elementType) {
         const id = props?.id || uuidv4();
-        const hierarchyPath = props?.hierarchyPath || parentHierarchyPath ? [...parentHierarchyPath, id] : [id];
+        const hierarchyPath = [id];
         this.id = id;
-        this.hierarchyPath = hierarchyPath;
+        this.hierarchyPath = props?.hierarchyPath || hierarchyPath;
         this.elementType = props?.elementType || elementType;
         this.childElements =
-            props?.childElements ||
+            props?.childElement ||
             childElements
                 ?.map((childElement) => {
                     const childElementType = childElement["#name"];
                     switch (childElementType) {
-                        case "effect":
-                            return new Effect(childElement.$, childElement["#name"], hierarchyPath);
+                        case "lfo":
+                            return new Lfo(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "envelope":
+                            return new Envelope(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
                         default:
                             return null;
                     }
@@ -36,7 +39,7 @@ export class Effects {
     }
 }
 
-Effects.propTypes = {
+Modulators.propTypes = {
     id: PropTypes.string,
-    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Effect))
+    childElements: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(Lfo), PropTypes.instanceOf(Envelope)]))
 };

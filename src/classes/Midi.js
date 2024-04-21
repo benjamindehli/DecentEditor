@@ -3,23 +3,26 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 // Classes
-import { Effect } from "./Effect";
+import { Cc } from "./Cc";
+import { Note } from "./Note";
 
-export class Effects {
-    constructor(props, childElements, elementType, parentHierarchyPath) {
+export class Midi {
+    constructor(props, childElements, elementType) {
         const id = props?.id || uuidv4();
-        const hierarchyPath = props?.hierarchyPath || parentHierarchyPath ? [...parentHierarchyPath, id] : [id];
+        const hierarchyPath = [id];
         this.id = id;
-        this.hierarchyPath = hierarchyPath;
+        this.hierarchyPath = props?.hierarchyPath || hierarchyPath;
         this.elementType = props?.elementType || elementType;
         this.childElements =
-            props?.childElements ||
+            props?.childElement ||
             childElements
                 ?.map((childElement) => {
                     const childElementType = childElement["#name"];
                     switch (childElementType) {
-                        case "effect":
-                            return new Effect(childElement.$, childElement["#name"], hierarchyPath);
+                        case "cc":
+                            return new Cc(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "note":
+                            return new Note(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
                         default:
                             return null;
                     }
@@ -36,7 +39,7 @@ export class Effects {
     }
 }
 
-Effects.propTypes = {
+Midi.propTypes = {
     id: PropTypes.string,
-    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Effect))
+    childElements: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(Cc), PropTypes.instanceOf(Note)]))
 };

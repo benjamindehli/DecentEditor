@@ -5,6 +5,11 @@ import PropTypes from "prop-types";
 // Classes
 import { Groups } from "./Groups";
 import { Ui } from "./Ui";
+import { Effects } from "./Effects";
+import { Midi } from "./Midi";
+import { NoteSequences } from "./NoteSequences";
+import { Modulators } from "./Modulators";
+import { Tags } from "./Tags";
 
 // Functions
 import { createXmlDoc, jsonToXml } from "@/functions/converters";
@@ -23,6 +28,16 @@ export class DecentSampler {
                             return new Ui(childElement.$, childElement.$$, childElement["#name"]);
                         case "groups":
                             return new Groups(childElement.$, childElement.$$, childElement["#name"]);
+                        case "effects":
+                            return new Effects(childElement.$, childElement.$$, childElement["#name"]);
+                        case "midi":
+                            return new Midi(childElement.$, childElement.$$, childElement["#name"]);
+                        case "noteSequences":
+                            return new NoteSequences(childElement.$, childElement.$$, childElement["#name"]);
+                        case "modulators":
+                            return new Modulators(childElement.$, childElement.$$, childElement["#name"]);
+                        case "tags":
+                            return new Tags(childElement.$, childElement.$$, childElement["#name"]);
                         default:
                             return null;
                     }
@@ -45,8 +60,14 @@ export class DecentSampler {
 }
 
 DecentSampler.propTypes = {
-    updateGroupsList: PropTypes.function,
-    updateUiList: PropTypes.function,
-    groupsList: PropTypes.arrayOf(PropTypes.instanceOf(Groups)),
-    uiList: PropTypes.arrayOf(PropTypes.instanceOf(Ui))
+    childElements: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.instanceOf(Ui),
+            PropTypes.instanceOf(Groups),
+            PropTypes.instanceOf(Effects),
+            PropTypes.instanceOf(Midi),
+            PropTypes.instanceOf(NoteSequences),
+            PropTypes.instanceOf(Modulators)
+        ])
+    )
 };

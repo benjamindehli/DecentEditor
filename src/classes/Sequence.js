@@ -3,23 +3,26 @@ import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 // Classes
-import { Effect } from "./Effect";
+import { Note } from "./Note";
 
-export class Effects {
+export class Sequence {
     constructor(props, childElements, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
-        const hierarchyPath = props?.hierarchyPath || parentHierarchyPath ? [...parentHierarchyPath, id] : [id];
+        const hierarchyPath = props?.hierarchyPath || [...parentHierarchyPath, id];
         this.id = id;
         this.hierarchyPath = hierarchyPath;
         this.elementType = props?.elementType || elementType;
+        this.name = props?.name;
+        this.length = props?.length;
+        this.rate = props?.rate;
         this.childElements =
             props?.childElements ||
             childElements
                 ?.map((childElement) => {
                     const childElementType = childElement["#name"];
                     switch (childElementType) {
-                        case "effect":
-                            return new Effect(childElement.$, childElement["#name"], hierarchyPath);
+                        case "note":
+                            return new Note(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
                         default:
                             return null;
                     }
@@ -27,7 +30,13 @@ export class Effects {
                 .filter((childElement) => childElement);
     }
     toJson() {
-        const jsonObject = {};
+        const jsonObject = {
+            $: {
+                name: this.name,
+                length: this.length,
+                rate: this.rate
+            }
+        };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
@@ -36,7 +45,10 @@ export class Effects {
     }
 }
 
-Effects.propTypes = {
+Sequence.propTypes = {
     id: PropTypes.string,
-    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Effect))
+    name: PropTypes.string,
+    length: PropTypes.number,
+    rate: PropTypes.number,
+    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Note))
 };
