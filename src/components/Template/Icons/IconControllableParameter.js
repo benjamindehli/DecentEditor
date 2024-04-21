@@ -21,7 +21,6 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
     function renderParameterLevelIcon(parameterLevel) {
         const iconProps = {
             sx: {
-                color: "text.secondary"
             }
         };
         switch (parameterLevel) {
@@ -42,7 +41,6 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
     function renderParameterTypeIcon(parameterType) {
         const iconProps = {
             sx: {
-                color: "text.secondary"
             }
         };
         switch (parameterType) {
