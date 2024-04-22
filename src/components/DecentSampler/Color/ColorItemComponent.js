@@ -83,7 +83,7 @@ export function ColorItemComponent({ colorItem }) {
                     <Fragment>
                         <IconButton
                             edge="start"
-                            aria-label="color"
+                            aria-label="edit color"
                             id={`${colorItem?.id}-edit-button`}
                             onClick={() => handleClickOpenEditColorItemDialog()}
                         >
