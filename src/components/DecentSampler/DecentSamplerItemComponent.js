@@ -9,6 +9,7 @@ import { UiItemComponent } from "./Ui/UiItemComponent";
 import { GroupsItemComponent } from "./Groups/GroupsItemComponent";
 import { EffectsItemComponent } from "./Effects/EffectsItemComponent";
 import { TagsItemComponent } from "./Tags/TagsItemComponent";
+import { ModulatorsItemComponent } from "./Modulators/ModulatorsItemComponent";
 import { NoteSequencesItemComponent } from "./NoteSequences/NoteSequencesItem";
 
 export function DecentSamplerItemComponent({ decentSamplerItem }) {
@@ -22,6 +23,8 @@ export function DecentSamplerItemComponent({ decentSamplerItem }) {
                 return <EffectsItemComponent key={childElement.id} effectsItem={childElement} />;
             case "tags":
                 return <TagsItemComponent key={childElement.id} tagsItem={childElement} />;
+            case "modulators":
+                return <ModulatorsItemComponent key={childElement.id} modulatorsItem={childElement} />;
             case "noteSequences":
                 return <NoteSequencesItemComponent key={childElement.id} noteSequencesItem={childElement} />;
             default:
