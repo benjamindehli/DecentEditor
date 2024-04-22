@@ -22,16 +22,34 @@ import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 // Data
 import controllableParametersData from "@/data/controllableParameters.js";
+import { EditBindingItemDialog } from "./EditBindingItemDialog";
+import { ControllableParameter } from "@/classes/ControllableParameter";
 
 export function BindingItemComponent({ bindingItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
-
-    const [controllableParameterForBinding, setControllableParameterForBinding] = useState(null);
+    const [controllableParameters, setControllableParameters] = useState(
+        controllableParametersData.map((controllableParameter) => {
+            return new ControllableParameter(controllableParameter);
+        })
+    );
+    const [controllableParameterForBinding, setControllableParameterForBinding] = useState(
+        getControlParameterForBindingItem(bindingItem)
+    );
 
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const [editBindingItemDialogIsOpen, setEditBindingItemDialogIsOpen] = useState(false);
+
+    const handleClickOpenEditBindingItemDialog = () => {
+        setEditBindingItemDialogIsOpen(true);
+    };
+
+    const handleCloseEditBindingItemDialog = () => {
+        setEditBindingItemDialogIsOpen(false);
+    };
+
     function getControlParameterForBindingItem(binding) {
-        return controllableParametersData.find((controllableParameter) => {
+        return controllableParameters.find((controllableParameter) => {
             return (
                 controllableParameter.type === binding.type &&
                 controllableParameter.level === binding.level &&
@@ -40,13 +58,13 @@ export function BindingItemComponent({ bindingItem }) {
         });
     }
 
-    useEffect(() => {
+   /* useEffect(() => {
         const controllableParameter = getControlParameterForBindingItem(bindingItem);
         setControllableParameterForBinding(controllableParameter);
         if (!controllableParameter) {
             console.log("noMatch", bindingItem);
         }
-    }, [bindingItem]);
+    }, [bindingItem]);*/
 
     const settingsMenuItems = (
         <Fragment>
@@ -87,9 +105,9 @@ export function BindingItemComponent({ bindingItem }) {
                     <Fragment>
                         <IconButton
                             edge="start"
-                            aria-label="binding edit button"
+                            aria-label="edit binding"
                             id={`${bindingItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
+                            onClick={() => handleClickOpenEditBindingItemDialog()}
                         >
                             <EditIcon />
                         </IconButton>
@@ -110,6 +128,13 @@ export function BindingItemComponent({ bindingItem }) {
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </ListItem>
+            <EditBindingItemDialog
+                bindingItem={bindingItem}
+                controllableParameters={controllableParameters}
+                controllableParameterForBinding={controllableParameterForBinding}
+                open={editBindingItemDialogIsOpen}
+                onClose={handleCloseEditBindingItemDialog}
+            />
         </Fragment>
     );
 }
