@@ -21,8 +21,8 @@ export class ControllableParameter {
         this.level = props?.level;
         this.parameter = props?.parameter;
         this.inputProps = props?.inputProps && {
-            minValue: props?.inputProps.minValue,
-            maxValue: props?.inputProps.maxValue,
+            min: props?.inputProps.min,
+            max: props?.inputProps.max,
             step: props?.inputProps.step,
             type: props?.inputProps.type,
             options: props?.inputProps.options
