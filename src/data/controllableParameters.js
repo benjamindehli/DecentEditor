@@ -5,8 +5,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "AMP_VOLUME",
         inputProps: {
-            minValue: "0",
-            maxValue: "16",
+            min: "0",
+            max: "16",
             step: "0.1",
             type: "number"
         },
@@ -18,8 +18,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "GLOBAL_TUNING",
         inputProps: {
-            minValue: "-36",
-            maxValue: "36",
+            min: "-36",
+            max: "36",
             step: "0.1",
             type: "number"
         },
@@ -31,8 +31,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "PAN",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -44,7 +44,7 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "SAMPLE_START",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -57,7 +57,7 @@ const controllableParametersData = [
         level: "group",
         parameter: "SAMPLE_START",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -70,7 +70,7 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "SAMPLE_END",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -83,7 +83,7 @@ const controllableParametersData = [
         level: "group",
         parameter: "SAMPLE_END",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -96,7 +96,7 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "LOOP_START",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -109,7 +109,7 @@ const controllableParametersData = [
         level: "group",
         parameter: "LOOP_START",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -122,7 +122,7 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "LOOP_END",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -135,7 +135,7 @@ const controllableParametersData = [
         level: "group",
         parameter: "LOOP_END",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -148,8 +148,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "AMP_VEL_TRACK",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -161,8 +161,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_ATTACK",
         inputProps: {
-            minValue: "0",
-            maxValue: "10",
+            min: "0",
+            max: "10",
             step: "0.01",
             type: "number"
         },
@@ -174,8 +174,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_ATTACK_CURVE",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -187,8 +187,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_DECAY",
         inputProps: {
-            minValue: "0",
-            maxValue: "25",
+            min: "0",
+            max: "25",
             step: "0.01",
             type: "number"
         },
@@ -200,8 +200,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_DECAY_CURVE",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -213,8 +213,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_SUSTAIN",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -226,8 +226,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_RELEASE",
         inputProps: {
-            minValue: "0",
-            maxValue: "25",
+            min: "0",
+            max: "25",
             step: "0.01",
             type: "number"
         },
@@ -239,8 +239,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_RELEASE_CURVE",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -252,15 +252,15 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "GLIDE_TIME",
         inputProps: {
-            minValue: "0",
-            maxValue: "10",
+            min: "0",
+            max: "10",
             step: "0.01",
             type: "number"
         },
         modulatable: false
     },
     {
-        description: "Effect Enabled (all effects)",
+        description: "Effect Enabled",
         type: "effect",
         level: "instrument",
         parameter: "ENABLED",
@@ -276,8 +276,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_MIX",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -301,8 +301,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_FILTER_FREQUENCY",
         inputProps: {
-            minValue: "0",
-            maxValue: "22000",
+            min: "0",
+            max: "22000",
             step: "1",
             type: "number"
         },
@@ -315,8 +315,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_FILTER_Q",
         inputProps: {
-            minValue: "0.01",
-            maxValue: "18",
+            min: "0.01",
+            max: "18",
             step: "0.01",
             type: "number"
         },
@@ -329,8 +329,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_FILTER_GAIN",
         inputProps: {
-            minValue: "0",
-            maxValue: "10",
+            min: "0",
+            max: "10",
             step: "0.01",
             type: "number"
         },
@@ -343,8 +343,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_FILTER_RESONANCE",
         inputProps: {
-            minValue: "0",
-            maxValue: "5",
+            min: "0",
+            max: "5",
             step: "0.01",
             type: "number"
         },
@@ -357,8 +357,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_REVERB_WET_LEVEL",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -371,8 +371,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_REVERB_ROOM_SIZE",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -385,8 +385,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_REVERB_DAMPING",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -399,8 +399,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_MIX",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -413,8 +413,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_MOD_DEPTH",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -427,8 +427,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_MOD_RATE",
         inputProps: {
-            minValue: "0",
-            maxValue: "10",
+            min: "0",
+            max: "10",
             step: "0.01",
             type: "number"
         },
@@ -441,8 +441,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_CENTER_FREQUENCY",
         inputProps: {
-            minValue: "0",
-            maxValue: "22000",
+            min: "0",
+            max: "22000",
             step: "1",
             type: "number"
         },
@@ -455,8 +455,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_FEEDBACK",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -469,8 +469,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_DELAY_TIME",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -498,8 +498,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_STEREO_OFFSET",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -512,8 +512,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_WET_LEVEL",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -526,13 +526,13 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "LEVEL",
         inputProps: {
-            minValue: "0",
-            maxValue: "8",
+            min: "0",
+            max: "8",
             step: "0.01",
             type: "number"
         },
         modulatable: true,
-        additionalParams: ["groupIndex"]
+        additionalParams: ["effectIndex"]
     },
     {
         description: "Wave Folder Drive Level",
@@ -540,13 +540,13 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_DRIVE",
         inputProps: {
-            minValue: "1",
-            maxValue: "100",
+            min: "1",
+            max: "100",
             step: "0.01",
             type: "number"
         },
         modulatable: true,
-        additionalParams: ["groupIndex"]
+        additionalParams: ["effectIndex"]
     },
     {
         description: "Wave Folder Threshold",
@@ -554,13 +554,13 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_THRESHOLD",
         inputProps: {
-            minValue: "0.1",
-            maxValue: "100",
+            min: "0.1",
+            max: "100",
             step: "0.01",
             type: "number"
         },
         modulatable: true,
-        additionalParams: ["groupIndex"]
+        additionalParams: ["effectIndex"]
     },
     {
         description: "Wave Shaper Drive Level",
@@ -568,13 +568,13 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_DRIVE",
         inputProps: {
-            minValue: "0",
-            maxValue: "1000",
+            min: "0",
+            max: "1000",
             step: "1",
             type: "number"
         },
         modulatable: true,
-        additionalParams: ["groupIndex"]
+        additionalParams: ["effectIndex"]
     },
     {
         description: "Wave Shaper Output Level",
@@ -582,13 +582,13 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_OUTPUT_LEVEL",
         inputProps: {
-            minValue: "0",
-            maxValue: "8",
+            min: "0",
+            max: "8",
             step: "0.01",
             type: "number"
         },
         modulatable: true,
-        additionalParams: ["groupIndex"]
+        additionalParams: ["effectIndex"]
     },
     {
         description: "Wave Shaper Drive Boost",
@@ -596,13 +596,364 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FX_DRIVE_BOOST",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
         modulatable: true,
-        additionalParams: ["groupIndex"]
+        additionalParams: ["effectIndex"]
+    },
+    {
+        description: "Effect Enabled",
+        type: "effect",
+        level: "group",
+        parameter: "ENABLED",
+        inputProps: {
+            type: "boolean"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Convolution Mix Level",
+        type: "effect",
+        level: "group",
+        parameter: "FX_MIX",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Convolution IR File",
+        type: "effect",
+        level: "group",
+        parameter: "FX_IR_FILE",
+        inputProps: {
+            type: "text"
+        },
+        modulatable: false,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Filter Frequency (for several filters)",
+        type: "effect",
+        level: "group",
+        parameter: "FX_FILTER_FREQUENCY",
+        inputProps: {
+            min: "0",
+            max: "22000",
+            step: "1",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Peak or Notch Filter Q",
+        type: "effect",
+        level: "group",
+        parameter: "FX_FILTER_Q",
+        inputProps: {
+            min: "0.01",
+            max: "18",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Peak or Notch Filter Gain",
+        type: "effect",
+        level: "group",
+        parameter: "FX_FILTER_GAIN",
+        inputProps: {
+            min: "0",
+            max: "10",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Low-pass or High-pass Filter Resonance",
+        type: "effect",
+        level: "group",
+        parameter: "FX_FILTER_RESONANCE",
+        inputProps: {
+            min: "0",
+            max: "5",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Reverb Wet Level",
+        type: "effect",
+        level: "group",
+        parameter: "FX_REVERB_WET_LEVEL",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Reverb Room Size",
+        type: "effect",
+        level: "group",
+        parameter: "FX_REVERB_ROOM_SIZE",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Reverb Damping",
+        type: "effect",
+        level: "group",
+        parameter: "FX_REVERB_DAMPING",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Chorus/Phaser/Convolution Mix Level",
+        type: "effect",
+        level: "group",
+        parameter: "FX_MIX",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Chorus/Phaser Mod Depth",
+        type: "effect",
+        level: "group",
+        parameter: "FX_MOD_DEPTH",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Chorus/Phaser Mod Rate",
+        type: "effect",
+        level: "group",
+        parameter: "FX_MOD_RATE",
+        inputProps: {
+            min: "0",
+            max: "10",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Phaser Center Frequency",
+        type: "effect",
+        level: "group",
+        parameter: "FX_CENTER_FREQUENCY",
+        inputProps: {
+            min: "0",
+            max: "22000",
+            step: "1",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Phaser/Delay Feedback",
+        type: "effect",
+        level: "group",
+        parameter: "FX_FEEDBACK",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Delay Time",
+        type: "effect",
+        level: "group",
+        parameter: "FX_DELAY_TIME",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Delay Time Format",
+        type: "effect",
+        level: "group",
+        parameter: "FX_DELAY_TIME_FORMAT",
+        inputProps: {
+            type: "select",
+            options: [
+                {
+                    label: "Seconds",
+                    value: "seconds"
+                },
+                {
+                    label: "Musical time",
+                    value: "musical_time"
+                }
+            ]
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Delay Stereo Offset",
+        type: "effect",
+        level: "group",
+        parameter: "FX_STEREO_OFFSET",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Delay Wet Level",
+        type: "effect",
+        level: "group",
+        parameter: "FX_WET_LEVEL",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Gain Level",
+        type: "effect",
+        level: "group",
+        parameter: "LEVEL",
+        inputProps: {
+            min: "0",
+            max: "8",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Wave Folder Drive Level",
+        type: "effect",
+        level: "group",
+        parameter: "FX_DRIVE",
+        inputProps: {
+            min: "1",
+            max: "100",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Wave Folder Threshold",
+        type: "effect",
+        level: "group",
+        parameter: "FX_THRESHOLD",
+        inputProps: {
+            min: "0.1",
+            max: "100",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Wave Shaper Drive Level",
+        type: "effect",
+        level: "group",
+        parameter: "FX_DRIVE",
+        inputProps: {
+            min: "0",
+            max: "1000",
+            step: "1",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Wave Shaper Output Level",
+        type: "effect",
+        level: "group",
+        parameter: "FX_OUTPUT_LEVEL",
+        inputProps: {
+            min: "0",
+            max: "8",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
+    },
+    {
+        description: "Wave Shaper Drive Boost",
+        type: "effect",
+        level: "group",
+        parameter: "FX_DRIVE_BOOST",
+        inputProps: {
+            min: "0",
+            max: "1",
+            step: "0.01",
+            type: "number"
+        },
+        modulatable: true,
+        additionalParams: ["effectIndex", "groupIndex"]
     },
     {
         description: "Group Enabled / Disabled",
@@ -632,8 +983,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "AMP_VOLUME",
         inputProps: {
-            minValue: "0",
-            maxValue: "16",
+            min: "0",
+            max: "16",
             step: "0.01",
             type: "number"
         },
@@ -646,8 +997,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "GROUP_TUNING",
         inputProps: {
-            minValue: "-36",
-            maxValue: "36",
+            min: "-36",
+            max: "36",
             step: "0.01",
             type: "number"
         },
@@ -660,8 +1011,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "PAN",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -674,8 +1025,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "AMP_VEL_TRACK",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -688,8 +1039,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "ENV_ATTACK",
         inputProps: {
-            minValue: "0",
-            maxValue: "10",
+            min: "0",
+            max: "10",
             step: "0.01",
             type: "number"
         },
@@ -702,8 +1053,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "ENV_DECAY",
         inputProps: {
-            minValue: "0",
-            maxValue: "25",
+            min: "0",
+            max: "25",
             step: "0.01",
             type: "number"
         },
@@ -716,8 +1067,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "ENV_SUSTAIN",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -730,8 +1081,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "ENV_RELEASE",
         inputProps: {
-            minValue: "0",
-            maxValue: "25",
+            min: "0",
+            max: "25",
             step: "0.01",
             type: "number"
         },
@@ -744,8 +1095,8 @@ const controllableParametersData = [
         level: "group",
         parameter: "GLIDE_TIME",
         inputProps: {
-            minValue: "0",
-            maxValue: "10",
+            min: "0",
+            max: "10",
             step: "0.01",
             type: "number"
         },
@@ -769,8 +1120,8 @@ const controllableParametersData = [
         level: "tag",
         parameter: "TAG_VOLUME",
         inputProps: {
-            minValue: "0",
-            maxValue: "16",
+            min: "0",
+            max: "16",
             step: "0.01",
             type: "number"
         },
@@ -783,7 +1134,7 @@ const controllableParametersData = [
         level: "midi",
         parameter: "ENABLED",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -796,7 +1147,7 @@ const controllableParametersData = [
         level: "midi",
         parameter: "ENABLED",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -810,7 +1161,7 @@ const controllableParametersData = [
         level: "midi",
         parameter: "SEQ_INDEX",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -844,8 +1195,8 @@ const controllableParametersData = [
         level: "midi",
         parameter: "SEQ_TRANSPOSE_WITH_ROOT_NOTE",
         inputProps: {
-            minValue: "0",
-            maxValue: "127",
+            min: "0",
+            max: "127",
             step: "1",
             type: "number"
         },
@@ -861,8 +1212,8 @@ const controllableParametersData = [
         level: "midi",
         parameter: "SEQ_PLAYBACK_RATE",
         inputProps: {
-            minValue: "0.001",
-            maxValue: "10000",
+            min: "0.001",
+            max: "10000",
             step: "0.01",
             type: "number"
         },
@@ -877,8 +1228,8 @@ const controllableParametersData = [
         level: "midi",
         parameter: "SEQ_TRACK_MIDI_INPUT_VELOCITY",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -894,8 +1245,8 @@ const controllableParametersData = [
         level: "midi",
         parameter: "SEQ_TRANSPOSE",
         inputProps: {
-            minValue: "-36",
-            maxValue: "36",
+            min: "-36",
+            max: "36",
             step: "1",
             type: "number"
         },
@@ -910,7 +1261,7 @@ const controllableParametersData = [
         level: "midi",
         parameter: "ENABLED",
         inputProps: {
-            minValue: "0",
+            min: "0",
             step: "1",
             type: "number"
         },
@@ -1041,8 +1392,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "MOD_AMOUNT",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -1055,8 +1406,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "FREQUENCY",
         inputProps: {
-            minValue: "0",
-            maxValue: "22000",
+            min: "0",
+            max: "22000",
             step: "1",
             type: "number"
         },
@@ -1070,8 +1421,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_ATTACK",
         inputProps: {
-            minValue: "0",
-            maxValue: "10",
+            min: "0",
+            max: "10",
             step: "0.01",
             type: "number"
         },
@@ -1085,8 +1436,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_ATTACK_CURVE",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -1100,8 +1451,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_DECAY",
         inputProps: {
-            minValue: "0",
-            maxValue: "25",
+            min: "0",
+            max: "25",
             step: "0.01",
             type: "number"
         },
@@ -1115,8 +1466,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_DECAY_CURVE",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -1130,8 +1481,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_SUSTAIN",
         inputProps: {
-            minValue: "0",
-            maxValue: "1",
+            min: "0",
+            max: "1",
             step: "0.01",
             type: "number"
         },
@@ -1145,8 +1496,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_RELEASE",
         inputProps: {
-            minValue: "0",
-            maxValue: "25",
+            min: "0",
+            max: "25",
             step: "0.01",
             type: "number"
         },
@@ -1160,8 +1511,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "ENV_RELEASE_CURVE",
         inputProps: {
-            minValue: "-100",
-            maxValue: "100",
+            min: "-100",
+            max: "100",
             step: "1",
             type: "number"
         },
@@ -1174,8 +1525,8 @@ const controllableParametersData = [
         level: "instrument",
         parameter: "RATE",
         inputProps: {
-            minValue: "0.01",
-            maxValue: "100",
+            min: "0.01",
+            max: "100",
             step: "0.01",
             type: "number"
         },
