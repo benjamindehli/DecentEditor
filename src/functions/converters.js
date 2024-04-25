@@ -1,20 +1,20 @@
 import xmlFormat from "xml-formatter";
 
 export function jsonToXml(json) {
-    let sequenceElement = document.createElementNS(null, json["#name"]);
+    let xmlElement = document.createElementNS(null, json["#name"]);
     if (!!json?.$ && Object.keys(json.$).length) {
         Object.keys(json.$).forEach((key) => {
             if (json.$[key] !== undefined) {
-                sequenceElement.setAttribute(key, json.$[key]);
+                xmlElement.setAttribute(key, json.$[key]);
             }
         });
     }
     if (!!json?.$$?.length) {
         json.$$?.forEach((childElement) => {
-            sequenceElement.appendChild(jsonToXml(childElement));
+            xmlElement.appendChild(jsonToXml(childElement));
         });
     }
-    return sequenceElement;
+    return xmlElement;
 }
 
 export function createXmlDoc(xmlContent) {
