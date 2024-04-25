@@ -46,6 +46,15 @@ export function EditBindingItemDialog({
         setSelectedBindingParameter(value);
     }
 
+    function handleGroupEffectSelectOnChange(value) {
+        console.log("handleGroupEffectSelectOnChange", value);
+    }
+
+    const defaultValue =
+        bindingItem?.groupRef && bindingItem?.effectRef
+            ? { groupRef: bindingItem.groupRef, effectRef: bindingItem.effectRef }
+            : "";
+
     return (
         <Dialog
             open={open}
@@ -56,8 +65,6 @@ export function EditBindingItemDialog({
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
-                    const updatedBindingItem = new Binding({ ...bindingItem, ...formJson });
-                    decentSamplerContext.updateDecentSamplerElement(updatedBindingItem);
                     onClose();
                 }
             }}
@@ -101,7 +108,11 @@ export function EditBindingItemDialog({
                     />
                 )}
                 <GroupEffectSelect
-                    defaultValue={{ groupIndex: parseInt(bindingItem?.groupIndex), effectIndex: parseInt(bindingItem?.effectIndex) }}
+                    groupRef={bindingItem?.groupRef}
+                    effectRef={bindingItem?.effectRef}
+                    open={open}
+                    onChange={handleGroupEffectSelectOnChange}
+                    defaultValue={defaultValue}
                 />
             </DialogContent>
 
