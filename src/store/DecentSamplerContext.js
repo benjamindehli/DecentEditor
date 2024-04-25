@@ -19,7 +19,15 @@ export function DecentSamplerContextProvider({ children }) {
     const [decentSampler, setDecentSampler] = useState(null);
 
     function initDecentSamplerHandler(decentSamplerElement) {
-        setDecentSampler(new DecentSampler(null, decentSamplerElement.$$, decentSamplerElement["#name"]));
+        let decentSampler;
+        if (decentSamplerElement){
+            decentSampler = new DecentSampler(null, decentSamplerElement?.$$, decentSamplerElement?.["#name"]);
+        } else {
+            decentSampler = new DecentSampler();
+            decentSampler.createNewPreset();
+        }
+        decentSampler.init(decentSampler);
+        setDecentSampler(decentSampler);
     }
 
     function updateDecentSamplerElementHandler(decentSamplerElement) {
