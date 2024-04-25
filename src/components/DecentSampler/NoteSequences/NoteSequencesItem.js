@@ -7,7 +7,7 @@ import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
 
 // Components
-import { SequenceItemComponent } from "../Sequence/SequenceItem";
+import { SequenceItemComponent } from "../Sequence/SequenceItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
