@@ -12,6 +12,8 @@ export const bindingTypes = [
     "note_sequence"
 ];
 
+export const bindingLevels = ["instrument", "group", "tag", "midi", "ui"];
+
 export const bindingParameters = [
     "AMP_VOLUME",
     "GLOBAL_TUNING",
@@ -74,7 +76,7 @@ export const bindingParameters = [
     "ALL_NOTES_OFF"
 ];
 
-export const bindingLevels = ["instrument", "group", "tag", "midi", "ui"];
+
 
 export const bindingAdditionalParams = [
     "effectIndex",
