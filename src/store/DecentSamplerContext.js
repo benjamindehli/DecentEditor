@@ -6,13 +6,9 @@ import { createContext, useState } from "react";
 // Classes
 import { DecentSampler } from "@/classes/DecentSampler";
 
-// Functions
-import { updateStore } from "@/functions/store";
-
 const DecentSamplerContext = createContext({
     decentSampler: {},
-    initDecentSampler: function (decentSamplerElement) {},
-    updateDecentSamplerElement: function (decentSamplerElement) {}
+    initDecentSampler: function (decentSamplerElement) {}
 });
 
 export function DecentSamplerContextProvider({ children }) {
@@ -20,7 +16,7 @@ export function DecentSamplerContextProvider({ children }) {
 
     function initDecentSamplerHandler(decentSamplerElement) {
         let decentSampler;
-        if (decentSamplerElement){
+        if (decentSamplerElement) {
             decentSampler = new DecentSampler(null, decentSamplerElement?.$$, decentSamplerElement?.["#name"]);
         } else {
             decentSampler = new DecentSampler();
@@ -30,15 +26,9 @@ export function DecentSamplerContextProvider({ children }) {
         setDecentSampler(decentSampler);
     }
 
-    function updateDecentSamplerElementHandler(decentSamplerElement) {
-        const updatedDecentSampler = updateStore(decentSampler, decentSamplerElement);
-        setDecentSampler(new DecentSampler(updatedDecentSampler));
-    }
-
     const context = {
         decentSampler: decentSampler,
-        initDecentSampler: initDecentSamplerHandler,
-        updateDecentSamplerElement: updateDecentSamplerElementHandler
+        initDecentSampler: initDecentSamplerHandler
     };
 
     return <DecentSamplerContext.Provider value={context}>{children}</DecentSamplerContext.Provider>;
