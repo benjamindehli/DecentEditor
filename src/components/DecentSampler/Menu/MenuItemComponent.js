@@ -3,24 +3,23 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, ListAlt } from "@mui/icons-material";
 
 // Components
 import { OptionItemComponent } from "../Option/OptionItemComponent";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 export function MenuItemComponent({ menuItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -76,22 +75,10 @@ export function MenuItemComponent({ menuItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(menuItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit menu"
-                            id={`${menuItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={menuItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={menuItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={() => console.log("onClick")}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(menuItem, hasChildren()) }}
@@ -103,13 +90,15 @@ export function MenuItemComponent({ menuItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {menuItem?.childElements?.length &&
-                        menuItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!menuItem?.childElements?.length &&
+                            menuItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

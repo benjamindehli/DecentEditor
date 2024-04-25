@@ -3,18 +3,17 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Folder, Image as ImageIcon } from "@mui/icons-material";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -60,22 +59,10 @@ export function ImageItemComponent({ imageItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(imageItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit image"
-                            id={`${imageItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={imageItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={imageItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={() => console.log("onClick")}
             >
                 <ListItemButton sx={{ pl: getIndentSize(imageItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
                     <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(imageItem?.elementType) }}>
@@ -83,7 +70,7 @@ export function ImageItemComponent({ imageItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
+            </DefaultListItem>
         </Fragment>
     );
 }

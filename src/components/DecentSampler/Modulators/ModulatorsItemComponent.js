@@ -2,7 +2,7 @@
 import { Fragment, useState } from "react";
 
 // Material UI
-import { Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import { Bookmarks, ChevronRight, ExpandMore, Web } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -14,12 +14,12 @@ import { LfoItemComponent } from "../Lfo/LfoItemComponent";
 import { EnvelopeItemComponent } from "../Envelope/EnvelopeItemComponent";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 export function ModulatorsItemComponent({ modulatorsItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -67,7 +67,7 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
             envelope: 0,
             lfo: 0
         };
-        modulatorsItem.childElements.forEach((childElement) => {
+        modulatorsItem.childElements?.forEach((childElement) => {
             if (childElementTypes[childElement.elementType] !== undefined) {
                 childElementTypes[childElement.elementType]++;
             }
@@ -101,12 +101,10 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
     return (
         <Fragment>
             {/* <UiItemSettingsComponent uiItem={uiItem} onUpdateUiItem={handleUpdateUiItem} />*/}
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(modulatorsItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <SettingsMenu elementItem={modulatorsItem} menuItems={settingsMenuItems}></SettingsMenu>
-                }
+            <DefaultListItem
+                elementItem={modulatorsItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={() => console.log("onClick")}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(modulatorsItem, hasChildren()) }}
@@ -120,13 +118,15 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {modulatorsItem?.childElements?.length &&
-                        modulatorsItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!modulatorsItem?.childElements?.length &&
+                            modulatorsItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

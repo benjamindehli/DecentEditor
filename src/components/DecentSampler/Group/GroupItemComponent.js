@@ -3,20 +3,8 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import { AudioFile, ChevronRight, ExpandMore, Folder, FolderOff, Tune } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import {
-    Chip,
-    Collapse,
-    IconButton,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    ListSubheader,
-    MenuItem
-} from "@mui/material";
+import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 
 // Components
 import { EditGroupItemDialog } from "./Dialogs/EditGroupItemDialog";
@@ -26,15 +14,15 @@ import { SampleItemComponent } from "../Sample/SampleItemComponent";
 // Template
 import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 export function GroupItemComponent({ groupItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -120,7 +108,7 @@ export function GroupItemComponent({ groupItem }) {
             effect: 0,
             sample: 0
         };
-        groupItem.childElements.forEach((childElement) => {
+        groupItem?.childElements?.forEach((childElement) => {
             if (childElement?.elementType === "sample") {
                 childElementTypes.sample++;
             } else if (childElement?.elementType === "effects") {
@@ -164,22 +152,10 @@ export function GroupItemComponent({ groupItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(groupItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit group button"
-                            id={`${groupItem?.id}-edit-button`}
-                            onClick={() => handleClickOpenEditGroupItemDialog()}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={groupItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={groupItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={handleClickOpenEditGroupItemDialog}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(groupItem, hasChildren()) }}
@@ -191,11 +167,11 @@ export function GroupItemComponent({ groupItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
+            </DefaultListItem>
             {hasChildren() && (
                 <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                     <List dense component="div" disablePadding>
-                        {groupItem?.childElements?.length &&
+                        {!!groupItem?.childElements?.length &&
                             groupItem.childElements.map((childElement) => renderChildElement(childElement))}
                     </List>
                 </Collapse>

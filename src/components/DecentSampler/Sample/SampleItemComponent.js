@@ -2,7 +2,7 @@
 import { Fragment, useState } from "react";
 
 // Material UI
-import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
@@ -13,12 +13,12 @@ import { AudioFile, RestorePage } from "@mui/icons-material";
 import { EditSampleItemDialog } from "./Dialogs/EditSampleItemDialog";
 
 // Template
-import { SettingsMenu } from "../../Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 export function SampleItemComponent({ sampleItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -70,22 +70,10 @@ export function SampleItemComponent({ sampleItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(sampleItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="comments"
-                            id={`${sampleItem?.id}-edit-button`}
-                            onClick={() => handleClickOpenEditSampleItemDialog()}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={sampleItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={sampleItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={handleClickOpenEditSampleItemDialog}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(sampleItem, false) }}
@@ -96,7 +84,7 @@ export function SampleItemComponent({ sampleItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
+            </DefaultListItem>
             <EditSampleItemDialog
                 sampleItem={sampleItem}
                 open={editSampleItemDialogIsOpen}

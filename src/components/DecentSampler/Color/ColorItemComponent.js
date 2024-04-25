@@ -2,7 +2,7 @@
 import { Fragment, useState } from "react";
 
 // Material UI
-import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
@@ -12,13 +12,13 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { EditColorItemDialog } from "./EditColorItemDialog";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconColor } from "@/components/Template/Icons/IconColor";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Data
 import midiNotes from "@/data/midiNotes";
@@ -76,22 +76,10 @@ export function ColorItemComponent({ colorItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(colorItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit color"
-                            id={`${colorItem?.id}-edit-button`}
-                            onClick={() => handleClickOpenEditColorItemDialog()}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={colorItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={colorItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={handleClickOpenEditColorItemDialog}
             >
                 <ListItemButton sx={{ pl: getIndentSize(colorItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
                     <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(colorItem?.elementType) }}>
@@ -99,7 +87,7 @@ export function ColorItemComponent({ colorItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
+            </DefaultListItem>
             <EditColorItemDialog
                 colorItem={colorItem}
                 open={editColorItemDialogIsOpen}

@@ -1,29 +1,32 @@
 // Dependencies
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Folder } from "@mui/icons-material";
+
+// Components
+import { EditBindingItemDialog } from "./EditBindingItemDialog";
 
 // Template
 import { IconControllableParameter } from "@/components/Template/Icons/IconControllableParameter";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
-import { SettingsMenu } from "../../Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
+
+// Classes
+import { ControllableParameter } from "@/classes/ControllableParameter";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 // Data
 import controllableParametersData from "@/data/controllableParameters.js";
-import { EditBindingItemDialog } from "./EditBindingItemDialog";
-import { ControllableParameter } from "@/classes/ControllableParameter";
 
 export function BindingItemComponent({ bindingItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
@@ -58,7 +61,7 @@ export function BindingItemComponent({ bindingItem }) {
         });
     }
 
-   /* useEffect(() => {
+    /* useEffect(() => {
         const controllableParameter = getControlParameterForBindingItem(bindingItem);
         setControllableParameterForBinding(controllableParameter);
         if (!controllableParameter) {
@@ -98,22 +101,10 @@ export function BindingItemComponent({ bindingItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(bindingItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit binding"
-                            id={`${bindingItem?.id}-edit-button`}
-                            onClick={() => handleClickOpenEditBindingItemDialog()}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={bindingItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={bindingItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={handleClickOpenEditBindingItemDialog}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(bindingItem, false) }}
@@ -127,7 +118,7 @@ export function BindingItemComponent({ bindingItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
+            </DefaultListItem>
             <EditBindingItemDialog
                 bindingItem={bindingItem}
                 controllableParameters={controllableParameters}

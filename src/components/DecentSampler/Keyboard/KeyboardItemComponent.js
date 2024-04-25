@@ -3,21 +3,20 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Piano } from "@mui/icons-material";
 
 // Components
 import { ColorItemComponent } from "../Color/ColorItemComponent";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -76,22 +75,10 @@ export function KeyboardItemComponent({ keyboardItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(keyboardItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="comments"
-                            id={`${keyboardItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={keyboardItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={keyboardItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={() => console.log("onClick")}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(keyboardItem, hasChildren()) }}
@@ -103,13 +90,15 @@ export function KeyboardItemComponent({ keyboardItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {keyboardItem?.childElements?.length &&
-                        keyboardItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!keyboardItem?.childElements?.length &&
+                            keyboardItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

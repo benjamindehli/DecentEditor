@@ -3,21 +3,20 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Components
 import { EffectItemComponent } from "../Effect/EffectItemComponent";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -93,23 +92,7 @@ export function EffectsItemComponent({ effectsItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(effectsItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit effects"
-                            id={`${effectsItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={effectsItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
-            >
+            <DefaultListItem elementItem={effectsItem} settingsMenuItems={settingsMenuItems}>
                 <ListItemButton
                     sx={{ pl: getIndentSize(effectsItem, hasChildren()) }}
                     onClick={() => setIsExpanded(!isExpanded)}
@@ -120,13 +103,15 @@ export function EffectsItemComponent({ effectsItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {effectsItem?.childElements?.length &&
-                        effectsItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!effectsItem?.childElements?.length &&
+                            effectsItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

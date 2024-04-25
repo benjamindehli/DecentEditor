@@ -3,21 +3,20 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
 
 // Components
 import { SequenceItemComponent } from "../Sequence/SequenceItem";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -59,7 +58,8 @@ export function NoteSequencesItemComponent({ noteSequencesItem }) {
     const primaryText = "Note sequences";
     const secondaryText = (
         <ListItemSecondaryText>
-            {noteSequencesItem?.childElements?.length || 0} {noteSequencesItem?.childElements?.length === 1 ? "sequence" : "sequences"}
+            {noteSequencesItem?.childElements?.length || 0}{" "}
+            {noteSequencesItem?.childElements?.length === 1 ? "sequence" : "sequences"}
         </ListItemSecondaryText>
     );
 
@@ -74,40 +74,32 @@ export function NoteSequencesItemComponent({ noteSequencesItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(noteSequencesItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit note sequences"
-                            id={`${noteSequencesItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={noteSequencesItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={noteSequencesItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={() => console.log("onClick")}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(noteSequencesItem, hasChildren()) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(noteSequencesItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{ minWidth: "32px", color: getFgColorForElementType(noteSequencesItem?.elementType) }}
+                    >
                         <Topic />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {noteSequencesItem?.childElements?.length &&
-                        noteSequencesItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!noteSequencesItem?.childElements?.length &&
+                            noteSequencesItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

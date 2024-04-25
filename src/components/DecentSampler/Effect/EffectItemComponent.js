@@ -2,23 +2,23 @@
 import { Fragment, useEffect, useState } from "react";
 
 // Material UI
-import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { AudioFile, RestorePage } from "@mui/icons-material";
+import { Tune } from "@mui/icons-material";
 
 // Components
 //import { EditSampleItemDialog } from "./Dialogs/EditSampleItemDialog";
 
 // Template
-import { SettingsMenu } from "../../Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Data
 import effectTypesData from "@/data/effectTypes";
@@ -87,33 +87,21 @@ export function EffectItemComponent({ effectItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(effectItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit effect"
-                            id={`${effectItem?.id}-edit-button`}
-                            onClick={() => handleClickOpenEditSampleItemDialog()}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={effectItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={effectItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={handleClickOpenEditSampleItemDialog}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(effectItem, false) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(effectItem?.elementType) }}>
-                        <RestorePage />
+                        <Tune />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
+            </DefaultListItem>
             {/*
             <EditSampleItemDialog
                 sampleItem={sampleItem}

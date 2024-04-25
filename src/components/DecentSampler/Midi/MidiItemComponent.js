@@ -7,7 +7,7 @@ import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui
 import { ChevronRight, ExpandMore, Folder, ListAlt } from "@mui/icons-material";
 
 // Components
-import { NoteItemComponent } from "../Note/NoteItem";
+import { NoteItemComponent } from "../Note/NoteItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";

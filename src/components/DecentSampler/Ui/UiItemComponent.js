@@ -2,7 +2,7 @@
 import { Fragment, useState } from "react";
 
 // Material UI
-import { Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import { ChevronRight, ExpandMore, Web } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -14,12 +14,12 @@ import { KeyboardItemComponent } from "../Keyboard/KeyboardItemComponent";
 import { TabItemComponent } from "../Tab/TabItemComponent";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 export function UiItemComponent({ uiItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -74,11 +74,10 @@ export function UiItemComponent({ uiItem }) {
 
     return (
         <Fragment>
-            {/* <UiItemSettingsComponent uiItem={uiItem} onUpdateUiItem={handleUpdateUiItem} />*/}
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(uiItem?.elementType) }}
-                disablePadding
-                secondaryAction={<SettingsMenu elementItem={uiItem} menuItems={settingsMenuItems}></SettingsMenu>}
+            <DefaultListItem
+                elementItem={uiItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={() => console.log("click")}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(uiItem, hasChildren()) }}
@@ -90,13 +89,15 @@ export function UiItemComponent({ uiItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {uiItem?.childElements?.length &&
-                        uiItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!uiItem?.childElements?.length &&
+                            uiItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

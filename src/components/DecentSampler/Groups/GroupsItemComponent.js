@@ -1,23 +1,22 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
 
 // Components
 import { GroupItemComponent } from "../Group/GroupItemComponent";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -27,16 +26,20 @@ export function GroupsItemComponent({ groupsItem }) {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const [numberOfGroups, setNumberOfGroups] = useState();
+
+    useEffect(() => {
+        setNumberOfGroups(groupsItem?.getGroupItems()?.length || 0);
+    }, [groupsItem]);
+
     const settingsMenuItems = (
         <Fragment>
             <MenuItem
                 onClick={() => {
-                    if (!groupsItem.groups.length) {
-                        // Automatically expand the group if it's the first group
-                        setIsExpanded(true);
-                    }
-                    groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
-                    decentSamplerContext.updateGroupsItem(groupsItem);
+                    groupsItem.addGroupItem();
+                    setIsExpanded(true);
+                    setNumberOfGroups(numberOfGroups + 1);
+                    // decentSamplerContext.updateGroupsItem(groupsItem);
                 }}
                 disableRipple
             >
@@ -47,12 +50,7 @@ export function GroupsItemComponent({ groupsItem }) {
             </MenuItem>
             <MenuItem
                 onClick={() => {
-                    if (!groupsItem.groups.length) {
-                        // Automatically expand the group if it's the first group
-                        setIsExpanded(true);
-                    }
-                    groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
-                    decentSamplerContext.updateGroupsItem(groupsItem);
+                    console.log("Add multiple groups");
                 }}
                 disableRipple
             >
@@ -69,7 +67,7 @@ export function GroupsItemComponent({ groupsItem }) {
     const primaryText = "Groups";
     const secondaryText = (
         <ListItemSecondaryText>
-            {groupsItem?.childElements?.length || 0} {groupsItem?.childElements?.length === 1 ? "group" : "groups"}
+            {numberOfGroups} {numberOfGroups === 1 ? "group" : "groups"}
         </ListItemSecondaryText>
     );
 
@@ -84,23 +82,7 @@ export function GroupsItemComponent({ groupsItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(groupsItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="comments"
-                            id={`${groupsItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={groupsItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
-            >
+            <DefaultListItem elementItem={groupsItem} settingsMenuItems={settingsMenuItems}>
                 <ListItemButton
                     sx={{ pl: getIndentSize(groupsItem, hasChildren()) }}
                     onClick={() => setIsExpanded(!isExpanded)}
@@ -111,13 +93,15 @@ export function GroupsItemComponent({ groupsItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {groupsItem?.childElements?.length &&
-                        groupsItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!groupsItem?.childElements?.length &&
+                            groupsItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

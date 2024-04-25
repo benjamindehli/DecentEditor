@@ -3,21 +3,20 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import { Chip, Collapse, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, ShowChart } from "@mui/icons-material";
 
 // Components
 import { BindingItemComponent } from "../Binding/BindingItemComponent";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
+import { getFgColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -64,7 +63,8 @@ export function EnvelopeItemComponent({ envelopeItem }) {
 
     const secondaryText = (
         <ListItemSecondaryText>
-            {envelopeItem?.childElements?.length || 0} {envelopeItem?.childElements?.length === 1 ? "binding" : "bindings"}
+            {envelopeItem?.childElements?.length || 0}{" "}
+            {envelopeItem?.childElements?.length === 1 ? "binding" : "bindings"}
         </ListItemSecondaryText>
     );
 
@@ -79,23 +79,7 @@ export function EnvelopeItemComponent({ envelopeItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(envelopeItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit lfo"
-                            id={`${envelopeItem?.id}-edit-button`}
-                            onClick={() => console.log("onClick")}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={envelopeItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
-            >
+            <DefaultListItem elementItem={envelopeItem} settingsMenuItems={settingsMenuItems}>
                 <ListItemButton
                     sx={{ pl: getIndentSize(envelopeItem, hasChildren()) }}
                     onClick={() => setIsExpanded(!isExpanded)}
@@ -106,13 +90,15 @@ export function EnvelopeItemComponent({ envelopeItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
-            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                    {envelopeItem?.childElements?.length &&
-                        envelopeItem.childElements.map((childElement) => renderChildElement(childElement))}
-                </List>
-            </Collapse>
+            </DefaultListItem>
+            {hasChildren() && (
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                        {!!envelopeItem?.childElements?.length &&
+                            envelopeItem.childElements.map((childElement) => renderChildElement(childElement))}
+                    </List>
+                </Collapse>
+            )}
         </Fragment>
     );
 }

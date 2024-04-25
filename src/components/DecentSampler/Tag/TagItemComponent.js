@@ -2,35 +2,31 @@
 import { Fragment, useState } from "react";
 
 // Material UI
-import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { Label, LabelOff } from "@mui/icons-material";
 
 // Template
-import { SettingsMenu } from "@/components/Template/SettingsMenu";
-import { IconColor } from "@/components/Template/Icons/IconColor";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
+import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getBgColorForElementType, getFgColorForElementType } from "@/functions/styles";
-
-// Data
-import midiNotes from "@/data/midiNotes";
-import { Label, LabelOff, Tag } from "@mui/icons-material";
+import { getFgColorForElementType } from "@/functions/styles";
 
 export function TagItemComponent({ tagItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [editColorItemDialogIsOpen, setEditColorItemDialogIsOpen] = useState(false);
+    const [editTagItemDialogIsOpen, setEditTagItemDialogIsOpen] = useState(false);
 
-    const handleClickOpenEditColorItemDialog = () => {
-        setEditColorItemDialogIsOpen(true);
+    const handleClickOpenEditTagItemDialog = () => {
+        setEditTagItemDialogIsOpen(true);
     };
 
-    const handleCloseEditColorItemDialog = () => {
-        setEditColorItemDialogIsOpen(false);
+    const handleCloseEditTagItemDialog = () => {
+        setEditTafItemDialogIsOpen(false);
     };
 
     const settingsMenuItems = (
@@ -64,22 +60,10 @@ export function TagItemComponent({ tagItem }) {
 
     return (
         <Fragment>
-            <ListItem
-                sx={{ bgcolor: getBgColorForElementType(tagItem?.elementType) }}
-                disablePadding
-                secondaryAction={
-                    <Fragment>
-                        <IconButton
-                            edge="start"
-                            aria-label="edit tag"
-                            id={`${tagItem?.id}-edit-button`}
-                            onClick={() => handleClickOpenEditColorItemDialog()}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <SettingsMenu elementItem={tagItem} menuItems={settingsMenuItems}></SettingsMenu>
-                    </Fragment>
-                }
+            <DefaultListItem
+                elementItem={tagItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={handleClickOpenEditTagItemDialog}
             >
                 <ListItemButton sx={{ pl: getIndentSize(tagItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
                     <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(tagItem?.elementType) }}>
@@ -87,7 +71,7 @@ export function TagItemComponent({ tagItem }) {
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
-            </ListItem>
+            </DefaultListItem>
         </Fragment>
     );
 }
