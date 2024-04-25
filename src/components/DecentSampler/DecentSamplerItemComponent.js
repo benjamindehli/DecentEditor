@@ -11,6 +11,7 @@ import { EffectsItemComponent } from "./Effects/EffectsItemComponent";
 import { TagsItemComponent } from "./Tags/TagsItemComponent";
 import { ModulatorsItemComponent } from "./Modulators/ModulatorsItemComponent";
 import { NoteSequencesItemComponent } from "./NoteSequences/NoteSequencesItem";
+import { MidiItemComponent } from "./Midi/MidiItemComponent";
 
 export function DecentSamplerItemComponent({ decentSamplerItem }) {
     function renderChildElement(childElement) {
@@ -21,8 +22,8 @@ export function DecentSamplerItemComponent({ decentSamplerItem }) {
                 return <GroupsItemComponent key={childElement.id} groupsItem={childElement} />;
             case "effects":
                 return <EffectsItemComponent key={childElement.id} effectsItem={childElement} />;
-            case "tags":
-                return <TagsItemComponent key={childElement.id} tagsItem={childElement} />;
+            case "midi":
+                return <MidiItemComponent key={childElement.id} midiItem={childElement} />;
             case "modulators":
                 return <ModulatorsItemComponent key={childElement.id} modulatorsItem={childElement} />;
             case "noteSequences":
