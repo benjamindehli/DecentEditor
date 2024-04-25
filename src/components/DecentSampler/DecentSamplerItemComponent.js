@@ -28,6 +28,8 @@ export function DecentSamplerItemComponent({ decentSamplerItem }) {
                 return <ModulatorsItemComponent key={childElement.id} modulatorsItem={childElement} />;
             case "noteSequences":
                 return <NoteSequencesItemComponent key={childElement.id} noteSequencesItem={childElement} />;
+            case "tags":
+                return <TagsItemComponent key={childElement.id} tagsItem={childElement} />;
             default:
                 return null;
         }
