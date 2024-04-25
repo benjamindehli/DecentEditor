@@ -17,7 +17,7 @@ export class Image {
         this.aspectRatioMode = props?.aspectRatioMode;
         this.visible = props?.visible;
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 x: this.x,

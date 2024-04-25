@@ -45,9 +45,10 @@ export class Control {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 x: this.x,
@@ -76,7 +77,7 @@ export class Control {
         };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
     }

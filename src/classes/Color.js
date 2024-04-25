@@ -13,7 +13,7 @@ export class Color {
         this.hiNote = props?.hiNote;
         this.color = props?.color;
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 loNote: this.loNote,

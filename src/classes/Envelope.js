@@ -30,9 +30,10 @@ export class Envelope {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 attack: this.attack,
@@ -45,7 +46,7 @@ export class Envelope {
         };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
     }

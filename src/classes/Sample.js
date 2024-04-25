@@ -50,7 +50,7 @@ export class Sample {
         this.glideTime = props?.glideTime;
         this.glideMode = props?.glideMode;
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 path: this.path,

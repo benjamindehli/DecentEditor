@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 // Classes
 import { Group } from "./Group";
+import { Effects } from "./Effects";
 
 export class Groups {
     constructor(props, childElements, elementType) {
@@ -11,7 +12,7 @@ export class Groups {
         const hierarchyPath = [id];
         this.id = id;
         this.hierarchyPath = props?.hierarchyPath || hierarchyPath;
-        this.elementType = props?.elementType || elementType;
+        this.elementType = props?.elementType || elementType || "groups";
         this.attack = props?.attack;
         this.decay = props?.decay;
         this.sustain = props?.sustain;
@@ -38,9 +39,27 @@ export class Groups {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    getGroupItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Group);
+    }
+    getGroupItemByIndex(index) {
+        return this.getGroupItems()[index];
+    }
+    getGroupItemsWithEffects() {
+        return this.getGroupItems().filter((group) =>
+            group.childElements.some((childElement) => childElement instanceof Effects)
+        );
+    }
+    addGroupItem(props) {
+        this.childElements.push(new Group(props, null, "group", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 attack: this.attack,
@@ -61,18 +80,9 @@ export class Groups {
         };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
-    }
-    newGroup() {
-        this.groups.push(new Group());
-    }
-    addGroup(group) {
-        this.groups.push(group);
-    }
-    removeGroup(groupId) {
-        this.groups = this.groups.filter((group) => group.id !== groupId);
     }
 }
 

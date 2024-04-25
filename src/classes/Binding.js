@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 // Data
 import { bindingLevels, bindingParameters, bindingTypes } from "@/data/bindingPropValues";
+import { Group } from "./Group";
 
 export class Binding {
     constructor(props, elementType, parentHierarchyPath) {
@@ -17,7 +18,9 @@ export class Binding {
         this.position = props?.position;
         this.controlIndex = props?.controlIndex;
         this.groupIndex = props?.groupIndex;
+        this.groupRef = props?.groupRef;
         this.effectIndex = props?.effectIndex;
+        this.effectRef = props?.effectRef;
         this.modulatorIndex = props?.modulatorIndex;
         this.tags = props?.tags;
         this.enabled = props?.enabled;
@@ -38,14 +41,44 @@ export class Binding {
         this.seqPlaybackRate = props?.seqPlaybackRate;
         this.seqLoopMode = props?.seqLoopMode;
     }
-    toJson() {
+    init(decentSampler) {
+        if (this.groupIndex !== undefined) {
+            this.groupRef = this.getGroupRefFromGroupIndex(decentSampler);
+        }
+        if (this.effectIndex !== undefined) {
+            this.effectRef = this.getEffectRefFromEffectIndex(decentSampler, this.groupRef);
+        }
+    }
+    getGroupRefFromGroupIndex(decentSampler) {
+        return decentSampler?.getFirstGroupsItem()?.getGroupItemByIndex(this.groupIndex);
+    }
+    getGroupIndexFromGroupRef(decentSampler, groupRef) {
+        return decentSampler
+            ?.getFirstGroupsItem()
+            ?.getGroupItems()
+            ?.findIndex((group) => group.id === groupRef.id);
+    }
+    getEffectRefFromEffectIndex(decentSampler, group) {
+        return !!group
+            ? group?.getFirstEffectsItem()?.getEffectItemByIndex(this.effectIndex)
+            : decentSampler?.getFirstEffectsItem()?.getEffectItemByIndex(this.effectIndex);
+    }
+    getEffectIndexFromEffectRef(decentSampler, effectRef) {
+        const effects = !!this.groupRef
+            ? this.groupRef?.getFirstEffectsItem()?.getEffectItems()
+            : decentSampler?.getFirstEffectsItem()?.getEffectItems();
+        return effects?.findIndex((effect) => effect.id === effectRef.id);
+    }
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 type: this.type,
                 level: this.level,
                 position: this.position,
                 controlIndex: this.controlIndex,
-                groupIndex: this.groupIndex,
+                groupIndex: this.groupRef
+                    ? this.getGroupIndexFromGroupRef(decentSampler, this.groupRef)
+                    : this.groupIndex,
                 effectIndex: this.effectIndex,
                 modulatorIndex: this.modulatorIndex,
                 tags: this.tags,
@@ -80,6 +113,7 @@ Binding.propTypes = {
     position: PropTypes.number,
     controlIndex: PropTypes.number,
     groupIndex: PropTypes.number,
+    groupRef: PropTypes.instanceOf(Group),
     effectIndex: PropTypes.number,
     modulatorIndex: PropTypes.number,
     tags: PropTypes.string,

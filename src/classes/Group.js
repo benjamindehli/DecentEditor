@@ -46,9 +46,25 @@ export class Group {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    getEffectsItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Effects);
+    }
+    getFirstEffectsItem() {
+        return this.childElements?.find((childElement) => childElement instanceof Effects);
+    }
+    getSampleItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Sample);
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
+    addSampleItem(props) {
+        this.childElements.push(new Sample(props, "sample", this.hierarchyPath));
+    }
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 enabled: this.enabled,
@@ -74,15 +90,9 @@ export class Group {
         };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
-    }
-    newSample() {
-        this.samples.push(new Sample());
-    }
-    addSample(sample) {
-        this.samples.push(sample);
     }
 }
 

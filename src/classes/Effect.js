@@ -33,7 +33,7 @@ export class Effect {
         this.outputLevel = props?.outputLevel;
         this.highQuality = props?.highQuality;
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 type: this.type,

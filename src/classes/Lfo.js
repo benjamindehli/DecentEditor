@@ -28,9 +28,16 @@ export class Lfo {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    init(decentSampler) {
+        console.log("Lfo.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 shape: this.shape,
@@ -41,7 +48,7 @@ export class Lfo {
         };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
     }

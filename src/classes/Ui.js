@@ -12,7 +12,7 @@ export class Ui {
         const hierarchyPath = [id];
         this.id = id;
         this.hierarchyPath = props?.hierarchyPath || hierarchyPath;
-        this.elementType = props?.elementType || elementType;
+        this.elementType = props?.elementType || elementType || "ui";
         this.coverArt = props?.coverArt;
         this.bgImage = props?.bgImage;
         this.bgColor = props?.bgColor;
@@ -34,9 +34,10 @@ export class Ui {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 coverArt: this.coverArt,
@@ -50,9 +51,21 @@ export class Ui {
         };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    getKeyboardItems() {
+        return this.childElements.filter((childElement) => childElement instanceof Keyboard);
+    }
+    getFirstKeyboardItem() {
+        return this.childElements.find((childElement) => childElement instanceof Keyboard);
+    }
+    getTabsItem() {
+        return this.childElements.filter((childElement) => childElement instanceof Tab);
+    }
+    getFirstTabItem() {
+        return this.childElements.find((childElement) => childElement instanceof Tab);
     }
 }
 

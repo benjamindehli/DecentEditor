@@ -20,7 +20,7 @@ export class Label {
         this.hAlign = props?.hAlign;
         this.visible = props?.visible;
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 x: this.x,

@@ -14,7 +14,7 @@ export class Tag {
         this.volume = props?.volume;
         this.polyphony = props?.polyphony;
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 enabled: this.enabled,

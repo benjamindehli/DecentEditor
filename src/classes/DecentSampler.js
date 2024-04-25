@@ -17,7 +17,7 @@ import { createXmlDoc, jsonToXml } from "@/functions/converters";
 export class DecentSampler {
     constructor(props, childElements, elementType) {
         this.id = props?.id || uuidv4();
-        this.elementType = props?.elementType || elementType;
+        this.elementType = props?.elementType || elementType || "DecentSampler";
         this.childElements =
             props?.childElements ||
             childElements
@@ -35,20 +35,21 @@ export class DecentSampler {
                         case "noteSequences":
                             return new NoteSequences(childElement.$, childElement.$$, childElement["#name"]);
                         case "modulators":
-                            return new Modulators(childElement.$, childElement.$$, childElement["#name"]);
+                            return new Modulators(childElement.$, childElement.$$, childElement["#name"], this);
                         case "tags":
                             return new Tags(childElement.$, childElement.$$, childElement["#name"]);
                         default:
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
     toJson() {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(this));
         }
         return jsonObject;
     }
@@ -56,6 +57,64 @@ export class DecentSampler {
         const xmlBody = jsonToXml(this.toJson());
         const xmlDoc = createXmlDoc(xmlBody);
         return xmlDoc;
+    }
+    init() {
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(this);
+        });
+    }
+    getUiItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Ui);
+    }
+    getFirstUiItem() {
+        return this.childElements?.find((childElement) => childElement instanceof Ui);
+    }
+    getGroupsItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Groups);
+    }
+    getFirstGroupsItem() {
+        return this.childElements?.find((childElement) => childElement instanceof Groups);
+    }
+    getEffectsItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Effects);
+    }
+    getFirstEffectsItem() {
+        return this.childElements?.find((childElement) => childElement instanceof Effects);
+    }
+    getMidiItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Midi);
+    }
+    getFirstMidiItem() {
+        return this.childElements?.find((childElement) => childElement instanceof Midi);
+    }
+    getNoteSequencesItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof NoteSequences);
+    }
+    getFirstNoteSequencesItem() {
+        return this.childElements?.find((childElement) => childElement instanceof NoteSequences);
+    }
+    getModulatorsItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Modulators);
+    }
+    getFirstModulatorsItem() {
+        return this.childElements?.find((childElement) => childElement instanceof Modulators);
+    }
+    getTagsItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Tags);
+    }
+    getFirstTagsItem() {
+        return this.childElements?.find((childElement) => childElement instanceof Tags);
+    }
+    createNewPreset() {
+        this.childElements = [
+            new Ui({}),
+            new Groups({}),
+            new Effects({}),
+            new Midi({}),
+            new NoteSequences({}),
+            new Modulators({}),
+            new Tags({})
+        ];
     }
 }
 

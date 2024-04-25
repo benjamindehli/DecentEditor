@@ -45,9 +45,10 @@ export class Tab {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {
             $: {
                 name: this.name
@@ -55,9 +56,48 @@ export class Tab {
         };
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    getButtonItems() {
+        return this.childElements.filter((childElement) => childElement instanceof Button);
+    }
+    getControlItems() {
+        return this.childElements.filter((childElement) => childElement instanceof Control);
+    }
+    getImageItems() {
+        return this.childElements.filter((childElement) => childElement instanceof Image);
+    }
+    getLabelItems() {
+        return this.childElements.filter((childElement) => childElement instanceof Label);
+    }
+    getLabeledKnobItems() {
+        return this.childElements.filter((childElement) => childElement instanceof LabeledKnob);
+    }
+    getMenuItems() {
+        return this.childElements.filter((childElement) => childElement instanceof Menu);
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
+    addButtonItem(props) {
+        this.childElements.push(new Button(props, null, "button", this.hierarchyPath));
+    }
+    addControlItem(props) {
+        this.childElements.push(new Control(props, null, "control", this.hierarchyPath));
+    }
+    addImageItem(props) {
+        this.childElements.push(new Image(props, "image", this.hierarchyPath));
+    }
+    addLabelItem(props) {
+        this.childElements.push(new Label(props, "label", this.hierarchyPath));
+    }
+    addLabeledKnobItem(props) {
+        this.childElements.push(new LabeledKnob(props, null, "labeled-knob", this.hierarchyPath));
+    }
+    addMenuItem(props) {
+        this.childElements.push(new Menu(props, null, "menu", this.hierarchyPath));
     }
 }
 

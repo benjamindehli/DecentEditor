@@ -24,21 +24,25 @@ export class Keyboard {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
     }
-    newSample() {
-        this.colors.push(new Color({}));
+    getColorItems() {
+        return this.childElements.filter((childElement) => childElement instanceof Color);
     }
-    addSample(color) {
-        this.colors.push(color);
+    getFirstColorItem() {
+        return this.childElements.find((childElement) => childElement instanceof Color);
+    }
+    addColorItem(props) {
+        this.childElements.push(new Color(props, "group", this.hierarchyPath));
     }
 }
 

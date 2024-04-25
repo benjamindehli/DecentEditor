@@ -11,7 +11,7 @@ export class Effects {
         const hierarchyPath = props?.hierarchyPath || parentHierarchyPath ? [...parentHierarchyPath, id] : [id];
         this.id = id;
         this.hierarchyPath = hierarchyPath;
-        this.elementType = props?.elementType || elementType;
+        this.elementType = props?.elementType || elementType || "effects";
         this.childElements =
             props?.childElements ||
             childElements
@@ -24,13 +24,23 @@ export class Effects {
                             return null;
                     }
                 })
-                .filter((childElement) => childElement);
+                .filter((childElement) => childElement) ||
+            [];
     }
-    toJson() {
+    getEffectItems() {
+        return this.childElements?.filter((childElement) => childElement.elementType === "effect");
+    }
+    getEffectItemByIndex(index) {
+        return this.getEffectItems()[index];
+    }
+    addEffectItem(props) {
+        this.childElements.push(new Effect(props, null, "effect", this.hierarchyPath));
+    }
+    toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;
         if (this.childElements?.length) {
-            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson());
+            jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
     }
