@@ -6,7 +6,6 @@ import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/mater
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AudioFile, RestorePage } from "@mui/icons-material";
 
 // Components
@@ -19,6 +18,7 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 // Functions
 import { getIndentSize } from "@/functions/helpers";
 import { getFgColorForElementType } from "@/functions/styles";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 
 export function SampleItemComponent({ sampleItem }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -51,9 +51,14 @@ export function SampleItemComponent({ sampleItem }) {
                 <ArchiveIcon />
                 Add group
             </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
+            <MenuItem
+                onClick={() => {
+                    onRemoveItem(sampleItem.id);
+                }}
+                disableRipple
+            >
+                <IconRemove>{sampleItem.loopEnabled === "1" ? <RestorePage /> : <AudioFile />}</IconRemove>
+                Remove group
             </MenuItem>
         </Fragment>
     );

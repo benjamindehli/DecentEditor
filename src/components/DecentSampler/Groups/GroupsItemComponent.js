@@ -26,10 +26,15 @@ export function GroupsItemComponent({ groupsItem }) {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const [numberOfGroups, setNumberOfGroups] = useState();
+    const [numberOfGroupItems, setNumberOfGroupItems] = useState();
+
+    function handleOnRemoveChildElement(itemId) {
+        groupsItem.removeChildElementById(itemId);
+        setNumberOfGroupItems(numberOfGroupItems - 1);
+    }
 
     useEffect(() => {
-        setNumberOfGroups(groupsItem?.getGroupItems()?.length || 0);
+        setNumberOfGroupItems(groupsItem?.getGroupItems()?.length || 0);
     }, [groupsItem]);
 
     const settingsMenuItems = (
@@ -38,8 +43,7 @@ export function GroupsItemComponent({ groupsItem }) {
                 onClick={() => {
                     groupsItem.addGroupItem();
                     setIsExpanded(true);
-                    setNumberOfGroups(numberOfGroups + 1);
-                    // decentSamplerContext.updateGroupsItem(groupsItem);
+                    setNumberOfGroupItems(numberOfGroupItems + 1);
                 }}
                 disableRipple
             >
@@ -67,14 +71,20 @@ export function GroupsItemComponent({ groupsItem }) {
     const primaryText = "Groups";
     const secondaryText = (
         <ListItemSecondaryText>
-            {numberOfGroups} {numberOfGroups === 1 ? "group" : "groups"}
+            {numberOfGroupItems} {numberOfGroupItems === 1 ? "group" : "groups"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "group":
-                return <GroupItemComponent key={childElement.id} groupItem={childElement} />;
+                return (
+                    <GroupItemComponent
+                        key={childElement.id}
+                        groupItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             default:
                 return null;
         }

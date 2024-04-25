@@ -1,9 +1,8 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 
 // Material UI
-import { AudioFile, ChevronRight, ExpandMore, Folder, FolderOff, Tune } from "@mui/icons-material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { AudioFile, ChevronRight, ExpandMore, Folder, FolderOff } from "@mui/icons-material";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 
 // Components
@@ -24,11 +23,13 @@ import { getFgColorForElementType } from "@/functions/styles";
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
-export function GroupItemComponent({ groupItem }) {
+export function GroupItemComponent({ groupItem, onRemoveItem }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [editGroupItemDialogIsOpen, setEditGroupItemDialogIsOpen] = useState(false);
+
+    const [numberOfSampleItems, setNumberOfSampleItems] = useState(0);
 
     const handleClickOpenEditGroupItemDialog = () => {
         setEditGroupItemDialogIsOpen(true);
@@ -38,16 +39,22 @@ export function GroupItemComponent({ groupItem }) {
         setEditGroupItemDialogIsOpen(false);
     };
 
+    function handleOnRemoveChildElement(itemId) {
+        groupItem.removeChildElementById(itemId);
+        setNumberOfSampleItems(numberOfSampleItems - 1);
+    }
+
+    useEffect(() => {
+        setNumberOfSampleItems(groupItem?.getSampleItems()?.length || 0);
+    }, [groupItem]);
+
     const settingsMenuItems = (
         <Fragment>
             <MenuItem
                 onClick={() => {
-                    if (!groupItem?.samples?.length && !groupItem?.effects?.length) {
-                        // Automatically expand the group if it's the first sample or effect
-                        setIsExpanded(true);
-                    }
-                    groupItem.newSample();
-                    decentSamplerContext.updateGroupItem(groupItem);
+                    groupItem.addSampleItem();
+                    setIsExpanded(true);
+                    setNumberOfSampleItems(numberOfSampleItems + 1);
                 }}
                 disableRipple
             >
@@ -58,24 +65,7 @@ export function GroupItemComponent({ groupItem }) {
             </MenuItem>
             <MenuItem
                 onClick={() => {
-                    if (!groupItem?.samples?.length && !groupItem?.effects?.length) {
-                        // Automatically expand the group if it's the first sample or effect
-                        setIsExpanded(true);
-                    }
-                    groupItem.newSample();
-                    decentSamplerContext.updateGroupItem(groupItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Tune />
-                </IconAdd>
-                Add effect
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    groupItem.newSample();
-                    decentSamplerContext.removeGroupItem(groupItem);
+                    onRemoveItem(groupItem.id);
                 }}
                 disableRipple
             >
@@ -83,10 +73,6 @@ export function GroupItemComponent({ groupItem }) {
                     <Folder />
                 </IconRemove>
                 Remove group
-            </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
             </MenuItem>
         </Fragment>
     );
@@ -105,16 +91,16 @@ export function GroupItemComponent({ groupItem }) {
 
     function renderSecondaryTextString(groupItem) {
         const childElementTypes = {
-            effect: 0,
-            sample: 0
+            effect: groupItem?.getFirstEffectsItem()?.getEffectItems()?.length || 0,
+            sample: numberOfSampleItems || 0
         };
-        groupItem?.childElements?.forEach((childElement) => {
-            if (childElement?.elementType === "sample") {
-                childElementTypes.sample++;
-            } else if (childElement?.elementType === "effects") {
-                childElementTypes.effect += childElement.childElements?.length;
-            }
-        });
+        // groupItem?.childElements?.forEach((childElement) => {
+        //     if (childElement?.elementType === "sample") {
+        //         childElementTypes.sample++;
+        //     } else if (childElement?.elementType === "effects") {
+        //         childElementTypes.effect += childElement.childElements?.length;
+        //     }
+        // });
         return (
             Object.keys(childElementTypes)
                 .map((type) => {
@@ -144,7 +130,13 @@ export function GroupItemComponent({ groupItem }) {
             case "effects":
                 return <EffectsItemComponent key={childElement.id} effectsItem={childElement} />;
             case "sample":
-                return <SampleItemComponent key={childElement.id} sampleItem={childElement} />;
+                return (
+                    <SampleItemComponent
+                        key={childElement.id}
+                        sampleItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             default:
                 return null;
         }
