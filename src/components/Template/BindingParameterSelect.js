@@ -11,17 +11,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { IconControllableParameter } from "./Icons/IconControllableParameter";
 
-// Classes
-import { ControllableParameter } from "@/classes/ControllableParameter";
-
-// Data
-import controllableParametersData from "@/data/controllableParameters.js";
-
-export default function BindingParameterSelect() {
-    const controllableParameters = controllableParametersData.map((controllableParameter) => {
-        return new ControllableParameter(controllableParameter);
-    });
-
+export default function BindingParameterSelect({ onChange, controllableParameters, defaultValue }) {
     const filterOptions = createFilterOptions({
         stringify: (option) => `${option.description} ${option.secondaryDescription} ${option.level} ${option.type}`
     });
@@ -34,8 +24,9 @@ export default function BindingParameterSelect() {
             filterOptions={filterOptions}
             getOptionLabel={(option) => option.description}
             onChange={(event, newValue) => {
-                console.log(newValue);
-              }}
+                onChange(newValue);
+            }}
+            value={defaultValue}
             renderInput={(params) => <TextField {...params} label="Controllable parameter" margin="normal" />}
             renderOption={(props, option, { inputValue }) => {
                 const descriptionMatches = match(option.description, inputValue, { insideWords: true });

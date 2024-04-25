@@ -1,5 +1,5 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext } from "react";
 
 // Material UI
 import InputLabel from "@mui/material/InputLabel";
@@ -19,13 +19,14 @@ import DecentSamplerContext from "@/store/DecentSamplerContext";
 // Data
 import effectTypesData from "@/data/effectTypes";
 
-export default function GroupEffectSelect({ defaultValue }) {
-    const [selectedGroupEffect, setSelectedGroupEffect] = useState(defaultValue);
-
+export default function GroupEffectSelect({ groupRef, effectRef, onChange, open }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
-    //const groupsAndGroupEffects = decentSamplerContext.decentSampler.getAllGroupsAndGroupEffects();
 
-    // const [color, setColor] = useState(defaultValue);
+    const groupsWithEffects = decentSamplerContext.decentSampler.getFirstGroupsItem().getGroupItemsWithEffects();
+
+    const defaultValue = groupRef && effectRef ? { groupRef, effectRef, text: "defaultvalue" } : "";
+
+    const optionElements = renderSelectChildElements(groupsWithEffects);
 
     function getEffectTypeForEffectItem(effect) {
         return effectTypesData.find((effectType) => {
@@ -33,62 +34,68 @@ export default function GroupEffectSelect({ defaultValue }) {
         });
     }
 
-    function renderSelectChildElements() {
-
-        const groupsWithEffects = decentSamplerContext.decentSampler.getAllGroupsWithEffects();
-
+    function renderSelectChildElements(groups) {
         const selectChildElements = [];
-        groupsWithEffects.forEach((groupWithEffects, groupIndex) => {
-            const effectsItem = groupWithEffects.childElements.find(
-                (childElement) => childElement.elementType === "effects"
-            );
-            const effects = effectsItem?.childElements;
+        groups?.length &&
+            groups.forEach((group, groupIndex) => {
+                const effects = group?.getFirstEffectsItem()?.getEffectItems();
 
-            if (!!effects?.length) {
-                const tagList = !!groupWithEffects?.tags?.length ? (
-                    <Fragment>
-                        {groupWithEffects.tags.split(",").map((tag) => {
-                            return <Chip component="span" label={tag} key={tag} size="small" />;
-                        })}
-                    </Fragment>
-                ) : (
-                    ""
-                );
-
-                selectChildElements.push(
-                    <ListSubheader key={groupWithEffects.id}>
-                        Group {groupIndex + 1} {tagList}
-                    </ListSubheader>
-                );
-
-                effects.forEach((effect, effectIndex) => {
-                    selectChildElements.push(
-                        <MenuItem key={effect.id} value={{ groupIndex, effectIndex }}>
-                            <Tune sx={{ mr: 1, color: getFgColorForElementType("effect") }} />{" "}
-                            {getEffectTypeForEffectItem(effect).description}
-                        </MenuItem>
+                if (!!effects?.length) {
+                    const tagList = !!group?.tags?.length ? (
+                        <Fragment>
+                            {group.tags.split(",").map((tag) => {
+                                return <Chip component="span" label={tag} key={tag} size="small" />;
+                            })}
+                        </Fragment>
+                    ) : (
+                        ""
                     );
-                });
-            }
-        });
+
+                    selectChildElements.push(
+                        <ListSubheader key={group.id}>
+                            Group {groupIndex + 1} {tagList}
+                        </ListSubheader>
+                    );
+
+                    effects.forEach((effect) => {
+                        const containsDefaultValue =
+                            group?.id === defaultValue?.groupRef?.id && effect?.id === defaultValue?.effectRef?.id;
+                        const value = containsDefaultValue ? defaultValue : { groupRef: group, effectRef: effect };
+                        selectChildElements.push(
+                            <MenuItem key={effect.id} value={value}>
+                                <Tune sx={{ mr: 1, color: getFgColorForElementType("effect") }} />{" "}
+                                {getEffectTypeForEffectItem(effect).description}
+                            </MenuItem>
+                        );
+                    });
+                }
+            });
         return selectChildElements;
     }
 
     function handleOnChange(event) {
-        console.log("handleOnChange", event.target.value);
+        onChange(event.target.value);
     }
 
-    console.log("defaultValue", defaultValue)
-
     return (
-        <div>
-            <FormControl margin="dense" fullWidth variant="outlined">
-                <pre>{JSON.stringify(defaultValue, null, 2)}</pre>
-                <InputLabel htmlFor="grouped-select">Group effects</InputLabel>
-                <Select value={selectedGroupEffect} id="grouped-select" label="Group effects" onChange={handleOnChange}>
-                    {renderSelectChildElements()}
-                </Select>
-            </FormControl>
-        </div>
+        open &&
+        optionElements?.length && ( // Prevent warning with unmounted component
+            <div>
+                <FormControl margin="dense" fullWidth variant="outlined">
+                    <InputLabel id="group-effect-select-label" htmlFor="group-effect-select">
+                        Group effects
+                    </InputLabel>
+                    <Select
+                        defaultValue={defaultValue}
+                        id="group-effect-select"
+                        label="Group effects"
+                        labelId="group-effect-select-label"
+                        onChange={handleOnChange}
+                    >
+                        {optionElements}
+                    </Select>
+                </FormControl>
+            </div>
+        )
     );
 }

@@ -3,14 +3,8 @@ import { Fragment, useState } from "react";
 import { MuiColorInput } from "mui-color-input";
 
 // Material UI
-import { FormHelperText } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
+import { FormControl, FormHelperText } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
-import { Help } from "@mui/icons-material";
 
 // Helpers
 import { capitalizeFirstLetter } from "@/functions/helpers";
@@ -19,20 +13,11 @@ export function DefaultColorField({
     id,
     name,
     label,
-    type = "text",
     defaultValue,
     helperText,
     inputProps,
-    autoFocus,
-    required
 }) {
     const [showHelperText, setShowHelperText] = useState(false);
-
-    const handleClickShowHelperText = () => setShowHelperText((showHelperText) => !showHelperText);
-
-    const handleMouseDownShowHelperText = (event) => {
-        event.preventDefault();
-    };
 
     const labelWithFallback = label || capitalizeFirstLetter(name);
     const idWithFallback = id || name;
