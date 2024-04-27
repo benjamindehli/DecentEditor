@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { IconButton } from "@mui/material";
-import { Settings } from "@mui/icons-material";
+import { MoreVert, Settings } from "@mui/icons-material";
 
 // Components
 import { StyledMenu } from "./StyledMenu";
@@ -47,7 +47,7 @@ export function SettingsMenu({ elementItem, menuItems = [] }) {
         aria-expanded={settingsOpen ? "true" : undefined}
         onClick={handleSettingsClick}
       >
-        <Settings />
+        <MoreVert />
       </IconButton>
     </Fragment>
   );
