@@ -27,6 +27,13 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, tabs, 
         setSelectedTab(newValue);
     };
 
+    function handleOnClose() {
+        onClose();
+        setTimeout(() => {
+            setPreviewXmlCode(false);
+        }, 500);
+    }
+
     function a11yProps(index) {
         return {
             id: `tab-${index}`,
@@ -43,13 +50,13 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, tabs, 
     return (
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleOnClose}
             PaperProps={{
                 component: "form",
                 onSubmit: (event) => {
                     event.preventDefault();
                     onSubmit(event);
-                    onClose();
+                    handleOnClose();
                 }
             }}
         >
@@ -96,7 +103,7 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, tabs, 
             )}
 
             <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={handleOnClose}>Cancel</Button>
                 <Button onClick={handleTogglePreviewXmlCode}>{previewXmlCode ? "Edit values" : "Preview code"}</Button>
                 <Button type="submit">Save</Button>
             </DialogActions>
