@@ -1,89 +1,29 @@
 // Dependencies
-import { useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
-import {
-    AppBar,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControlLabel,
-    FormHelperText,
-    Icon,
-    Switch,
-    Tab,
-    Tabs,
-} from "@mui/material";
-import { Folder, FolderOff, MiscellaneousServices, SettingsInputSvideo, ShowChart, Tune } from "@mui/icons-material";
-
-// Components
-import { TabPanel } from "@/components/Template/TabPanel";
+import { FormControlLabel, FormHelperText, Icon, Switch } from "@mui/material";
+import { Folder, FolderOff, MiscellaneousServices, SettingsInputSvideo, ShowChart } from "@mui/icons-material";
 
 // Template
 import { DefaultTextField } from "@/components/Template/DefaultTextField";
-
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
-// Classes
-import { Group } from "@/classes/Group";
+import { DefaultItemDialog } from "@/components/Template/DefaultItemDialog";
+import DefaultTagsField from "@/components/Template/DefaultTagsField";
 
 export function EditGroupItemDialog({ groupItem, open, onClose }) {
-    const decentSampler = useContext(DecentSamplerContext);
     const [enabled, setEnabled] = useState(groupItem.enabled !== "0");
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [tags, setTags] = useState(groupItem.tags);
 
-    const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
-    };
-
-    function a11yProps(index) {
-        return {
-            id: `tab-${index}`,
-            "aria-controls": `tabpanel-${index}`
-        };
+    function handleTagsOnChange(tags) {
+        setTags(tags);
     }
 
-    return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            PaperProps={{
-                component: "form",
-                onSubmit: (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.currentTarget);
-                    const formJson = Object.fromEntries(formData.entries());
-                    const stateProps = {
-                        enabled: enabled ? "1" : "0"
-                    };
-                    groupItem.tags = formJson.tags;
-                    onClose();
-                }
-            }}
-        >
-            <DialogTitle>
-                <Icon>{enabled ? <Folder /> : <FolderOff />}</Icon> Edit group
-            </DialogTitle>
-            <AppBar position="static">
-                <Tabs
-                    value={selectedTab}
-                    textColor="inherit"
-                    indicatorColor="secondary"
-                    centered
-                    variant="fullWidth"
-                    onChange={handleTabChange}
-                    aria-label="tabs for editing group item"
-                >
-                    <Tab icon={<MiscellaneousServices />} label="GENERAL" {...a11yProps(0)} />
-                    <Tab icon={<ShowChart />} label="ENVELOPE" {...a11yProps(1)} />
-                    <Tab icon={<SettingsInputSvideo />} label="MIDI" {...a11yProps(1)} />
-                </Tabs>
-            </AppBar>
-            <DialogContent>
-                <TabPanel value={selectedTab} index={0}>
+    const tabs = [
+        {
+            icon: <MiscellaneousServices />,
+            label: "GENERAL",
+            children: (
+                <Fragment>
                     <FormControlLabel
                         value="1"
                         name="enabled"
@@ -100,12 +40,11 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                     <FormHelperText component="span" sx={{ display: "block" }}>
                         Whether or not this group is enabled. Possible values: true, false. Default: true
                     </FormHelperText>
-                    <DefaultTextField
-                        autoFocus
-                        required
+                    <DefaultTagsField
                         name="tags"
                         defaultValue={groupItem.tags}
                         helperText="A comma-separated list of tags. Example: tags=”rt,mic1”. These are useful when controlling volumes using tags. See Appendix D."
+                        onChange={handleTagsOnChange}
                     />
                     <DefaultTextField
                         name="volume"
@@ -130,8 +69,14 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                         defaultValue={groupItem.groupTuning}
                         helperText="Group-level pitch adjustment for changing note pitch. In semitones. For example 1.0 would be a half-step up and -1 would a half-step down. Default: 0"
                     />
-                </TabPanel>
-                <TabPanel value={selectedTab} index={1}>
+                </Fragment>
+            )
+        },
+        {
+            icon: <ShowChart />,
+            label: "ENVELOPE",
+            children: (
+                <Fragment>
                     <DefaultTextField
                         name="attack"
                         type="number"
@@ -181,16 +126,48 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                         defaultValue={groupItem.decayCurve}
                         helperText="A value from -100 to 100 that determines the shape of the release curves. This can also be set at the <sample> or <groups> levels."
                     />
-                </TabPanel>
-                <TabPanel value={selectedTab} index={2}>
-                    
-                </TabPanel>
-            </DialogContent>
+                </Fragment>
+            )
+        },
+        {
+            icon: <SettingsInputSvideo />,
+            label: "MIDI",
+            children: <Fragment>Midi test</Fragment>
+        }
+    ];
 
-            <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
-                <Button type="submit">Save</Button>
-            </DialogActions>
-        </Dialog>
+    function onSubmit(event) {
+        const formData = new FormData(event.currentTarget);
+        const formJson = Object.fromEntries(formData.entries());
+
+        groupItem.enabled = enabled ? "1" : "0";
+        groupItem.tags = tags;
+        groupItem.volume = formJson.volume;
+        groupItem.ampVelTrack = formJson.ampVelTrack;
+        groupItem.groupTuning = formJson.groupTuning;
+
+        groupItem.attack = formJson.attack;
+        groupItem.decay = formJson.decay;
+        groupItem.sustain = formJson.sustain;
+        groupItem.release = formJson.release;
+        groupItem.attackCurve = formJson.attackCurve;
+        groupItem.decayCurve = formJson.decayCurve;
+        groupItem.releaseCurve = formJson.releaseCurve;
+    }
+
+    const dialogIcon = <Icon>{enabled ? <Folder /> : <FolderOff />}</Icon>;
+
+    const dialogTitle = "Edit group";
+
+    return (
+        <DefaultItemDialog
+            elementItem={groupItem}
+            dialogIcon={dialogIcon}
+            dialogTitle={dialogTitle}
+            tabs={tabs}
+            open={open}
+            onClose={onClose}
+            onSubmit={onSubmit}
+        />
     );
 }
