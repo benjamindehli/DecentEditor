@@ -1,7 +1,7 @@
 "use client";
 
 // Depenedencies
-import { useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
 import xml from "highlight.js/lib/languages/xml";
 import "highlight.js/styles/atom-one-dark.css";
@@ -17,6 +17,9 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import styled from "@emotion/styled";
 import { blueGrey } from "@mui/material/colors";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 
 // Classes
 import { Ui } from "@/classes/Ui";
@@ -34,10 +37,14 @@ import style from "./page.module.scss";
 import { Keyboard } from "@/classes/Keyboard";
 import { Tab } from "@/classes/Tab";
 import BindingParameterSelect from "@/components/Template/BindingParameterSelect";
+import ColorModeContext from "@/store/ColorModeContext";
 
 hljs.registerLanguage("xml", xml);
 
 export default function Home() {
+    const theme = useTheme();
+    const colorMode = useContext(ColorModeContext);
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [jsonData, setJsonData] = useState({});
@@ -119,7 +126,7 @@ export default function Home() {
     });
 
     return (
-        <Box
+        <Box>
             sx={{
                 backgroundColor: (theme) =>
                     theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
@@ -132,6 +139,9 @@ export default function Home() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
                         DecentEditor{selectedFileName ? `: ${selectedFileName}` : ""}
                     </Typography>
+                    <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+                        {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+                    </IconButton>
                     <IconButton color="inherit">
                         <Badge badgeContent={4} color="secondary">
                             <NotificationsIcon />

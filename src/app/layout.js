@@ -1,13 +1,13 @@
-// Dependencies
-import { CssBaseline, ThemeProvider } from "@mui/material";
+// Material UI
+import { CssBaseline } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+
+// Store
+import { DecentSamplerContextProvider } from "@/store/DecentSamplerContext";
+import { ColorModeContextProvider } from "@/store/ColorModeContext";
 
 // Stylesheets
 import "@/app/globals.css";
-
-// Theme
-import theme from "@/theme";
-import { DecentSamplerContextProvider } from "@/store/DecentSamplerContext";
 
 export const metadata = {
     title: "DecentEditor",
@@ -19,12 +19,12 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body>
                 <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-                    <ThemeProvider theme={theme}>
+                    <ColorModeContextProvider>
                         <DecentSamplerContextProvider>
                             <CssBaseline />
                             {children}
                         </DecentSamplerContextProvider>
-                    </ThemeProvider>
+                    </ColorModeContextProvider>
                 </AppRouterCacheProvider>
             </body>
         </html>
