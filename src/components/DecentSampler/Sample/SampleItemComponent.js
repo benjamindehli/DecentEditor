@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { AudioFile, RestorePage } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { EditSampleItemDialog } from "./Dialogs/EditSampleItemDialog";
@@ -17,10 +18,12 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 import { IconRemove } from "@/components/Template/Icons/IconRemove";
 
 export function SampleItemComponent({ sampleItem }) {
+    const theme = useTheme();
+
     const [isExpanded, setIsExpanded] = useState(false);
     const [editSampleItemDialogIsOpen, setEditSampleItemDialogIsOpen] = useState(false);
 
@@ -84,7 +87,12 @@ export function SampleItemComponent({ sampleItem }) {
                     sx={{ pl: getIndentSize(sampleItem, false) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(sampleItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(sampleItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         {sampleItem.loopEnabled === "1" ? <RestorePage /> : <AudioFile />}
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

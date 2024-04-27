@@ -5,6 +5,7 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { GroupItemComponent } from "../Group/GroupItemComponent";
@@ -16,12 +17,13 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function GroupsItemComponent({ groupsItem }) {
+    const theme = useTheme();
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -98,7 +100,12 @@ export function GroupsItemComponent({ groupsItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(groupsItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(groupsItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <Topic />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

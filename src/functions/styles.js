@@ -36,18 +36,15 @@ function getElementTypesArray() {
 }
 
 const hueValues = [
-    296, 77, 154, 231, 309, 13, 103, 167, 321, 244, 26, 90, 180, 257, 334, 39, 116, 193, 270, 347, 51, 129, 206, 283,
-    64, 141, 219, 0
+    296, 77, 154, 231, 347, 13, 64, 167, 321, 244, 26, 90, 180, 257, 39, 334, 129, 193, 283, 309, 51, 103, 206, 219,
+    116, 141, 270, 0
 ];
 
-export function getBgColorForElementType(elementType) {
+export function getColorForElementType(elementType) {
     const elementTypes = getElementTypesArray();
     const elementTypeIndex = elementTypes.indexOf(elementType);
-    return `hsla(${hueValues[elementTypeIndex]}, 100%, 25%, 0.05)`;
-}
-
-export function getFgColorForElementType(elementType) {
-    const elementTypes = getElementTypesArray();
-    const elementTypeIndex = elementTypes.indexOf(elementType);
-    return `hsla(${hueValues[elementTypeIndex]}, 100%, 65%, 0.95)`;
+    return {
+        light: `hsla(${hueValues[elementTypeIndex]}, 90%, 40%, 0.95)`,
+        dark: `hsla(${hueValues[elementTypeIndex]}, 100%, 65%, 0.95)`
+    };
 }

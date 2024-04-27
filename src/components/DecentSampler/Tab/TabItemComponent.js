@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Tab } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { ButtonItemComponent } from "../Button/ButtonItemComponent";
@@ -18,12 +19,14 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function TabItemComponent({ tabItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -119,7 +122,12 @@ export function TabItemComponent({ tabItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(tabItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(tabItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <Tab />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

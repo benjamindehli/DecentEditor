@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { LfoItemComponent } from "../Lfo/LfoItemComponent";
@@ -19,9 +20,11 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 export function ModulatorsItemComponent({ modulatorsItem }) {
+    const theme = useTheme();
+
     const [isExpanded, setIsExpanded] = useState(false);
 
     function hasChildren() {
@@ -112,7 +115,10 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon
-                        sx={{ minWidth: "32px", color: getFgColorForElementType(modulatorsItem?.elementType) }}
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(modulatorsItem?.elementType)[theme.palette.mode]
+                        }}
                     >
                         <Bookmarks />
                     </ListItemIcon>

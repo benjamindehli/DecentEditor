@@ -8,6 +8,7 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Tune } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 //import { EditSampleItemDialog } from "./Dialogs/EditSampleItemDialog";
@@ -18,12 +19,14 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Data
 import effectTypesData from "@/data/effectTypes";
 
 export function EffectItemComponent({ effectItem }) {
+    const theme = useTheme();
+
     const [effectTypeForEffectItem, setEffectTypeForEffectItem] = useState(null);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -96,7 +99,12 @@ export function EffectItemComponent({ effectItem }) {
                     sx={{ pl: getIndentSize(effectItem, false) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(effectItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(effectItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <Tune />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

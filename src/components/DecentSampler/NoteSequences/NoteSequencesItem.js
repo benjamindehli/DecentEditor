@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { SequenceItemComponent } from "../Sequence/SequenceItemComponent";
@@ -16,12 +17,14 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function NoteSequencesItemComponent({ noteSequencesItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -85,7 +88,10 @@ export function NoteSequencesItemComponent({ noteSequencesItem }) {
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
                     <ListItemIcon
-                        sx={{ minWidth: "32px", color: getFgColorForElementType(noteSequencesItem?.elementType) }}
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(noteSequencesItem?.elementType)[theme.palette.mode]
+                        }}
                     >
                         <Topic />
                     </ListItemIcon>

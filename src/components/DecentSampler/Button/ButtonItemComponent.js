@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, SmartButton } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { StateItemComponent } from "../State/StateItemComponent";
@@ -16,12 +17,14 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function ButtonItemComponent({ buttonItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -85,7 +88,12 @@ export function ButtonItemComponent({ buttonItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(buttonItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(buttonItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <SmartButton />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

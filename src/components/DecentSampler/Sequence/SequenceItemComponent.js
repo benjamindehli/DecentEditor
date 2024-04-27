@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, Piano } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { NoteItemComponent } from "../Note/NoteItemComponent";
@@ -16,12 +17,14 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function SequenceItemComponent({ sequenceItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -85,7 +88,12 @@ export function SequenceItemComponent({ sequenceItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {isExpanded ? <ExpandMore /> : <ChevronRight />}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(sequenceItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(sequenceItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <Piano />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

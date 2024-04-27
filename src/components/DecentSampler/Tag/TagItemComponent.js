@@ -8,6 +8,7 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Label, LabelOff } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Template
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
@@ -15,9 +16,11 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 export function TagItemComponent({ tagItem }) {
+    const theme = useTheme();
+
     const [isExpanded, setIsExpanded] = useState(false);
     const [editTagItemDialogIsOpen, setEditTagItemDialogIsOpen] = useState(false);
 
@@ -66,7 +69,12 @@ export function TagItemComponent({ tagItem }) {
                 onEditButtonClick={handleClickOpenEditTagItemDialog}
             >
                 <ListItemButton sx={{ pl: getIndentSize(tagItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(tagItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(tagItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         {tagItem.enabled !== "0" ? <Label /> : <LabelOff />}
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

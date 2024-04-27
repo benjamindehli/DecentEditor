@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, ToggleOn } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { BindingItemComponent } from "../Binding/BindingItemComponent";
@@ -16,12 +17,14 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function CcItemComponent({ ccItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -69,7 +72,9 @@ export function CcItemComponent({ ccItem }) {
         }
     }
 
-    const ccNumber = ccItem?.number !== undefined && <Chip component="span" label={`Number: ${ccItem.number}`} size="small" />;
+    const ccNumber = ccItem?.number !== undefined && (
+        <Chip component="span" label={`Number: ${ccItem.number}`} size="small" />
+    );
 
     const primaryText = <Fragment>Cc {ccNumber}</Fragment>;
 
@@ -96,7 +101,12 @@ export function CcItemComponent({ ccItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(ccItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(ccItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <ToggleOn />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

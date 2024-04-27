@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, ListAlt } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { OptionItemComponent } from "../Option/OptionItemComponent";
@@ -19,9 +20,11 @@ import { getIndentSize } from "@/functions/helpers";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 export function MenuItemComponent({ menuItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -85,7 +88,12 @@ export function MenuItemComponent({ menuItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(menuItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(menuItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <ListAlt />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

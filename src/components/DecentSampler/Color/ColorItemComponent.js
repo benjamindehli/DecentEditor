@@ -18,7 +18,7 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Data
 import midiNotes from "@/data/midiNotes";
@@ -82,7 +82,7 @@ export function ColorItemComponent({ colorItem }) {
                 onEditButtonClick={handleClickOpenEditColorItemDialog}
             >
                 <ListItemButton sx={{ pl: getIndentSize(colorItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(colorItem?.elementType) }}>
+                    <ListItemIcon sx={{ minWidth: "32px", color: getColorForElementType(colorItem?.elementType) }}>
                         <IconColor color={convertColorValueToHex(colorItem.color)} />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Folder, Image as ImageIcon } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
@@ -13,12 +14,14 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function ImageItemComponent({ imageItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -65,7 +68,12 @@ export function ImageItemComponent({ imageItem }) {
                 onEditButtonClick={() => console.log("onClick")}
             >
                 <ListItemButton sx={{ pl: getIndentSize(imageItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(imageItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(imageItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <ImageIcon />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

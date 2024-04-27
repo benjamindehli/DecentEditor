@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { KeyboardItemComponent } from "../Keyboard/KeyboardItemComponent";
@@ -19,9 +20,11 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 export function UiItemComponent({ uiItem }) {
+    const theme = useTheme();
+
     const [isExpanded, setIsExpanded] = useState(false);
 
     function hasChildren() {
@@ -84,7 +87,12 @@ export function UiItemComponent({ uiItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(uiItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(uiItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <Web />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

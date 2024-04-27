@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { TagItemComponent } from "../Tag/TagItemComponent";
@@ -18,9 +19,11 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 export function TagsItemComponent({ tagsItem }) {
+    const theme = useTheme();
+
     const [isExpanded, setIsExpanded] = useState(false);
 
     function hasChildren() {
@@ -82,7 +85,12 @@ export function TagsItemComponent({ tagsItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(tagsItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(tagsItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <Bookmarks />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

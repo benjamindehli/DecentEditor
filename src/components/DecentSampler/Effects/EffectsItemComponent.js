@@ -9,6 +9,7 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Components
 import { EffectItemComponent } from "../Effect/EffectItemComponent";
+import { useTheme } from "@mui/material/styles";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
@@ -16,12 +17,14 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
 export function EffectsItemComponent({ effectsItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -98,7 +101,12 @@ export function EffectsItemComponent({ effectsItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(effectsItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(effectsItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <Topic />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

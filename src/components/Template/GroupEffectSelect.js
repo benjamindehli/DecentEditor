@@ -11,7 +11,7 @@ import { Chip } from "@mui/material";
 import { Tune } from "@mui/icons-material";
 
 // Functions
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
@@ -63,7 +63,7 @@ export default function GroupEffectSelect({ groupRef, effectRef, onChange, open 
                         const value = containsDefaultValue ? defaultValue : { groupRef: group, effectRef: effect };
                         selectChildElements.push(
                             <MenuItem key={effect.id} value={value}>
-                                <Tune sx={{ mr: 1, color: getFgColorForElementType("effect") }} />{" "}
+                                <Tune sx={{ mr: 1, color: getColorForElementType("effect") }} />{" "}
                                 {getEffectTypeForEffectItem(effect).description}
                             </MenuItem>
                         );

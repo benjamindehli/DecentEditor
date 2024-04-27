@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, ListAlt } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { NoteItemComponent } from "../Note/NoteItemComponent";
@@ -16,13 +17,15 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 import { CcItemComponent } from "../Cc/CcItemComponent";
 
 export function MidiItemComponent({ midiItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -113,7 +116,12 @@ export function MidiItemComponent({ midiItem }) {
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     {hasChildren() ? isExpanded ? <ExpandMore /> : <ChevronRight /> : null}
-                    <ListItemIcon sx={{ minWidth: "32px", color: getFgColorForElementType(midiItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{
+                            minWidth: "32px",
+                            color: getColorForElementType(midiItem?.elementType)[theme.palette.mode]
+                        }}
+                    >
                         <ListAlt />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />

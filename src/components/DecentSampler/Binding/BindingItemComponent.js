@@ -5,6 +5,7 @@ import { Fragment, useContext, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Folder } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { EditBindingItemDialog } from "./EditBindingItemDialog";
@@ -17,7 +18,7 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
-import { getFgColorForElementType } from "@/functions/styles";
+import { getColorForElementType } from "@/functions/styles";
 
 // Classes
 import { ControllableParameter } from "@/classes/ControllableParameter";
@@ -29,6 +30,8 @@ import DecentSamplerContext from "@/store/DecentSamplerContext";
 import controllableParametersData from "@/data/controllableParameters.js";
 
 export function BindingItemComponent({ bindingItem }) {
+    const theme = useTheme();
+
     const decentSamplerContext = useContext(DecentSamplerContext);
     const [controllableParameters, setControllableParameters] = useState(
         controllableParametersData.map((controllableParameter) => {
@@ -110,7 +113,9 @@ export function BindingItemComponent({ bindingItem }) {
                     sx={{ pl: getIndentSize(bindingItem, false) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
-                    <ListItemIcon sx={{ color: getFgColorForElementType(bindingItem?.elementType) }}>
+                    <ListItemIcon
+                        sx={{ color: getColorForElementType(bindingItem?.elementType)[theme.palette.mode] }}
+                    >
                         <IconControllableParameter
                             parameterType={bindingItem.type}
                             parameterLevel={bindingItem.level}

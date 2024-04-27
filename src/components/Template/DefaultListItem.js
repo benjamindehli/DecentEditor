@@ -14,7 +14,11 @@ import { getBgColorForElementType } from "@/functions/styles";
 export function DefaultListItem({ elementItem, settingsMenuItems, onEditButtonClick, children }) {
     return (
         <ListItem
-            sx={{ bgcolor: getBgColorForElementType(elementItem?.elementType) }}
+            sx={{
+                "&:hover, &:focus": {
+                    "& svg": { opacity: open ? 1 : 0 }
+                }
+            }}
             disablePadding
             secondaryAction={
                 <Fragment>
@@ -23,8 +27,16 @@ export function DefaultListItem({ elementItem, settingsMenuItems, onEditButtonCl
                         aria-label={`edit ${elementItem?.elementType}`}
                         id={`${elementItem?.id}-edit-button`}
                         onClick={onEditButtonClick}
+                        sx={{
+                            "&:hover, &:focus": { "& svg": { opacity: open ? 1 : 0 } }
+                        }}
                     >
-                        <EditIcon />
+                        <EditIcon
+                            sx={{
+                                opacity: 0,
+                                transition: "0.2s"
+                            }}
+                        />
                     </IconButton>
                     <SettingsMenu elementItem={elementItem} menuItems={settingsMenuItems}></SettingsMenu>
                 </Fragment>
