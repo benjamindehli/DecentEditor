@@ -1,0 +1,92 @@
+.code {
+    color: #abb2bf;
+}
+
+.code pre {
+    margin: 0;
+    padding: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    font-size: 14px;
+    tab-size: 4;
+    line-height: 1.25rem;
+}
+
+.code.dark pre {
+    color: #abb2bf;
+}
+
+.code.dark pre .hljs-bullet,
+.code.dark pre .hljs-link,
+.code.dark pre .hljs-meta,
+.code.dark pre .hljs-selector-id,
+.code.dark pre .hljs-symbol,
+.code.dark pre .hljs-title {
+    color: #61aeee;
+}
+
+.code.dark pre .hljs-addition,
+.code.dark pre .hljs-attribute,
+.code.dark pre .hljs-meta .hljs-string,
+.code.dark pre .hljs-regexp,
+.code.dark pre .hljs-string {
+    color: #98c379;
+}
+
+.code.dark pre .hljs-deletion,
+.code.dark pre .hljs-name,
+.code.dark pre .hljs-section,
+.code.dark pre .hljs-selector-tag,
+.code.dark pre .hljs-subst {
+    color: #e06c75;
+}
+
+.code.dark pre .hljs-attr,
+.code.dark pre .hljs-number,
+.code.dark pre .hljs-selector-attr,
+.code.dark pre .hljs-selector-class,
+.code.dark pre .hljs-selector-pseudo,
+.code.dark pre .hljs-template-variable,
+.code.dark pre .hljs-type,
+.code.dark pre .hljs-variable {
+    color: #d19a66;
+}
+
+.code.light pre {
+    color: #383a42;
+}
+
+.code.light pre .hljs-bullet,
+.code.light pre .hljs-link,
+.code.light pre .hljs-meta,
+.code.light pre .hljs-selector-id,
+.code.light pre .hljs-symbol,
+.code.light pre .hljs-title {
+    color: #4078f2;
+}
+
+.code.light pre .hljs-addition,
+.code.light pre .hljs-attribute,
+.code.light pre .hljs-meta .hljs-string,
+.code.light pre .hljs-regexp,
+.code.light pre .hljs-string {
+    color: #50a14f;
+}
+
+.code.light pre .hljs-deletion,
+.code.light pre .hljs-name,
+.code.light pre .hljs-section,
+.code.light pre .hljs-selector-tag,
+.code.light pre .hljs-subst {
+    color: #e45649;
+}
+
+.code.light pre .hljs-attr,
+.code.light pre .hljs-number,
+.code.light pre .hljs-selector-attr,
+.code.light pre .hljs-selector-class,
+.code.light pre .hljs-selector-pseudo,
+.code.light pre .hljs-template-variable,
+.code.light pre .hljs-type,
+.code.light pre .hljs-variable {
+    color: #986801;
+}
