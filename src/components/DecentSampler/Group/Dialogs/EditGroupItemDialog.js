@@ -59,9 +59,7 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                     const stateProps = {
                         enabled: enabled ? "1" : "0"
                     };
-
-                    const updatedGroupItem = new Group({ ...groupItem, ...formJson, ...stateProps });
-                    decentSampler.updateGroupItem(updatedGroupItem);
+                    groupItem.tags = formJson.tags;
                     onClose();
                 }
             }}

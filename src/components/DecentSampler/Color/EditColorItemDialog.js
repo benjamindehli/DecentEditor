@@ -86,11 +86,9 @@ export function EditColorItemDialog({ colorItem, open, onClose }) {
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
-                    formJson.color = formJson.color.replace("#", "FF");
-                    formJson.loNote = keyRangeValue[0];
-                    formJson.hiNote = keyRangeValue[1];
-                    const updatedColorItem = new Color({ ...colorItem, ...formJson });
-                    decentSamplerContext.updateDecentSamplerElement(updatedColorItem);
+                    colorItem.color = formJson.color.replace("#", "FF");
+                    colorItem.loNote = keyRangeValue[0];
+                    colorItem.hiNote = keyRangeValue[1];
                     onClose();
                 }
             }}
