@@ -1,14 +1,17 @@
 // Material UI
+import { useTheme } from "@mui/material/styles";
 import {
     CheckBox,
     DisplaySettings,
     Folder,
     LocalOffer,
     MusicNote,
+    Palette,
     Piano,
     Settings,
     SettingsInputSvideo,
     Speed,
+    SwapCalls,
     ToggleOff,
     ToggleOn,
     Tune,
@@ -17,10 +20,16 @@ import {
 import QueueMusicIcon from "@mui/icons-material/QueueMusic";
 import Stack from "@mui/material/Stack";
 
+// Functions
+import { getColorForBindingLevel, getColorForBindingType } from "@/functions/styles";
+
 export function IconControllableParameter({ parameterType, parameterLevel }) {
+    const theme = useTheme();
+
     function renderParameterLevelIcon(parameterLevel) {
         const iconProps = {
             sx: {
+                color: getColorForBindingLevel(parameterLevel)[theme.palette.mode]
             }
         };
         switch (parameterLevel) {
@@ -41,6 +50,7 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
     function renderParameterTypeIcon(parameterType) {
         const iconProps = {
             sx: {
+                color: getColorForBindingType(parameterType)[theme.palette.mode]
             }
         };
         switch (parameterType) {
@@ -71,7 +81,7 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
     }
 
     return (
-        <Stack direction="row" spacing={0} sx={{minWidth: "56px"}}>
+        <Stack direction="row" spacing={0} sx={{ minWidth: "56px" }}>
             {renderParameterLevelIcon(parameterLevel)}
             {renderParameterTypeIcon(parameterType)}
         </Stack>
