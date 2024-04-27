@@ -17,14 +17,24 @@ export function jsonToXml(json) {
     return xmlElement;
 }
 
-export function createXmlDoc(xmlContent) {
-    const docHead = `<?xml version="1.0" encoding="UTF-8"?>`;
-    const docBody = xmlContent.outerHTML;
-    const formatOptions = {
+function getXmlFormatOption() {
+    return {
         indentation: "  ",
         forceSelfClosingEmptyTag: true,
         whiteSpaceAtEndOfSelfclosingTag: true,
         collapseContent: true
     };
+}
+
+export function formatXml(xmlContent) {
+    const docBody = xmlContent.outerHTML;
+    const formatOptions = getXmlFormatOption();
+    return xmlFormat(docBody, formatOptions);
+}
+
+export function createXmlDoc(xmlContent) {
+    const docHead = `<?xml version="1.0" encoding="UTF-8"?>`;
+    const docBody = xmlContent.outerHTML;
+    const formatOptions = getXmlFormatOption();
     return xmlFormat(`${docHead}${docBody}`, formatOptions);
 }
