@@ -52,6 +52,10 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
                 return <Tune {...iconProps} />;
             case "control":
                 return <ToggleOn {...iconProps} />;
+            case "keyboard_color": ///
+                return <Palette {...iconProps} />;
+            case "modulator": ///
+                return <SwapCalls {...iconProps} />;
             case "note_sequence":
                 return <QueueMusicIcon {...iconProps} />;
             case "note":
