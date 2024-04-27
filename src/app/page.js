@@ -1,85 +1,41 @@
 "use client";
 
 // Depenedencies
-import { createContext, useContext, useEffect, useState } from "react";
-import hljs from "highlight.js/lib/core";
-import xml from "highlight.js/lib/languages/xml";
-import "highlight.js/styles/atom-one-dark.css";
+import { useContext, useState } from "react";
 import xml2js from "xml2js";
 
 // Material UI
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { AppBar, Box, IconButton, List, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import { Badge, Button } from "@mui/base";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import styled from "@emotion/styled";
-import { blueGrey } from "@mui/material/colors";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
-
-// Classes
-import { Ui } from "@/classes/Ui";
-import { Groups } from "@/classes/Groups";
-import { DecentSampler } from "@/classes/DecentSampler";
-
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import { DecentSamplerItemComponent } from "@/components/DecentSampler/DecentSamplerItemComponent";
+import { XmlPreview } from "@/components/Template/XmlPreview";
 
-// Stylesheets
-import style from "./page.module.scss";
-import { Keyboard } from "@/classes/Keyboard";
-import { Tab } from "@/classes/Tab";
-import BindingParameterSelect from "@/components/Template/BindingParameterSelect";
+// Store
+import DecentSamplerContext from "@/store/DecentSamplerContext";
 import ColorModeContext from "@/store/ColorModeContext";
 
-hljs.registerLanguage("xml", xml);
+import BindingParameterSelect from "@/components/Template/BindingParameterSelect";
 
 export default function Home() {
     const theme = useTheme();
     const colorMode = useContext(ColorModeContext);
-
     const decentSamplerContext = useContext(DecentSamplerContext);
 
-    const [jsonData, setJsonData] = useState({});
-    const [xmlData, setXmlData] = useState(null);
     const [showXmlPreview, setShowXmlPreview] = useState(false);
     const [selectedFileName, setSelectedFileName] = useState(null);
 
     function toggleXmlPreview() {
         setShowXmlPreview(!showXmlPreview);
-    }
-
-    useEffect(() => {
-        if (decentSamplerContext?.decentSampler?.toJson) {
-            const jsonData = { DecentSampler: decentSamplerContext.decentSampler.toJson() };
-            setJsonData(jsonData);
-        }
-    }, [decentSamplerContext]);
-
-    useEffect(() => {
-        if (decentSamplerContext?.decentSampler?.toXml && Object.keys(decentSamplerContext?.decentSampler).length) {
-            const xml = decentSamplerContext.decentSampler.toXml();
-            setXmlData(hljs.highlight(xml, { language: "xml" }).value);
-        }
-    }, [decentSamplerContext.decentSampler]);
-
-    function convertJsonDataToObject(jsonData) {
-        const groupsList = jsonData.DecentSampler.groups.map((groupsItem) => {
-            const groupsObject = new Groups({ ...groupsItem.$ }, groupsItem.group, groupsItem.$$);
-            return groupsObject;
-        });
-        const uiList = jsonData.DecentSampler.ui.map((uiItem) => {
-            const uiObject = new Ui({ ...uiItem.$ }, uiItem.keyboard, uiItem.tab, uiItem.$$);
-            return uiObject;
-        });
-        return { groupsList, uiList, jsonData };
     }
 
     function handleFileInputChange(e) {
@@ -92,25 +48,17 @@ export default function Home() {
                     console.error(err);
                     return;
                 }
-                const objectFromJsonData = convertJsonDataToObject(result);
                 setSelectedFileName(file.name);
                 if (result?.DecentSampler) {
                     decentSamplerContext.initDecentSampler(result.DecentSampler);
                 }
-                // decentSampler.updateGroupsList(objectFromJsonData.groupsList);
-                // decentSampler.updateUiList(objectFromJsonData.uiList);
             });
         };
         reader.readAsText(file);
     }
 
     function handleCreateNewPresetClick() {
-        const newPreset = new DecentSampler(decentSamplerContext);
-        const newGroupsList = new Groups();
-        const newUiList = new Ui({}, [new Keyboard()], [new Tab()]);
-        decentSampler.updateUiList([newUiList]);
-        decentSampler.updateGroupsList([newGroupsList]);
-        setDecentSampler(newPreset);
+        decentSamplerContext.initDecentSampler();
     }
 
     const VisuallyHiddenInput = styled("input")({
@@ -125,15 +73,10 @@ export default function Home() {
         width: 1
     });
 
+    const elementSectionWidth = showXmlPreview ? "400px" : "530px";
+
     return (
         <Box>
-            sx={{
-                backgroundColor: (theme) =>
-                    theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
-                flexGrow: 1,
-                height: "100vh"
-            }}
-        >
             <AppBar position="sticky">
                 <Toolbar>
                     <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
@@ -156,52 +99,48 @@ export default function Home() {
                 </Toolbar>
             </AppBar>
 
-            <Box sx={{ display: "flex" }} component="main">
-                {/*                
+            {/*                
               <BindingParameterSelect /> 
                */}
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <Paper
-                                sx={{
-                                    p: 0,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    overflow: "auto",
-                                    maxHeight: "calc(100vh - 128px)"
-                                }}
-                            >
-                                {!!decentSamplerContext.decentSampler && (
-                                    <DecentSamplerItemComponent
-                                        decentSamplerItem={decentSamplerContext.decentSampler}
-                                    />
-                                )}
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={8}>
-                            <Paper
-                                sx={{
-                                    p: 0,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    overflow: "auto",
-                                    maxHeight: "calc(100vh - 128px)",
-                                    bgcolor: blueGrey[900]
-                                }}
-                            >
-                                {showXmlPreview && (
-                                    <div className={style.container}>
-                                        <div className={style.code}>
-                                            <pre dangerouslySetInnerHTML={xmlData && { __html: xmlData }}></pre>
-                                        </div>
-                                    </div>
-                                )}
-                            </Paper>
-                        </Grid>
+            <Grid
+                container
+                component="main"
+                sx={{ mx: 0, px: 0 }}
+                columnSpacing={0}
+                direction="row"
+                justifyContent={!showXmlPreview ? "center" : "space-between"}
+            >
+                <Grid
+                    item
+                    sx={{
+                        width: elementSectionWidth,
+                        height: "calc(100vh - 64px)",
+                        overflow: "auto",
+                        pt: 2,
+                        pb: 2,
+                        pr: 1,
+                        pl: 0
+                    }}
+                >
+                    {!!decentSamplerContext.decentSampler && (
+                        <DecentSamplerItemComponent decentSamplerItem={decentSamplerContext.decentSampler} />
+                    )}
+                </Grid>
+                {showXmlPreview && (
+                    <Grid item sx={{ width: `calc(100% - ${elementSectionWidth})`, mt: 0, mb: 0 }}>
+                        <Paper
+                            sx={{
+                                p: 0,
+                                overflow: "auto",
+                                borderRadius: 0,
+                                height: "calc(100vh - 64px)"
+                            }}
+                        >
+                            <XmlPreview xmlString={decentSamplerContext.decentSampler.toXml()} />
+                        </Paper>
                     </Grid>
-                </Container>
-            </Box>
+                )}
+            </Grid>
         </Box>
     );
 }
