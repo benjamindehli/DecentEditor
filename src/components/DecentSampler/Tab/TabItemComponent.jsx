@@ -11,6 +11,9 @@ import { useTheme } from "@mui/material/styles";
 import { ButtonItemComponent } from "../Button/ButtonItemComponent";
 import { ImageItemComponent } from "../Image/ImageItemComponent";
 import { MenuItemComponent } from "../Menu/MenuItemComponent";
+import { ControlItemComponent } from "../Control/ControlItemComponent";
+import { LabelItemComponent } from "../Label/LabelItemComponent";
+import { LabeledKnobItemComponent } from "../LabeledKnob/LabeledKnobItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
@@ -75,7 +78,7 @@ export function TabItemComponent({ tabItem }) {
             control: 0,
             image: 0,
             label: 0,
-            labeledKnob: 0,
+            ["labeled-knob"]: 0,
             menu: 0
         };
         tabItem.childElements.forEach((childElement) => {
@@ -101,8 +104,14 @@ export function TabItemComponent({ tabItem }) {
         switch (childElement?.elementType) {
             case "button":
                 return <ButtonItemComponent key={childElement.id} buttonItem={childElement} />;
+            case "control":
+                return <ControlItemComponent key={childElement.id} controlItem={childElement} />;
             case "image":
                 return <ImageItemComponent key={childElement.id} imageItem={childElement} />;
+            case "label":
+                return <LabelItemComponent key={childElement.id} labelItem={childElement} />;
+            case "labeled-knob":
+                return <LabeledKnobItemComponent key={childElement.id} labeledKnobItem={childElement} />;
             case "menu":
                 return <MenuItemComponent key={childElement.id} menuItem={childElement} />;
             default:
