@@ -24,6 +24,11 @@ export class Color {
         jsonObject["#name"] = this.elementType;
         return jsonObject;
     }
+    toXml() {
+        const xmlBody = jsonToXml(this.toJson());
+        const xmlDoc = createXmlDoc(xmlBody);
+        return xmlDoc;
+    }
 }
 
 Color.propTypes = {

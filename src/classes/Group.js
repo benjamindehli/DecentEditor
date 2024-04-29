@@ -6,6 +6,9 @@ import PropTypes from "prop-types";
 import { Sample } from "./Sample";
 import { Effects } from "./Effects";
 
+// Functions
+import { createXmlDoc, formatXml, jsonToXml } from "@/functions/converters";
+
 export class Group {
     constructor(props, childElements, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
@@ -93,6 +96,11 @@ export class Group {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

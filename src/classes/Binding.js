@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 
 // Data
 import { bindingLevels, bindingParameters, bindingTypes } from "@/data/bindingPropValues";
+
+// Classes
 import { Group } from "./Group";
 
 export class Binding {
