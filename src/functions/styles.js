@@ -18,7 +18,7 @@ const elementTypes = [
     "image",
     "keyboard",
     "label",
-    "labeledKnob",
+    "labeled-knob",
     "lfo",
     "menu",
     "midi",
