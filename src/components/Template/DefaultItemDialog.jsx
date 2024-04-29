@@ -86,7 +86,7 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, tabs, 
 
             {previewXmlCode ? (
                 <DialogContent sx={{ px: 0, backgroundColor: theme.palette.background.default }}>
-                    <XmlPreview xmlString={elementItem.toXml(decentSamplerContext?.decentSampler)} />
+                    <XmlPreview xmlString={elementItem.toXml(decentSamplerContext?.decentSampler)} wrapText />
                 </DialogContent>
             ) : (
                 <DialogContent>

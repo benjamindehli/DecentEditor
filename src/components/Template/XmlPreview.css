@@ -11,6 +11,10 @@
     line-height: 1.25rem;
 }
 
+.code pre.wrap-text {
+    text-wrap: pretty;
+}
+
 .code.dark pre {
     color: #abb2bf;
 }

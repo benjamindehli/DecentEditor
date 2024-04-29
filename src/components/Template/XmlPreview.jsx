@@ -12,7 +12,7 @@ import "./XmlPreview.css";
 
 hljs.registerLanguage("xml", xml);
 
-export function XmlPreview({ xmlString }) {
+export function XmlPreview({ xmlString, wrapText }) {
     const theme = useTheme();
 
     const [xmlData, setXmlData] = useState();
@@ -24,7 +24,7 @@ export function XmlPreview({ xmlString }) {
     }, [xmlString]);
     return (
         <div className={classNameArrayToClassNameString(["code", theme.palette.mode])}>
-            <pre dangerouslySetInnerHTML={xmlData && { __html: xmlData }}></pre>
+            <pre dangerouslySetInnerHTML={xmlData && { __html: xmlData }} className={!!wrapText && "wrap-text"}></pre>
         </div>
     );
 }
