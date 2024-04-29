@@ -3,7 +3,7 @@ import { Fragment, useContext, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { ChevronRight, ExpandMore, Folder, SmartButton } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
@@ -60,7 +60,16 @@ export function ButtonItemComponent({ buttonItem }) {
         return !!buttonItem?.childElements?.length;
     }
 
-    const primaryText = "Button";
+    const chipLabel =
+        buttonItem?.mainImage ||
+        buttonItem?.style ||
+        (buttonItem?.x && buttonItem?.y && `x: ${buttonItem.x}, y: ${buttonItem.y}`);
+
+    let primaryInfoText;
+    if (!!chipLabel.length) {
+        primaryInfoText = <Chip component="span" label={chipLabel} size="small" />;
+    }
+    const primaryText = <Fragment>Button {primaryInfoText}</Fragment>;
     const secondaryText = (
         <ListItemSecondaryText>
             {buttonItem?.childElements?.length || 0} {buttonItem?.childElements?.length === 1 ? "state" : "states"}
