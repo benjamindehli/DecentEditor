@@ -61,7 +61,7 @@ export class Ui {
     getFirstKeyboardItem() {
         return this.childElements.find((childElement) => childElement instanceof Keyboard);
     }
-    getTabsItem() {
+    getTabItems() {
         return this.childElements.filter((childElement) => childElement instanceof Tab);
     }
     getFirstTabItem() {
