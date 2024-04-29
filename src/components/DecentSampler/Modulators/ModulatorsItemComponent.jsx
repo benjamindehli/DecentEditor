@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { Bookmarks, ChevronRight, ExpandMore, Web } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, SwapCalls } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
@@ -120,7 +120,7 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
                             color: getColorForElementType(modulatorsItem?.elementType)[theme.palette.mode]
                         }}
                     >
-                        <Bookmarks />
+                        <SwapCalls />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

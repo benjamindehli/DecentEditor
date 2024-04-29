@@ -4,7 +4,7 @@ import { Fragment, useContext, useState } from "react";
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, ToggleOn } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Folder, MusicNote } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -113,7 +113,7 @@ export function NoteItemComponent({ noteItem }) {
                             color: getColorForElementType(noteItem?.elementType)[theme.palette.mode]
                         }}
                     >
-                        <ToggleOn />
+                        <MusicNote />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

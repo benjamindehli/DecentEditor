@@ -7,7 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Label, LabelOff } from "@mui/icons-material";
+import { LocalOffer, LocalOfferOutlined } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Template
@@ -75,7 +75,7 @@ export function TagItemComponent({ tagItem }) {
                             color: getColorForElementType(tagItem?.elementType)[theme.palette.mode]
                         }}
                     >
-                        {tagItem.enabled !== "0" ? <Label /> : <LabelOff />}
+                        {tagItem.enabled !== "0" ? <LocalOffer /> : <LocalOfferOutlined />}
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

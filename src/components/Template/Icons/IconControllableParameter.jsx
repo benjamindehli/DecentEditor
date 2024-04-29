@@ -1,7 +1,7 @@
 // Material UI
 import { useTheme } from "@mui/material/styles";
 import {
-    CheckBox,
+    AutoAwesome,
     DisplaySettings,
     Folder,
     LocalOffer,
@@ -12,7 +12,6 @@ import {
     SettingsInputSvideo,
     Speed,
     SwapCalls,
-    ToggleOff,
     ToggleOn,
     Tune,
     VolumeUp
@@ -59,9 +58,9 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
             case "general":
                 return <Settings {...iconProps} />;
             case "effect":
-                return <Tune {...iconProps} />;
+                return <AutoAwesome {...iconProps} />;
             case "control":
-                return <ToggleOn {...iconProps} />;
+                return <Tune {...iconProps} />;
             case "keyboard_color": ///
                 return <Palette {...iconProps} />;
             case "modulator": ///
@@ -74,7 +73,7 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
             case "velocity_binding":
                 return <Speed {...iconProps} />;
             case "button_state_binding":
-                return <CheckBox {...iconProps} />;
+                return <ToggleOn {...iconProps} />;
             default:
                 return "";
         }

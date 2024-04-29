@@ -4,7 +4,7 @@ import { Fragment, useContext, useState } from "react";
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Folder, FolderSpecial } from "@mui/icons-material";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Components
@@ -107,7 +107,7 @@ export function EffectsItemComponent({ effectsItem }) {
                             color: getColorForElementType(effectsItem?.elementType)[theme.palette.mode]
                         }}
                     >
-                        <Topic />
+                        <FolderSpecial />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

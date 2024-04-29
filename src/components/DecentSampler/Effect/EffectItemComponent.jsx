@@ -7,7 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Tune } from "@mui/icons-material";
+import { AutoAwesome } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -105,7 +105,7 @@ export function EffectItemComponent({ effectItem }) {
                             color: getColorForElementType(effectItem?.elementType)[theme.palette.mode]
                         }}
                     >
-                        <Tune />
+                        <AutoAwesome />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>

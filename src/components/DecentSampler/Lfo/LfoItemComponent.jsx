@@ -4,7 +4,7 @@ import { Fragment, useContext, useState } from "react";
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, ToggleOn } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Folder, Water } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -97,7 +97,7 @@ export function LfoItemComponent({ lfoItem }) {
                             color: getColorForElementType(lfoItem?.elementType)[theme.palette.mode]
                         }}
                     >
-                        <ToggleOn />
+                        <Water />
                     </ListItemIcon>
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
