@@ -29,7 +29,7 @@ export default function DefaultTagsField({
     autoFocus,
     onChange
 }) {
-    const [tags, SetTags] = useState(defaultValue.split(",") || []);
+    const [tags, SetTags] = useState(!!defaultValue?.length ? defaultValue.split(",") : []);
     const tagRef = useRef();
 
     const handleDelete = (value) => {
