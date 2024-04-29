@@ -5,16 +5,14 @@ import { useContext, useState } from "react";
 import xml2js from "xml2js";
 
 // Material UI
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
-import { Badge, Button } from "@mui/base";
+import { useTheme } from "@mui/material/styles";
+import { AppBar, Box, Divider, ListItemButton, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import styled from "@emotion/styled";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { useTheme } from "@mui/material/styles";
+import { Code, CodeOff, NoteAdd, OpenInBrowser } from "@mui/icons-material";
 
 // Components
 import { DecentSamplerItemComponent } from "@/components/DecentSampler/DecentSamplerItemComponent";
@@ -23,8 +21,6 @@ import { XmlPreview } from "@/components/Template/XmlPreview";
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 import ColorModeContext from "@/store/ColorModeContext";
-
-import BindingParameterSelect from "@/components/Template/BindingParameterSelect";
 
 export default function Home() {
     const theme = useTheme();
@@ -82,20 +78,37 @@ export default function Home() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
                         DecentEditor{selectedFileName ? `: ${selectedFileName}` : ""}
                     </Typography>
-                    <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-                        {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
-                    </IconButton>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton color="inherit" component="label" role={undefined} tabIndex={-1}>
-                        <CloudUploadIcon />
-                        <VisuallyHiddenInput type="file" onChange={handleFileInputChange} />
-                    </IconButton>
-                    <button onClick={toggleXmlPreview}>{showXmlPreview ? "Hide XML" : "Show XML"}</button>
-                    <Button onClick={handleCreateNewPresetClick}>Create new preset</Button>
+                    <Grid flexBasis="fit-content" container flexDirection="row" justifyContent="right">
+                        <ListItemButton dense component="label" onClick={toggleXmlPreview}>
+                            <Stack flexDirection="column" alignItems="center">
+                                {showXmlPreview ? <CodeOff /> : <Code />}
+                                <ListItemText sx={{ my: 0 }} primary={showXmlPreview ? "Hide XML" : "Show XML"} />
+                            </Stack>
+                        </ListItemButton>
+                        <ListItemButton dense component="label" onClick={colorMode.toggleColorMode}>
+                            <Stack flexDirection="column" alignItems="center">
+                                {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+                                <ListItemText
+                                    sx={{ my: 0 }}
+                                    primary={theme.palette.mode === "dark" ? "Light mode" : "Dark mode"}
+                                />
+                            </Stack>
+                        </ListItemButton>
+                        <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 2 }} />
+                        <ListItemButton dense component="label" role={undefined} tabIndex={-1}>
+                            <Stack flexDirection="column" alignItems="center">
+                                <OpenInBrowser />
+                                <ListItemText sx={{ my: 0 }} primary="Open preset" />
+                            </Stack>
+                            <VisuallyHiddenInput type="file" onChange={handleFileInputChange} />
+                        </ListItemButton>
+                        <ListItemButton dense component="label" onClick={handleCreateNewPresetClick}>
+                            <Stack flexDirection="column" alignItems="center">
+                                <NoteAdd />
+                                <ListItemText sx={{ my: 0 }} primary="New preset" />
+                            </Stack>
+                        </ListItemButton>
+                    </Grid>
                 </Toolbar>
             </AppBar>
 
