@@ -7,8 +7,9 @@ import MenuItem from "@mui/material/MenuItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Chip } from "@mui/material";
+import { Chip, Grid, Icon } from "@mui/material";
 import { Tune } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 // Functions
 import { getColorForElementType } from "@/functions/styles";
@@ -22,9 +23,11 @@ import effectTypesData from "@/data/effectTypes";
 export default function GroupEffectSelect({ groupRef, effectRef, onChange, open }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
 
+    const theme = useTheme();
+
     const groupsWithEffects = decentSamplerContext.decentSampler.getFirstGroupsItem().getGroupItemsWithEffects();
 
-    const defaultValue = groupRef && effectRef ? { groupRef, effectRef, text: "defaultvalue" } : "";
+    const defaultValue = groupRef && effectRef ? { groupRef, effectRef } : "";
 
     const optionElements = renderSelectChildElements(groupsWithEffects);
 
@@ -63,8 +66,16 @@ export default function GroupEffectSelect({ groupRef, effectRef, onChange, open 
                         const value = containsDefaultValue ? defaultValue : { groupRef: group, effectRef: effect };
                         selectChildElements.push(
                             <MenuItem key={effect.id} value={value}>
-                                <Tune sx={{ mr: 1, color: getColorForElementType("effect") }} />{" "}
-                                {getEffectTypeForEffectItem(effect).description}
+                                <Grid container spacing={1} alignItems="center">
+                                    <Grid item>
+                                        <Icon>
+                                            <Tune
+                                                sx={{ color: getColorForElementType("effect")[theme.palette.mode] }}
+                                            />
+                                        </Icon>
+                                    </Grid>
+                                    <Grid item>{getEffectTypeForEffectItem(effect).description}</Grid>
+                                </Grid>
                             </MenuItem>
                         );
                     });
