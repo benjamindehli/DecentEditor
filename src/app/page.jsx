@@ -79,7 +79,7 @@ export default function Home() {
                         DecentEditor{selectedFileName ? `: ${selectedFileName}` : ""}
                     </Typography>
                     <Grid flexBasis="fit-content" container flexDirection="row" justifyContent="right">
-                        <ListItemButton dense component="label" onClick={toggleXmlPreview}>
+                        <ListItemButton dense component="label" onClick={toggleXmlPreview} disabled={!decentSamplerContext?.decentSampler}>
                             <Stack flexDirection="column" alignItems="center">
                                 {showXmlPreview ? <CodeOff /> : <Code />}
                                 <ListItemText sx={{ my: 0 }} primary={showXmlPreview ? "Hide XML" : "Show XML"} />
@@ -149,7 +149,7 @@ export default function Home() {
                                 height: "calc(100vh - 64px)"
                             }}
                         >
-                            <XmlPreview xmlString={decentSamplerContext.decentSampler.toXml()} />
+                            <XmlPreview xmlString={decentSamplerContext?.decentSampler?.toXml()} />
                         </Paper>
                     </Grid>
                 )}
