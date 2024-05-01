@@ -53,7 +53,7 @@ export function DefaultTextField({
                 onChange={onChange}
                 label={labelWithFallback}
                 endAdornment={
-                    helperText?.length && (
+                    !!helperText?.length && (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
@@ -67,9 +67,11 @@ export function DefaultTextField({
                     )
                 }
             />
-            <Collapse in={showHelperText}>
-                <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
-            </Collapse>
+            {!!helperText?.length && (
+                <Collapse in={showHelperText}>
+                    <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
+                </Collapse>
+            )}
         </FormControl>
     );
 }
