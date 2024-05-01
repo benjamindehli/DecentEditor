@@ -22,6 +22,9 @@ import { getColorForElementType } from "@/functions/styles";
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
+// Data
+import midiCcDescription from "@/data/midiCcDescription";
+
 export function CcItemComponent({ ccItem }) {
     const theme = useTheme();
 
@@ -72,11 +75,18 @@ export function CcItemComponent({ ccItem }) {
         }
     }
 
-    const ccNumber = ccItem?.number !== undefined && (
-        <Chip component="span" label={`Number: ${ccItem.number}`} size="small" />
-    );
+    let primaryInfoText;
+    if (ccItem?.number !== undefined) {
+        if (!!midiCcDescription[ccItem.number]) {
+            primaryInfoText = (
+                <Chip component="span" label={`${ccItem.number}: ${midiCcDescription[ccItem.number]}`} size="small" />
+            );
+        } else {
+            primaryInfoText = <Chip component="span" label={ccItem.number} size="small" />;
+        }
+    }
 
-    const primaryText = <Fragment>Cc {ccNumber}</Fragment>;
+    const primaryText = <Fragment>CC {primaryInfoText}</Fragment>;
 
     const secondaryText = renderSecondaryText();
 
