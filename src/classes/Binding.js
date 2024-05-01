@@ -71,6 +71,9 @@ export class Binding {
             : decentSampler?.getFirstEffectsItem()?.getEffectItems();
         return effects?.findIndex((effect) => effect.id === effectRef.id);
     }
+    getTags() {
+        return this.tags?.split(",");
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

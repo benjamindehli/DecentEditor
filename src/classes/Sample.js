@@ -50,6 +50,9 @@ export class Sample {
         this.glideTime = props?.glideTime;
         this.glideMode = props?.glideMode;
     }
+    getTags() {
+        return this.tags?.split(",");
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

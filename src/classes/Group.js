@@ -61,6 +61,9 @@ export class Group {
     getSampleItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Sample);
     }
+    getTags() {
+        return this.tags?.split(",");
+    }
     removeChildElementById(id) {
         this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
     }
@@ -106,7 +109,7 @@ export class Group {
 
 Group.propTypes = {
     id: PropTypes.string,
-    enabled: PropTypes.bool,
+    enabled: PropTypes.string,
     tags: PropTypes.string,
     silencingMode: PropTypes.string,
     ampVelTrack: PropTypes.number,
