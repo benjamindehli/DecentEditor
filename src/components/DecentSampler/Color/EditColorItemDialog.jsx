@@ -1,9 +1,8 @@
 // Dependencies
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 // Material UI
 import {
-    AppBar,
     Box,
     Button,
     Dialog,
@@ -14,20 +13,16 @@ import {
     Slider,
     Typography
 } from "@mui/material";
-import { Folder, FolderOff, Palette } from "@mui/icons-material";
+import { Palette } from "@mui/icons-material";
 
 // Template
 import { DefaultColorField } from "@/components/Template/DefaultColorField";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
 // Classes
-import { Color } from "@/classes/Color";
 import midiNotes from "@/data/midiNotes";
 
 export function EditColorItemDialog({ colorItem, open, onClose }) {
-    const decentSamplerContext = useContext(DecentSamplerContext);
+    const [previewXmlCode, setPreviewXmlCode] = useState(false);
 
     const [keyRangeValue, setKeyRangeValue] = useState([parseInt(colorItem.loNote), parseInt(colorItem.hiNote)]);
 
@@ -76,6 +71,10 @@ export function EditColorItemDialog({ colorItem, open, onClose }) {
         return `${midiNoteName} (${value})`;
     }
 
+    function handleTogglePreviewXmlCode() {
+        setPreviewXmlCode(!previewXmlCode);
+    }
+
     return (
         <Dialog
             open={open}
@@ -94,42 +93,43 @@ export function EditColorItemDialog({ colorItem, open, onClose }) {
             }}
         >
             <DialogTitle>
-                <Icon><Palette /></Icon> Edit Color
+                <Icon>
+                    <Palette />
+                </Icon>{" "}
+                Edit Color
             </DialogTitle>
 
-            <DialogContent>
-                <DefaultColorField
-                    autoFocus
-                    required
-                    name="color"
-                    defaultValue={colorItem.color}
-                    helperText="A comma-separated list of tags. Example: tags=”rt,mic1”. These are useful when controlling volumes using tags. See Appendix D."
-                />
-                        
-                <Box sx={{mt: 2}} >
-                    <Typography id="track-false-slider" gutterBottom>
-                        Key range: {valueLabelFormat(keyRangeValue[0])} - {valueLabelFormat(keyRangeValue[1])}
-                    </Typography>
-                <Box sx={{px: 2}} >
+            {previewXmlCode ? (
+                <DialogContent>hoy</DialogContent>
+            ) : (
+                <DialogContent>
+                    <DefaultColorField autoFocus required name="color" defaultValue={colorItem.color} />
 
-                    <Slider
-                        getAriaLabel={() => "Key range"}
-                        value={keyRangeValue}
-                        min={0}
-                        step={1}
-                        max={127}
-                        onChange={handleKeyRangeChange}
-                        valueLabelDisplay="auto"
-                        getAriaValueText={valuetext}
-                        valueLabelFormat={valueLabelFormat}
-                        marks={marks}
-                    />
+                    <Box sx={{ mt: 2 }}>
+                        <Typography id="track-false-slider" gutterBottom>
+                            Key range: {valueLabelFormat(keyRangeValue[0])} - {valueLabelFormat(keyRangeValue[1])}
+                        </Typography>
+                        <Box sx={{ px: 2 }}>
+                            <Slider
+                                getAriaLabel={() => "Key range"}
+                                value={keyRangeValue}
+                                min={0}
+                                step={1}
+                                max={127}
+                                onChange={handleKeyRangeChange}
+                                valueLabelDisplay="auto"
+                                getAriaValueText={valuetext}
+                                valueLabelFormat={valueLabelFormat}
+                                marks={marks}
+                            />
+                        </Box>
                     </Box>
-                </Box>
-            </DialogContent>
+                </DialogContent>
+            )}
 
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={handleTogglePreviewXmlCode}>Preview code</Button>
                 <Button type="submit">Save</Button>
             </DialogActions>
         </Dialog>

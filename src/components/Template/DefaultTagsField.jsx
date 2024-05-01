@@ -1,5 +1,5 @@
 // Dependencies
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 
 // Material UI
 import { Autocomplete, Chip, FormControl, FormHelperText, TextField } from "@mui/material";

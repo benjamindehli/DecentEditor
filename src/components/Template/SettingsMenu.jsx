@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { IconButton } from "@mui/material";
-import { MoreVert, Settings } from "@mui/icons-material";
+import { MoreVert } from "@mui/icons-material";
 
 // Components
 import { StyledMenu } from "./StyledMenu";

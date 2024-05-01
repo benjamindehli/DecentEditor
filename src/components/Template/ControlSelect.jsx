@@ -17,9 +17,6 @@ import { getColorForElementType } from "@/functions/styles";
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
-// Data
-import effectTypesData from "@/data/effectTypes";
-
 export default function ControlSelect({ controlRef, onChange, open }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
 

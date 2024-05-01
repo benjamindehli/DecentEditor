@@ -3,25 +3,14 @@ import { Fragment, useState } from "react";
 import { MuiColorInput } from "mui-color-input";
 
 // Material UI
-import { FormControl, FormHelperText } from "@mui/material";
-import Collapse from "@mui/material/Collapse";
+import { FormControl } from "@mui/material";
 
 // Helpers
 import { capitalizeFirstLetter } from "@/functions/helpers";
 
-export function DefaultColorField({
-    id,
-    name,
-    label,
-    defaultValue,
-    helperText,
-    inputProps,
-}) {
-    const [showHelperText, setShowHelperText] = useState(false);
-
+export function DefaultColorField({ id, name, label, defaultValue, inputProps }) {
     const labelWithFallback = label || capitalizeFirstLetter(name);
     const idWithFallback = id || name;
-    const helperTextId = `${idWithFallback}-helper-text`;
 
     const [color, setColor] = useState(convertColorValueToHex(defaultValue));
 
@@ -46,33 +35,6 @@ export function DefaultColorField({
                     value={color}
                     inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
                 />
-                {/*
-            <OutlinedInput
-                id={idWithFallback}
-                type="color"
-                name={name}
-                defaultValue={defaultValue}
-                inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
-                aria-describedby={helperTextId}
-                autoFocus={autoFocus}
-                required={required}
-                endAdornment={
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowHelperText}
-                            onMouseDown={handleMouseDownShowHelperText}
-                            edge="end"
-                        >
-                            <Help color={showHelperText ? "primary" : "inherit"} />
-                        </IconButton>
-                    </InputAdornment>
-                }
-                label={labelWithFallback}
-            />*/}
-                <Collapse in={showHelperText}>
-                    <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
-                </Collapse>
             </FormControl>
         </Fragment>
     );

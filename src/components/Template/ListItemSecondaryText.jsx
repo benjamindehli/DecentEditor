@@ -1,6 +1,5 @@
 // Material-UI
 import { Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
 
 export function ListItemSecondaryText({ children, fullWidth = false }) {
     const width = fullWidth ? "100%" : "calc(100% - 30px)";

@@ -8,9 +8,6 @@ import EditIcon from "@mui/icons-material/Edit";
 // Components
 import { SettingsMenu } from "@/components/Template/SettingsMenu";
 
-// Functions
-import { getBgColorForElementType } from "@/functions/styles";
-
 export function DefaultListItem({ elementItem, settingsMenuItems, onEditButtonClick, children }) {
     return (
         <ListItem
