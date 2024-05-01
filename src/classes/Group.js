@@ -7,7 +7,7 @@ import { Sample } from "./Sample";
 import { Effects } from "./Effects";
 
 // Functions
-import { createXmlDoc, formatXml, jsonToXml } from "@/functions/converters";
+import { formatXml, jsonToXml } from "@/functions/converters";
 
 export class Group {
     constructor(props, childElements, elementType, parentHierarchyPath) {
@@ -20,8 +20,10 @@ export class Group {
         this.tags = props?.tags;
         this.silencingMode = props?.silencingMode;
         this.ampVelTrack = props?.ampVelTrack;
+        this.pitchKeyTrack = props?.pitchKeyTrack;
         this.groupTuning = props?.groupTuning;
         this.volume = props?.volume;
+        this.pan = props?.pan;
         this.trigger = props?.trigger;
         this.attack = props?.attack;
         this.decay = props?.decay;
@@ -35,6 +37,13 @@ export class Group {
         this.seqMode = props?.seqMode;
         this.seqLength = props?.seqLength;
         this.seqPosition = props?.seqPosition;
+        this.loCCN = props?.loCCN;
+        this.hiCCN = props?.hiCCN;
+        this.onLoCCN = props?.onLoCCN;
+        this.onHiCCN = props?.onHiCCN;
+        this.playbackMode = props?.playbackMode;
+        this.loopCrossfade = props?.loopCrossfade;
+        this.loopCrossfadeMode = props?.loopCrossfadeMode;
         this.childElements =
             props?.childElements ||
             childElements
@@ -70,15 +79,17 @@ export class Group {
     addSampleItem(props) {
         this.childElements.push(new Sample(props, "sample", this.hierarchyPath));
     }
-    toJson(decentSampler) {
+    toJson(decentSampler, topLevelOnly) {
         const jsonObject = {
             $: {
                 enabled: this.enabled,
                 tags: this.tags,
                 silencingMode: this.silencingMode,
                 ampVelTrack: this.ampVelTrack,
+                pitchKeyTrack: this.pitchKeyTrack,
                 groupTuning: this.groupTuning,
                 volume: this.volume,
+                pan: this.pan,
                 trigger: this.trigger,
                 attack: this.attack,
                 decay: this.decay,
@@ -91,17 +102,24 @@ export class Group {
                 glideMode: this.glideMode,
                 seqMode: this.seqMode,
                 seqLength: this.seqLength,
-                seqPosition: this.seqPosition
+                seqPosition: this.seqPosition,
+                loCCN: this.loCCN,
+                hiCCN: this.hiCCN,
+                onLoCCN: this.onLoCCN,
+                onHiCCN: this.onHiCCN,
+                playbackMode: this.playbackMode,
+                loopCrossfade: this.loopCrossfade,
+                loopCrossfadeMode: this.loopCrossfadeMode
             }
         };
         jsonObject["#name"] = this.elementType;
-        if (this.childElements?.length) {
+        if (!topLevelOnly && this.childElements?.length) {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
     }
-    toXml(decentSampler) {
-        const xmlBody = jsonToXml(this.toJson(decentSampler));
+    toXml(decentSampler, topLevelOnly) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler, topLevelOnly));
         const xmlDoc = formatXml(xmlBody);
         return xmlDoc;
     }
@@ -115,6 +133,7 @@ Group.propTypes = {
     ampVelTrack: PropTypes.number,
     groupTuning: PropTypes.number,
     volume: PropTypes.number,
+    pan: PropTypes.number,
     trigger: PropTypes.string,
     attack: PropTypes.number,
     decay: PropTypes.number,
@@ -125,8 +144,15 @@ Group.propTypes = {
     releaseCurve: PropTypes.number,
     glideTime: PropTypes.number,
     glideMode: PropTypes.string,
-    seqMode: PropTypes.oneOf(["random", "true_random", "round_robin", "allways"]),
+    seqMode: PropTypes.oneOf(["random", "true_random", "round_robin", "always"]),
     seqLength: PropTypes.number,
     seqPosition: PropTypes.number,
+    loCCN: PropTypes.number,
+    hiCCN: PropTypes.number,
+    onLoCCN: PropTypes.number,
+    onHiCCN: PropTypes.number,
+    playbackMode: PropTypes.oneOf(["memory", "disk_streaming", "auto"]),
+    loopCrossfade: PropTypes.string,
+    loopCrossfadeMode: PropTypes.oneOf(["linear", "equal_power"]),
     childElements: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(Effects), PropTypes.instanceOf(Sample)]))
 };
