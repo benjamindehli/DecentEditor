@@ -15,7 +15,16 @@ import { getColorForElementType } from "@/functions/styles";
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
-export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, tabs, open, onClose, onSubmit }) {
+export function DefaultItemDialog({
+    elementItem,
+    previewItem,
+    dialogIcon,
+    dialogTitle,
+    contentHeight,
+    tabs,
+    open,
+    onClose
+}) {
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const theme = useTheme();
@@ -31,6 +40,7 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, tabs, 
         onClose();
         setTimeout(() => {
             setPreviewXmlCode(false);
+            setSelectedTab(0);
         }, 500);
     }
 
@@ -48,65 +58,81 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, tabs, 
     const elementColor = getColorForElementType(elementItem?.elementType)[theme.palette.mode];
 
     return (
-        <Dialog
-            open={open}
-            onClose={handleOnClose}
-            PaperProps={{
-                component: "form",
-                onSubmit: (event) => {
-                    event.preventDefault();
-                    onSubmit(event);
-                    handleOnClose();
-                }
-            }}
-        >
-            <DialogTitle>
-                {dialogIcon} {dialogTitle}
-            </DialogTitle>
+        open && (
+            <Dialog
+                open={open}
+                onClose={handleOnClose}
+                PaperProps={{
+                    component: "form",
+                    onSubmit: (event) => {
+                        event.preventDefault();
+                        Object.keys(previewItem).forEach((key) => {
+                            elementItem[key] = previewItem[key];
+                        });
+                        handleOnClose();
+                    }
+                }}
+            >
+                <DialogTitle>
+                    {dialogIcon} {dialogTitle}
+                </DialogTitle>
 
-            {tabs.length > 1 && !previewXmlCode && (
-                <AppBar position="static">
-                    <Tabs
-                        value={selectedTab}
-                        centered
-                        textColor="inherit"
-                        variant="fullWidth"
-                        onChange={handleTabChange}
-                        TabIndicatorProps={{
-                            sx: { backgroundColor: elementColor }
+                {tabs.length > 1 && !previewXmlCode && (
+                    <AppBar position="static">
+                        <Tabs
+                            value={selectedTab}
+                            centered
+                            textColor="inherit"
+                            variant="fullWidth"
+                            onChange={handleTabChange}
+                            TabIndicatorProps={{
+                                sx: { backgroundColor: elementColor }
+                            }}
+                            aria-label={`tabs for editing ${elementItem.elementType}`}
+                        >
+                            {tabs.map((tab, index) => (
+                                <Tab key={index} icon={tab.icon} label={tab.label} {...a11yProps(0)} />
+                            ))}
+                        </Tabs>
+                    </AppBar>
+                )}
+
+                {previewXmlCode ? (
+                    <DialogContent
+                        sx={{
+                            height: contentHeight || "auto",
+                            width: "600px",
+                            px: 0,
+                            backgroundColor: theme.palette.background.default
                         }}
-                        aria-label={`tabs for editing ${elementItem.elementType}`}
                     >
-                        {tabs.map((tab, index) => (
-                            <Tab key={index} icon={tab.icon} label={tab.label} {...a11yProps(0)} />
-                        ))}
-                    </Tabs>
-                </AppBar>
-            )}
+                        <XmlPreview
+                            xmlString={previewItem?.toXml(decentSamplerContext?.decentSampler, true)}
+                            wrapText
+                        />
+                    </DialogContent>
+                ) : (
+                    <DialogContent sx={{ height: contentHeight || "auto", width: "600px" }}>
+                        {tabs.length > 1
+                            ? tabs.map((tab, index) => {
+                                  return (
+                                      <TabPanel key={index} value={selectedTab} index={index}>
+                                          {tab.children}
+                                      </TabPanel>
+                                  );
+                              })
+                            : tabs[0].children}
+                    </DialogContent>
+                )}
 
-            {previewXmlCode ? (
-                <DialogContent sx={{ px: 0, backgroundColor: theme.palette.background.default }}>
-                    <XmlPreview xmlString={elementItem.toXml(decentSamplerContext?.decentSampler)} wrapText />
-                </DialogContent>
-            ) : (
-                <DialogContent>
-                    {tabs.length > 1
-                        ? tabs.map((tab, index) => {
-                              return (
-                                  <TabPanel key={index} value={selectedTab} index={index}>
-                                      {tab.children}
-                                  </TabPanel>
-                              );
-                          })
-                        : tabs[0].children}
-                </DialogContent>
-            )}
-
-            <DialogActions>
-                <Button onClick={handleOnClose}>Cancel</Button>
-                <Button onClick={handleTogglePreviewXmlCode}>{previewXmlCode ? "Edit values" : "Preview code"}</Button>
-                <Button type="submit">Save</Button>
-            </DialogActions>
-        </Dialog>
+                <DialogActions>
+                    <Button onClick={handleOnClose}>Cancel</Button>
+                    <Button onClick={handleTogglePreviewXmlCode}>
+                        {previewXmlCode ? "Edit values" : "Preview code"}
+                    </Button>
+                    <Button type="submit">Save</Button>
+                </DialogActions>
+            </Dialog>
+        )
     );
 }
