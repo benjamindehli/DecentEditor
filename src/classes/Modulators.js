@@ -36,6 +36,12 @@ export class Modulators {
             !!childElement?.init && childElement.init(decentSampler);
         });
     }
+    getLfoItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Lfo);
+    }
+    getEnvelopeItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Envelope);
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

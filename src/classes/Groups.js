@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 // Classes
 import { Group } from "./Group";
 import { Effects } from "./Effects";
+import { Sample } from "./Sample";
 
 export class Groups {
     constructor(props, childElements, elementType) {
@@ -35,6 +36,8 @@ export class Groups {
                     switch (childElementType) {
                         case "group":
                             return new Group(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "sample":
+                            return new Sample(childElement.$, childElement["#name"], hierarchyPath);
                         default:
                             return null;
                     }
@@ -52,6 +55,9 @@ export class Groups {
         return this.getGroupItems().filter((group) =>
             group.childElements.some((childElement) => childElement instanceof Effects)
         );
+    }
+    getSampleItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Sample);
     }
     addGroupItem(props) {
         this.childElements.push(new Group(props, null, "group", this.hierarchyPath));
@@ -102,5 +108,5 @@ Groups.propTypes = {
     glideMode: PropTypes.oneOf(["always", "legato", "off"]),
     seqMode: PropTypes.oneOf(["random", "true_random", "round_robin", "allways"]),
     seqLength: PropTypes.number,
-    childElements: PropTypes.arrayOf(PropTypes.instanceOf(Group))
+    childElements: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(Group), PropTypes.instanceOf(Sample)]))
 };

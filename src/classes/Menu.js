@@ -33,6 +33,9 @@ export class Menu {
                 .filter((childElement) => childElement) ||
             [];
     }
+    getOptionItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Option);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

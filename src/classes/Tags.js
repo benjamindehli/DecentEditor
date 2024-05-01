@@ -27,6 +27,9 @@ export class Tags {
                 .filter((childElement) => childElement) ||
             [];
     }
+    getTagItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Tag);
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

@@ -37,6 +37,9 @@ export class Lfo {
             !!childElement?.init && childElement.init(decentSampler);
         });
     }
+    getBindingItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Binding);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

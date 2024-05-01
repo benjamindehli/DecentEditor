@@ -37,6 +37,9 @@ export class Button {
                 .filter((childElement) => childElement) ||
             [];
     }
+    getStateItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof State);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

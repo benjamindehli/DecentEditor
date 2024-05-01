@@ -30,6 +30,12 @@ export class Midi {
                 .filter((childElement) => childElement) ||
             [];
     }
+    getCcItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Cc);
+    }
+    getNoteItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Note);
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

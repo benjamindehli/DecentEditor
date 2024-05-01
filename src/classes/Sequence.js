@@ -30,6 +30,9 @@ export class Sequence {
                 .filter((childElement) => childElement) ||
             [];
     }
+    getNoteItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Note);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {
