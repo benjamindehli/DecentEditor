@@ -23,7 +23,8 @@ export function DefaultTextField({
     helperText,
     inputProps,
     autoFocus,
-    required
+    required,
+    onChange
 }) {
     const [showHelperText, setShowHelperText] = useState(false);
 
@@ -44,24 +45,27 @@ export function DefaultTextField({
                 id={idWithFallback}
                 type={type}
                 name={name}
-                defaultValue={defaultValue}
+                defaultValue={defaultValue(name)}
                 inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
                 aria-describedby={helperTextId}
                 autoFocus={autoFocus}
                 required={required}
-                endAdornment={
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowHelperText}
-                            onMouseDown={handleMouseDownShowHelperText}
-                            edge="end"
-                        >
-                            <Help color={showHelperText ? "primary" : "inherit"} />
-                        </IconButton>
-                    </InputAdornment>
-                }
+                onChange={onChange}
                 label={labelWithFallback}
+                endAdornment={
+                    helperText?.length && (
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowHelperText}
+                                onMouseDown={handleMouseDownShowHelperText}
+                                edge="end"
+                            >
+                                <Help color={showHelperText ? "primary" : "inherit"} />
+                            </IconButton>
+                        </InputAdornment>
+                    )
+                }
             />
             <Collapse in={showHelperText}>
                 <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
