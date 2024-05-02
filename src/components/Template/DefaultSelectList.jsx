@@ -36,6 +36,7 @@ export function DefaultSelectList({
     const labelWithFallback = label || capitalizeFirstLetter(name);
     const idWithFallback = id || name;
     const helperTextId = `${idWithFallback}-helper-text`;
+    const hasHelperText = !!helperText?.length;
 
     return (
         <FormControl margin="dense" fullWidth variant="outlined">
@@ -52,7 +53,7 @@ export function DefaultSelectList({
                 label={labelWithFallback}
                 input={<OutlinedInput label="Glide mode" />}
                 endAdornment={
-                    helperText?.length && (
+                    hasHelperText && (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
@@ -65,6 +66,11 @@ export function DefaultSelectList({
                         </InputAdornment>
                     )
                 }
+                sx={{
+                    "& .MuiSelect-icon": hasHelperText && {
+                        marginRight: 5
+                    }
+                }}
             >
                 {options.map((option) => (
                     <MenuItem
@@ -81,7 +87,7 @@ export function DefaultSelectList({
                     </MenuItem>
                 ))}
             </Select>
-            {helperText?.length && (
+            {hasHelperText && (
                 <Collapse in={showHelperText}>
                     <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
                 </Collapse>
