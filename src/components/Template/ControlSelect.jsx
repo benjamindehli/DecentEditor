@@ -1,5 +1,5 @@
 // Dependencies
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 // Material UI
 import InputLabel from "@mui/material/InputLabel";
@@ -7,8 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Chip, Grid, Icon } from "@mui/material";
-import { SmartButton, Tune, Image as ImageIcon, ListAlt, Abc, FormatOverline } from "@mui/icons-material";
+import { Chip, Collapse, FormHelperText, Grid, Icon, IconButton, InputAdornment } from "@mui/material";
+import { SmartButton, Tune, Image as ImageIcon, ListAlt, Abc, FormatOverline, Help } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Functions
@@ -16,9 +16,17 @@ import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
+import { capitalizeFirstLetter } from "@/functions/helpers";
 
-export default function ControlSelect({ controlRef, onChange, open }) {
+export default function ControlSelect({ id, name, label, getDefaultValue, controlRef, onChange, open, helperText }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
+    const [showHelperText, setShowHelperText] = useState(false);
+
+    const handleClickShowHelperText = () => setShowHelperText((showHelperText) => !showHelperText);
+
+    const handleMouseDownShowHelperText = (event) => {
+        event.preventDefault();
+    };
 
     const theme = useTheme();
 
@@ -76,7 +84,6 @@ export default function ControlSelect({ controlRef, onChange, open }) {
     }
 
     function getChipLabelForElementType(elementType, element) {
-        console.log(element);
         switch (elementType) {
             case "button":
                 return element?.mainImage || element?.style || (element?.x && element?.y)
@@ -98,7 +105,6 @@ export default function ControlSelect({ controlRef, onChange, open }) {
                 return "";
         }
     }
-    console.log(tabChildItems);
 
     function renderSelectChildElements(tabChildItems) {
         const selectChildElements = [];
@@ -140,25 +146,52 @@ export default function ControlSelect({ controlRef, onChange, open }) {
         onChange(event.target.value);
     }
 
+    const labelWithFallback = label || capitalizeFirstLetter(name);
+    const idWithFallback = id || name;
+    const helperTextId = `${idWithFallback}-helper-text`;
+    const hasHelperText = !!helperText?.length;
+
     return (
         open &&
         optionElements?.length && ( // Prevent warning with unmounted component
-            <div>
-                <FormControl margin="dense" fullWidth variant="outlined">
-                    <InputLabel id="control-select-label" htmlFor="control-select">
-                        Controls
-                    </InputLabel>
-                    <Select
-                        defaultValue={defaultValue}
-                        id="control-select"
-                        label="Control"
-                        labelId="control-select-label"
-                        onChange={handleOnChange}
-                    >
-                        {optionElements}
-                    </Select>
-                </FormControl>
-            </div>
+            <FormControl margin="dense" fullWidth variant="outlined">
+                <InputLabel id="control-select-label" htmlFor="control-select">
+                    Controls
+                </InputLabel>
+                <Select
+                    defaultValue={defaultValue}
+                    id="control-select"
+                    label="Control"
+                    labelId="control-select-label"
+                    onChange={handleOnChange}
+                    endAdornment={
+                        hasHelperText && (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowHelperText}
+                                    onMouseDown={handleMouseDownShowHelperText}
+                                    edge="end"
+                                >
+                                    <Help color={showHelperText ? "primary" : "inherit"} />
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }
+                    sx={{
+                        "& .MuiSelect-icon": hasHelperText && {
+                            marginRight: 5
+                        }
+                    }}
+                >
+                    {optionElements}
+                </Select>
+                {hasHelperText && (
+                    <Collapse in={showHelperText}>
+                        <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
+                    </Collapse>
+                )}
+            </FormControl>
         )
     );
 }
