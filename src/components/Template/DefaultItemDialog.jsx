@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 
 // Material UI
-import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Tab, Tabs } from "@mui/material";
+import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Tab, Tabs } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -15,16 +15,7 @@ import { getColorForElementType } from "@/functions/styles";
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
-export function DefaultItemDialog({
-    elementItem,
-    previewItem,
-    dialogIcon,
-    dialogTitle,
-    contentHeight,
-    tabs,
-    open,
-    onClose
-}) {
+export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, contentHeight, tabs, open, onClose }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
 
     const theme = useTheme();
@@ -66,15 +57,17 @@ export function DefaultItemDialog({
                     component: "form",
                     onSubmit: (event) => {
                         event.preventDefault();
-                        Object.keys(previewItem).forEach((key) => {
-                            elementItem[key] = previewItem[key];
-                        });
                         handleOnClose();
                     }
                 }}
             >
                 <DialogTitle>
-                    {dialogIcon} {dialogTitle}
+                    <Grid container>
+                        <Grid item sx={{ display: "flex", mr: 1 }}>
+                            {dialogIcon}
+                        </Grid>
+                        <Grid item>{dialogTitle}</Grid>
+                    </Grid>
                 </DialogTitle>
 
                 {tabs.length > 1 && !previewXmlCode && (
@@ -107,7 +100,7 @@ export function DefaultItemDialog({
                         }}
                     >
                         <XmlPreview
-                            xmlString={previewItem?.toXml(decentSamplerContext?.decentSampler, true)}
+                            xmlString={elementItem?.toXml(decentSamplerContext?.decentSampler, true)}
                             wrapText
                         />
                     </DialogContent>
@@ -126,11 +119,10 @@ export function DefaultItemDialog({
                 )}
 
                 <DialogActions>
-                    <Button onClick={handleOnClose}>Cancel</Button>
                     <Button onClick={handleTogglePreviewXmlCode}>
                         {previewXmlCode ? "Edit values" : "Preview code"}
                     </Button>
-                    <Button type="submit">Save</Button>
+                    <Button type="submit">Close</Button>
                 </DialogActions>
             </Dialog>
         )

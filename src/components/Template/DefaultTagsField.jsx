@@ -1,5 +1,5 @@
 // Dependencies
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 // Material UI
 import { Autocomplete, Chip, FormControl, FormHelperText, TextField } from "@mui/material";
@@ -10,8 +10,11 @@ import { capitalizeFirstLetter } from "@/functions/helpers";
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
 
-export default function DefaultTagsField({ id, name, label, getDefaultValue, helperText, autoFocus, onChange }) {
+export default function DefaultTagsField({ id, name, label, defaultValue, getValue, helperText, autoFocus, onChange }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
+
+    const [value, setValue] = useState(getValue(name));
+
 
     function getTagsInUse() {
         const getTagsInUse = [];
@@ -195,18 +198,22 @@ export default function DefaultTagsField({ id, name, label, getDefaultValue, hel
     }
 
     function handleOnChange(event, newValue) {
+        //onChange(newValue);
+        
         let newTags = [];
         newValue.forEach((tag) => {
             newTags = [...newTags, ...tag.split(",").filter((tag) => tag.trim().length)];
         });
+        setValue(newTags.join(","));
         onChange(newTags.join(","));
+        
     }
 
     const labelWithFallback = label || capitalizeFirstLetter(name);
     const idWithFallback = id || name;
     const helperTextId = `${idWithFallback}-helper-text`;
 
-    const defaultValue = !!getDefaultValue?.(name)?.length ? getDefaultValue(name).split(",") : [];
+   // const defaultValue = !!getDefaultValue?.(name)?.length ? getDefaultValue(name).split(",") : [];
 
     return (
         <FormControl margin="dense" fullWidth variant="outlined">
@@ -216,7 +223,7 @@ export default function DefaultTagsField({ id, name, label, getDefaultValue, hel
                 autoSelect
                 id={idWithFallback}
                 name={name}
-                defaultValue={defaultValue}
+                value={value?.length ? value.split(",") : []}
                 autoFocus={autoFocus}
                 aria-describedby={helperTextId}
                 options={getTagsInUse()}

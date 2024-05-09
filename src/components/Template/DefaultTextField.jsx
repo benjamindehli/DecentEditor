@@ -19,19 +19,25 @@ export function DefaultTextField({
     name,
     label,
     type = "text",
-    defaultValue,
     helperText,
     inputProps,
     autoFocus,
     required,
-    onChange
+    onChange,
+    getValue
 }) {
     const [showHelperText, setShowHelperText] = useState(false);
+    const [value, setValue] = useState(getValue(name));
 
     const handleClickShowHelperText = () => setShowHelperText((showHelperText) => !showHelperText);
 
     const handleMouseDownShowHelperText = (event) => {
         event.preventDefault();
+    };
+
+    function handleOnChange(event){
+        setValue(event.target.value);
+        onChange(event);
     };
 
     const labelWithFallback = label || capitalizeFirstLetter(name);
@@ -45,12 +51,12 @@ export function DefaultTextField({
                 id={idWithFallback}
                 type={type}
                 name={name}
-                defaultValue={defaultValue(name)}
+                value={value}
                 inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
                 aria-describedby={helperTextId}
                 autoFocus={autoFocus}
                 required={required}
-                onChange={onChange}
+                onChange={handleOnChange}
                 label={labelWithFallback}
                 endAdornment={
                     !!helperText?.length && (

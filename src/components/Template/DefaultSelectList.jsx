@@ -17,15 +17,21 @@ export function DefaultSelectList({
     id,
     name,
     label,
-    getDefaultValue,
+    onChange,
+    getValue,
     options,
     helperText,
     inputProps,
     autoFocus,
-    required,
-    onChange
+    required
 }) {
     const [showHelperText, setShowHelperText] = useState(false);
+    const [value, setValue] = useState(getValue(name));
+
+    function handleOnChange(event) {
+        setValue(event.target.value);
+        onChange(event);
+    }
 
     const handleClickShowHelperText = () => setShowHelperText((showHelperText) => !showHelperText);
 
@@ -44,12 +50,12 @@ export function DefaultSelectList({
             <Select
                 id={idWithFallback}
                 name={name}
-                defaultValue={getDefaultValue(name)}
+                value={value}
                 inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
                 aria-describedby={helperTextId}
                 autoFocus={autoFocus}
                 required={required}
-                onChange={onChange}
+                onChange={handleOnChange}
                 label={labelWithFallback}
                 input={<OutlinedInput label="Glide mode" />}
                 endAdornment={
