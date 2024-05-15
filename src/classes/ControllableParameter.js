@@ -31,6 +31,9 @@ export class ControllableParameter {
         this.additionalParams = props?.additionalParams;
         this.helperText = props?.helperText;
     }
+    hasAdditionalParam(param) {
+        return this.additionalParams?.includes(param);
+    }
 }
 
 ControllableParameter.propTypes = {
