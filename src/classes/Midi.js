@@ -30,6 +30,12 @@ export class Midi {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("Midi.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     getCcItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Cc);
     }

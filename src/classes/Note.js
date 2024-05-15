@@ -32,6 +32,12 @@ export class Note {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("Note.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     getBindingItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Binding);
     }

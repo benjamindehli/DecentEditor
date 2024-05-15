@@ -33,6 +33,12 @@ export class Envelope {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("Envelope.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     getBindingItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Binding);
     }
