@@ -109,6 +109,11 @@ export class Binding {
         jsonObject["#name"] = this.elementType;
         return jsonObject;
     }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
+    }
 }
 
 Binding.propTypes = {
