@@ -13,6 +13,8 @@ import { Tags } from "./Tags";
 
 // Functions
 import { createXmlDoc, jsonToXml } from "@/functions/converters";
+import controllableParametersData from "@/data/controllableParameters";
+import { ControllableParameter } from "./ControllableParameter";
 
 export class DecentSampler {
     constructor(props, childElements, elementType) {
@@ -44,6 +46,9 @@ export class DecentSampler {
                 })
                 .filter((childElement) => childElement) ||
             [];
+        this.data = {
+            controllableParameters: [],
+        }
     }
     toJson() {
         const jsonObject = {};
@@ -59,6 +64,9 @@ export class DecentSampler {
         return xmlDoc;
     }
     init() {
+        this.data.controllableParameters = controllableParametersData.map((controllableParameter) => {
+            return new ControllableParameter(controllableParameter);
+        })
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(this);
         });
@@ -104,6 +112,9 @@ export class DecentSampler {
     }
     getFirstTagsItem() {
         return this.childElements?.find((childElement) => childElement instanceof Tags);
+    }
+    getControllableParameters() {
+        return this.data?.controllableParameters;
     }
     createNewPreset() {
         this.childElements = [
