@@ -5,6 +5,9 @@ import PropTypes from "prop-types";
 // Data
 import { bindingLevels, bindingParameters, bindingTypes } from "@/data/bindingPropValues";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 // Classes
 import { Group } from "./Group";
 
