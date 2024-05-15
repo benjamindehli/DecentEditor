@@ -1,5 +1,5 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
@@ -20,27 +20,8 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Classes
-import { ControllableParameter } from "@/classes/ControllableParameter";
-
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
-// Data
-import controllableParametersData from "@/data/controllableParameters.js";
-
 export function BindingItemComponent({ bindingItem }) {
     const theme = useTheme();
-
-    const decentSamplerContext = useContext(DecentSamplerContext);
-    const [controllableParameters, setControllableParameters] = useState(
-        controllableParametersData.map((controllableParameter) => {
-            return new ControllableParameter(controllableParameter);
-        })
-    );
-    const [controllableParameterForBinding, setControllableParameterForBinding] = useState(
-        getControlParameterForBindingItem(bindingItem)
-    );
 
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -53,24 +34,6 @@ export function BindingItemComponent({ bindingItem }) {
     const handleCloseEditBindingItemDialog = () => {
         setEditBindingItemDialogIsOpen(false);
     };
-
-    function getControlParameterForBindingItem(binding) {
-        return controllableParameters.find((controllableParameter) => {
-            return (
-                controllableParameter.type === binding.type &&
-                controllableParameter.level === binding.level &&
-                controllableParameter.parameter === binding.parameter
-            );
-        });
-    }
-
-    /* useEffect(() => {
-        const controllableParameter = getControlParameterForBindingItem(bindingItem);
-        setControllableParameterForBinding(controllableParameter);
-        if (!controllableParameter) {
-            console.log("noMatch", bindingItem);
-        }
-    }, [bindingItem]);*/
 
     const settingsMenuItems = (
         <Fragment>
@@ -100,7 +63,9 @@ export function BindingItemComponent({ bindingItem }) {
     );
 
     const primaryText = "Binding";
-    const secondaryText = <ListItemSecondaryText>{controllableParameterForBinding?.description}</ListItemSecondaryText>;
+    const secondaryText = (
+        <ListItemSecondaryText>{bindingItem?.controllableParameterRef?.description}</ListItemSecondaryText>
+    );
 
     return (
         <Fragment>
@@ -125,8 +90,6 @@ export function BindingItemComponent({ bindingItem }) {
             </DefaultListItem>
             <EditBindingItemDialog
                 bindingItem={bindingItem}
-                controllableParameters={controllableParameters}
-                controllableParameterForBinding={controllableParameterForBinding}
                 open={editBindingItemDialogIsOpen}
                 onClose={handleCloseEditBindingItemDialog}
             />

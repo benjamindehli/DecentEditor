@@ -18,8 +18,6 @@ import { IconControllableParameter } from "@/components/Template/Icons/IconContr
 
 export function EditBindingItemDialog({
     bindingItem,
-    controllableParameters,
-    controllableParameterForBinding,
     open,
     onClose
 }) {
@@ -88,7 +86,6 @@ export function EditBindingItemDialog({
 
                     <BindingParameterSelect
                         onChange={handleBindingParameterChange}
-                        controllableParameters={controllableParameters}
                         defaultValue={selectedBindingParameter}
                     />
                     {selectedBindingParameter && (
