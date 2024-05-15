@@ -1,5 +1,5 @@
+import { useContext, useState } from "react";
 // Dependencies
-import * as React from "react";
 import parse from "autosuggest-highlight/parse";
 import match from "autosuggest-highlight/match";
 
@@ -13,7 +13,14 @@ import Typography from "@mui/material/Typography";
 // Template
 import { IconControllableParameter } from "./Icons/IconControllableParameter";
 
-export default function BindingParameterSelect({ onChange, controllableParameters, defaultValue }) {
+// Store
+import DecentSamplerContext from "@/store/DecentSamplerContext";
+
+export default function BindingParameterSelect({ onChange, defaultValue }) {
+    const decentSamplerContext = useContext(DecentSamplerContext);
+    const controllableParameters = decentSamplerContext.decentSampler.getControllableParameters();
+    const [value, setValue] = useState(defaultValue && Object.keys(defaultValue).length ? defaultValue : controllableParameters[0]);
+
     const filterOptions = createFilterOptions({
         stringify: (option) => `${option.description} ${option.secondaryDescription} ${option.level} ${option.type}`
     });
@@ -26,31 +33,33 @@ export default function BindingParameterSelect({ onChange, controllableParameter
             filterOptions={filterOptions}
             getOptionLabel={(option) => option.description}
             onChange={(event, newValue) => {
+                setValue(newValue);
                 onChange(newValue);
             }}
-            value={defaultValue}
+            value={value || ""}
             renderInput={(params) => <TextField {...params} label="Controllable parameter" margin="normal" />}
             renderOption={(props, option, { inputValue }) => {
-                const descriptionMatches = match(option.description, inputValue, { insideWords: true });
-                const descriptionParts = parse(option.description, descriptionMatches);
+                const descriptionMatches =
+                    option?.description && match(option.description, inputValue, { insideWords: true });
+                const descriptionParts = option?.description && parse(option.description, descriptionMatches);
 
                 const secondaryDescriptionMatches =
-                    option.secondaryDescription &&
+                    option?.secondaryDescription &&
                     match(option.secondaryDescription, inputValue, { insideWords: true });
                 const secondaryDescriptionParts =
-                    option.secondaryDescription && parse(option.secondaryDescription, secondaryDescriptionMatches);
+                    option?.secondaryDescription && parse(option.secondaryDescription, secondaryDescriptionMatches);
 
-                const levelMatches = match(option.level, inputValue, { insideWords: true });
-                const levelParts = parse(option.level, levelMatches);
+                const levelMatches = option?.level && match(option.level, inputValue, { insideWords: true });
+                const levelParts = option?.level && parse(option.level, levelMatches);
 
-                const typeMatches = match(option.type, inputValue, { insideWords: true });
-                const typeParts = parse(option.type, typeMatches);
+                const typeMatches = option?.type && match(option.type, inputValue, { insideWords: true });
+                const typeParts = option?.type && parse(option.type, typeMatches);
 
                 return (
                     <li {...props} key={option.id}>
                         <Grid container alignItems="center">
                             <Grid item sx={{ display: "flex", width: 64 }}>
-                                <IconControllableParameter parameterType={option.type} parameterLevel={option.level} />
+                                <IconControllableParameter controllableParameter={option} />
                             </Grid>
                             <Grid item sx={{ width: "calc(100% - 64px)", wordWrap: "break-word" }}>
                                 {descriptionParts.map((part, index) => (
@@ -62,7 +71,7 @@ export default function BindingParameterSelect({ onChange, controllableParameter
                                         {part.text}
                                     </Box>
                                 ))}
-                                {option.secondaryDescription && (
+                                {option?.secondaryDescription && (
                                     <Typography variant="body2" color="text.primary">
                                         {secondaryDescriptionParts.map((part, index) => (
                                             <Box
@@ -78,38 +87,42 @@ export default function BindingParameterSelect({ onChange, controllableParameter
 
                                 <Grid container>
                                     <Grid item xs={4}>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Level:{" "}
-                                            {levelParts.map((part, index) => (
-                                                <Box
-                                                    key={index}
-                                                    component="span"
-                                                    sx={{
-                                                        fontWeight: part.highlight ? "bold" : "regular",
-                                                        color: part.highlight ? "text.primary" : "text.secondary"
-                                                    }}
-                                                >
-                                                    {part.text}
-                                                </Box>
-                                            ))}
-                                        </Typography>
+                                        {!!levelParts?.length && (
+                                            <Typography variant="body2" color="text.secondary">
+                                                Level:{" "}
+                                                {levelParts.map((part, index) => (
+                                                    <Box
+                                                        key={index}
+                                                        component="span"
+                                                        sx={{
+                                                            fontWeight: part.highlight ? "bold" : "regular",
+                                                            color: part.highlight ? "text.primary" : "text.secondary"
+                                                        }}
+                                                    >
+                                                        {part.text}
+                                                    </Box>
+                                                ))}
+                                            </Typography>
+                                        )}
                                     </Grid>
                                     <Grid item xs={8}>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Type:{" "}
-                                            {typeParts.map((part, index) => (
-                                                <Box
-                                                    key={index}
-                                                    component="span"
-                                                    sx={{
-                                                        fontWeight: part.highlight ? "bold" : "regular",
-                                                        color: part.highlight ? "text.primary" : "text.secondary"
-                                                    }}
-                                                >
-                                                    {part.text}
-                                                </Box>
-                                            ))}
-                                        </Typography>
+                                        {!!typeParts?.length && (
+                                            <Typography variant="body2" color="text.secondary">
+                                                Type:{" "}
+                                                {typeParts.map((part, index) => (
+                                                    <Box
+                                                        key={index}
+                                                        component="span"
+                                                        sx={{
+                                                            fontWeight: part.highlight ? "bold" : "regular",
+                                                            color: part.highlight ? "text.primary" : "text.secondary"
+                                                        }}
+                                                    >
+                                                        {part.text}
+                                                    </Box>
+                                                ))}
+                                            </Typography>
+                                        )}
                                     </Grid>
                                 </Grid>
                             </Grid>
