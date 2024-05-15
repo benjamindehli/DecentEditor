@@ -22,7 +22,7 @@ import Stack from "@mui/material/Stack";
 // Functions
 import { getColorForBindingLevel, getColorForBindingType } from "@/functions/styles";
 
-export function IconControllableParameter({ parameterType, parameterLevel }) {
+export function IconControllableParameter({ controllableParameter }) {
     const theme = useTheme();
 
     function renderParameterLevelIcon(parameterLevel) {
@@ -80,9 +80,9 @@ export function IconControllableParameter({ parameterType, parameterLevel }) {
     }
 
     return (
-        <Stack direction="row" spacing={0} sx={{ minWidth: "56px" }}>
-            {renderParameterLevelIcon(parameterLevel)}
-            {renderParameterTypeIcon(parameterType)}
+        <Stack direction="row" spacing={0}>
+            {renderParameterLevelIcon(controllableParameter?.level)}
+            {renderParameterTypeIcon(controllableParameter?.type)}
         </Stack>
     );
 }

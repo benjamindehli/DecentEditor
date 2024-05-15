@@ -128,8 +128,7 @@ export function EditBindingItemDialog({
 
     const dialogIcon = (
         <IconControllableParameter
-            parameterType={selectedBindingParameter?.type}
-            parameterLevel={selectedBindingParameter?.level}
+            controllableParameter={selectedBindingParameter}
         />
     );
     const dialogTitle = "Edit binding";

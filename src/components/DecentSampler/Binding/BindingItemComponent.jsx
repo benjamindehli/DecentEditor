@@ -113,10 +113,9 @@ export function BindingItemComponent({ bindingItem }) {
                     sx={{ pl: getIndentSize(bindingItem, false) }}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
-                    <ListItemIcon
-                        sx={{ color: getColorForElementType(bindingItem?.elementType)[theme.palette.mode] }}
-                    >
+                    <ListItemIcon sx={{ color: getColorForElementType(bindingItem?.elementType)[theme.palette.mode] }}>
                         <IconControllableParameter
+                            controllableParameter={bindingItem?.controllableParameterRef}
                             parameterType={bindingItem.type}
                             parameterLevel={bindingItem.level}
                         />
