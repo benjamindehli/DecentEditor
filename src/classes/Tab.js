@@ -60,6 +60,12 @@ export class Tab {
         }
         return jsonObject;
     }
+    getChildElements() {
+        return this.childElements;
+    }
+    getChildElementByIndex(index) {
+        return this.childElements[index];
+    }
     getButtonItems() {
         return this.childElements.filter((childElement) => childElement instanceof Button);
     }
