@@ -18,10 +18,12 @@ export class Binding {
         this.id = id;
         this.hierarchyPath = hierarchyPath;
         this.elementType = props?.elementType || elementType;
+        this.controllableParameterRef = props?.controllableParameterRef;
         this.type = props?.type;
         this.level = props?.level;
         this.position = props?.position;
         this.controlIndex = props?.controlIndex;
+        this.controlRef = props?.controlRef;
         this.groupIndex = props?.groupIndex;
         this.groupRef = props?.groupRef;
         this.effectIndex = props?.effectIndex;
@@ -47,12 +49,39 @@ export class Binding {
         this.seqLoopMode = props?.seqLoopMode;
     }
     init(decentSampler) {
+        if (this.type !== undefined && this.level !== undefined && this.parameter !== undefined) {
+            this.controllableParameterRef = this.getControllableParameterRef(decentSampler);
+            if (this.controllableParameterRef.hasAdditionalParam("controlIndex")) {
+                this.controlIndex = this.controlIndex || this.position;
+            }
+            if (this.controllableParameterRef.hasAdditionalParam("effectIndex")) {
+                this.effectIndex = this.effectIndex || this.position;
+            }
+            if (this.controllableParameterRef.hasAdditionalParam("groupIndex")) {
+                this.groupIndex = this.groupIndex || this.position;
+            }
+        }
         if (this.groupIndex !== undefined) {
             this.groupRef = this.getGroupRefFromGroupIndex(decentSampler);
         }
         if (this.effectIndex !== undefined) {
             this.effectRef = this.getEffectRefFromEffectIndex(decentSampler, this.groupRef);
         }
+        if (this.controlIndex !== undefined) {
+            this.controlRef = this.getControlRefFromControlIndex(decentSampler);
+        }
+    }
+    getControllableParameterRef(decentSampler) {
+        return decentSampler?.data?.controllableParameters.find((controllableParameter) => {
+            return (
+                controllableParameter.type === this.type &&
+                controllableParameter.level === this.level &&
+                controllableParameter.parameter === this.parameter
+            );
+        });
+    }
+    getControlRefFromControlIndex(decentSampler) {
+        return decentSampler?.getFirstUiItem()?.getFirstTabItem()?.getChildElementByIndex(this.controlIndex);
     }
     getGroupRefFromGroupIndex(decentSampler) {
         return decentSampler?.getFirstGroupsItem()?.getGroupItemByIndex(this.groupIndex);
@@ -74,6 +103,7 @@ export class Binding {
             : decentSampler?.getFirstEffectsItem()?.getEffectItems();
         return effects?.findIndex((effect) => effect.id === effectRef.id);
     }
+
     getTags() {
         return this.tags?.split(",");
     }
