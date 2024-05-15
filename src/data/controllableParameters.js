@@ -1,5 +1,8 @@
 const controllableParametersData = [
     {
+        description: "Unselected",
+    },
+    {
         description: "Global Volume",
         type: "amp",
         level: "instrument",
