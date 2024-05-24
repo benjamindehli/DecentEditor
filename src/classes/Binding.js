@@ -22,6 +22,8 @@ export class Binding {
         this.type = props?.type;
         this.level = props?.level;
         this.position = props?.position;
+        this.colorIndex = props?.colorIndex;
+        this.colorRef = props?.colorRef;
         this.controlIndex = props?.controlIndex;
         this.controlRef = props?.controlRef;
         this.groupIndex = props?.groupIndex;
@@ -80,8 +82,25 @@ export class Binding {
             );
         });
     }
+    getColorRefFromColorIndex(decentSampler) {
+        return decentSampler?.getFirstUiItem()?.getFirstKeyboardItem()?.getColorItemByIndex(this.colorIndex);
+    }
+    getColorIndexFromColorRef(decentSampler, colorRef) {
+        return decentSampler
+            ?.getFirstUiItem()
+            ?.getFirstKeyboardItem()
+            ?.getColorItems()
+            ?.findIndex((color) => color.id === colorRef.id);
+    }
     getControlRefFromControlIndex(decentSampler) {
         return decentSampler?.getFirstUiItem()?.getFirstTabItem()?.getChildElementByIndex(this.controlIndex);
+    }
+    getControlIndexFromControlRef(decentSampler, controlRef) {
+        return decentSampler
+            ?.getFirstUiItem()
+            ?.getFirstTabItem()
+            ?.getChildElements()
+            ?.findIndex((control) => control.id === controlRef.id);
     }
     getGroupRefFromGroupIndex(decentSampler) {
         return decentSampler?.getFirstGroupsItem()?.getGroupItemByIndex(this.groupIndex);
@@ -113,11 +132,18 @@ export class Binding {
                 type: this.type,
                 level: this.level,
                 position: this.position,
-                controlIndex: this.controlIndex,
+                colorIndex: this.colorRef
+                    ? this.getColorIndexFromColorRef(decentSampler, this.colorRef)
+                    : this.colorIndex,
+                controlIndex: this.controlRef
+                    ? this.getControlIndexFromControlRef(decentSampler, this.controlRef)
+                    : this.controlIndex,
                 groupIndex: this.groupRef
                     ? this.getGroupIndexFromGroupRef(decentSampler, this.groupRef)
                     : this.groupIndex,
-                effectIndex: this.effectIndex,
+                effectIndex: this.effectRef
+                    ? this.getEffectIndexFromEffectRef(decentSampler, this.effectRef)
+                    : this.effectIndex,
                 modulatorIndex: this.modulatorIndex,
                 tags: this.tags,
                 enabled: this.enabled,
