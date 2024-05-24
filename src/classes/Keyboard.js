@@ -41,6 +41,9 @@ export class Keyboard {
     getFirstColorItem() {
         return this.childElements.find((childElement) => childElement instanceof Color);
     }
+    getColorItemByIndex(index) {
+        return this.getColorItems()[index];
+    }
     addColorItem(props) {
         this.childElements.push(new Color(props, "group", this.hierarchyPath));
     }

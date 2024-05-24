@@ -36,6 +36,12 @@ export class Modulators {
             !!childElement?.init && childElement.init(decentSampler);
         });
     }
+    getChildElements() {
+        return this.childElements;
+    }
+    getChildElementByIndex(index) {
+        return this.childElements[index];
+    }
     getLfoItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Lfo);
     }
