@@ -22,6 +22,8 @@ export class Binding {
         this.type = props?.type;
         this.level = props?.level;
         this.position = props?.position;
+        this.bindingIndex = props?.bindingIndex;
+        this.bindingRef = props?.bindingRef;
         this.colorIndex = props?.colorIndex;
         this.colorRef = props?.colorRef;
         this.controlIndex = props?.controlIndex;
@@ -31,6 +33,11 @@ export class Binding {
         this.effectIndex = props?.effectIndex;
         this.effectRef = props?.effectRef;
         this.modulatorIndex = props?.modulatorIndex;
+        this.modulatorRef = props?.modulatorRef;
+        this.noteIndex = props?.noteIndex;
+        this.noteRef = props?.noteRef;
+        this.stateIndex = props?.stateIndex;
+        this.stateRef = props?.stateRef;
         this.tags = props?.tags;
         this.enabled = props?.enabled;
         this.identifier = props?.identifier;
@@ -63,14 +70,40 @@ export class Binding {
                 this.groupIndex = this.groupIndex || this.position;
             }
         }
+
         if (this.groupIndex !== undefined) {
             this.groupRef = this.getGroupRefFromGroupIndex(decentSampler);
         }
-        if (this.effectIndex !== undefined) {
-            this.effectRef = this.getEffectRefFromEffectIndex(decentSampler, this.groupRef);
+        const hasGroupRef = !!this.groupRef;
+        if (hasGroupRef && this.effectIndex !== undefined) {
+            this.effectRef = this.getGroupEffectRefFromEffectIndex(this.groupRef);
+        } else if (this.effectIndex !== undefined) {
+            this.effectRef = this.getGlobalEffectRefFromEffectIndex(decentSampler);
         }
+
         if (this.controlIndex !== undefined) {
             this.controlRef = this.getControlRefFromControlIndex(decentSampler);
+            const hasControlRef = !!this.controlRef;
+            if (hasControlRef && this.stateIndex !== undefined) {
+                this.stateRef = this.getStateRefFromStateIndex(this.controlRef);
+                const hasStateRef = !!this.stateRef;
+                if (hasStateRef && this.bindingIndex !== undefined) {
+                    this.bindingRef = this.getStateBindingRefFromBindingIndex(this.stateRef);
+                }
+            }
+        }
+        if (this.colorIndex !== undefined) {
+            this.colorRef = this.getColorRefFromColorIndex(decentSampler);
+        }
+        if (this.modulatorIndex !== undefined) {
+            this.modulatorRef = this.getModulatorRefFromModulatorIndex(decentSampler);
+        }
+        if (this.noteIndex !== undefined) {
+            this.noteRef = this.getNoteRefFromNoteIndex(decentSampler);
+            const hasNoteRef = !!this.noteRef;
+            if (hasNoteRef && this.bindingIndex !== undefined) {
+                this.bindingRef = this.getNoteBindingRefFromBindingIndex(this.noteRef);
+            }
         }
     }
     getControllableParameterRef(decentSampler) {
@@ -111,16 +144,61 @@ export class Binding {
             ?.getGroupItems()
             ?.findIndex((group) => group.id === groupRef.id);
     }
-    getEffectRefFromEffectIndex(decentSampler, group) {
-        return !!group
-            ? group?.getFirstEffectsItem()?.getEffectItemByIndex(this.effectIndex)
-            : decentSampler?.getFirstEffectsItem()?.getEffectItemByIndex(this.effectIndex);
+    getGroupEffectRefFromEffectIndex(groupRef) {
+        return groupRef?.getFirstEffectsItem()?.getEffectItemByIndex(this.effectIndex);
     }
-    getEffectIndexFromEffectRef(decentSampler, effectRef) {
-        const effects = !!this.groupRef
-            ? this.groupRef?.getFirstEffectsItem()?.getEffectItems()
-            : decentSampler?.getFirstEffectsItem()?.getEffectItems();
-        return effects?.findIndex((effect) => effect.id === effectRef.id);
+    getGroupEffectIndexFromEffectRef(groupRef, effectRef) {
+        return groupRef
+            ?.getFirstEffectsItem()
+            ?.getEffectItems()
+            ?.findIndex((effect) => effect.id === effectRef.id);
+    }
+    getGlobalEffectRefFromEffectIndex(decentSampler) {
+        return decentSampler?.getFirstEffectsItem()?.getEffectItemByIndex(this.effectIndex);
+    }
+    getGlobalEffectIndexFromEffectRef(decentSampler, effectRef) {
+        return decentSampler
+            ?.getFirstEffectsItem()
+            ?.getEffectItems()
+            ?.findIndex((effect) => effect.id === effectRef.id);
+    }
+    getModulatorRefFromModulatorIndex(decentSampler) {
+        return decentSampler?.getFirstModulatorsItem()?.getChildElementByIndex(this.modulatorIndex);
+    }
+    getModulatorIndexFromModulatorRef(decentSampler, modulatorRef) {
+        return decentSampler
+            ?.getFirstModulatorsItem()
+            ?.getChildElements()
+            ?.findIndex((modulator) => modulator.id === modulatorRef.id);
+    }
+    getNoteRefFromNoteIndex(decentSampler) {
+        return decentSampler?.getFirstMidiItem()?.getNoteItemByIndex(this.noteIndex);
+    }
+    getNoteIndexFromNoteRef(decentSampler, noteRef) {
+        return decentSampler
+            ?.getFirstMidiItem()
+            ?.getNoteItems()
+            ?.findIndex((note) => note.id === noteRef.id);
+    }
+    getNoteBindingRefFromBindingIndex(noteRef) {
+        return noteRef?.getBindingItemByIndex(this.bindingIndex);
+    }
+    getNoteBindingIndexFromBindingRef(noteRef, bindingRef) {
+        return noteRef?.getBindingItems()?.findIndex((binding) => binding.id === bindingRef.id);
+    }
+    getStateRefFromStateIndex(controlRef) {
+        const isButtonControl = controlRef instanceof Button;
+        return isButtonControl && controlRef?.getStateItemByIndex(this.stateIndex);
+    }
+    getStateIndexFromStateRef(controlRef, stateRef) {
+        const isButtonControl = controlRef instanceof Button;
+        return isButtonControl && controlRef?.getStateItems()?.findIndex((state) => state.id === stateRef.id);
+    }
+    getStateBindingRefFromBindingIndex(stateRef) {
+        return stateRef?.getBindingItemByIndex(this.bindingIndex);
+    }
+    getStateBindingIndexFromBindingRef(stateRef, bindingRef) {
+        return stateRef?.getBindingItems()?.findIndex((binding) => binding.id === bindingRef.id);
     }
 
     getTags() {
@@ -142,9 +220,25 @@ export class Binding {
                     ? this.getGroupIndexFromGroupRef(decentSampler, this.groupRef)
                     : this.groupIndex,
                 effectIndex: this.effectRef
-                    ? this.getEffectIndexFromEffectRef(decentSampler, this.effectRef)
+                    ? this.groupRef // If groupRef exists, then it's a group effect
+                        ? this.getGroupEffectIndexFromEffectRef(this.groupRef, this.effectRef)
+                        : this.getGlobalEffectIndexFromEffectRef(decentSampler, this.effectRef)
                     : this.effectIndex,
-                modulatorIndex: this.modulatorIndex,
+                modulatorIndex: this.modulatorRef
+                    ? this.getModulatorIndexFromModulatorRef(decentSampler, this.modulatorRef)
+                    : this.modulatorIndex,
+                noteIndex: this.noteRef ? this.getNoteIndexFromNoteRef(decentSampler, this.noteRef) : this.noteIndex,
+                stateIndex:
+                    this.stateRef && this.controlRef
+                        ? this.getStateIndexFromStateRef(this.controlRef, this.stateRef)
+                        : this.stateIndex,
+                bindingIndex: this.bindingRef
+                    ? this.stateRef // If stateRef exists, then it's a button control
+                        ? this.getStateBindingRefFromBindingIndex(this.stateRef)
+                        : this.noteRef // Else if noteRef exists, then it's a note
+                        ? this.getNoteBindingRefFromBindingIndex(this.noteRef)
+                        : this.bindingIndex
+                    : this.bindingIndex,
                 tags: this.tags,
                 enabled: this.enabled,
                 identifier: this.identifier,
