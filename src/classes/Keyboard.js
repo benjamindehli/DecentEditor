@@ -27,6 +27,12 @@ export class Keyboard {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("Keyboard.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

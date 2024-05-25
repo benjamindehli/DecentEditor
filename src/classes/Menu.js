@@ -33,6 +33,12 @@ export class Menu {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("Menu.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     getOptionItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Option);
     }

@@ -37,6 +37,12 @@ export class Button {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("Button.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     getStateItems() {
         return this.childElements?.filter((childElement) => childElement instanceof State);
     }

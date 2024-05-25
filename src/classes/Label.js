@@ -20,6 +20,9 @@ export class Label {
         this.hAlign = props?.hAlign;
         this.visible = props?.visible;
     }
+    init(decentSampler) {
+        console.log("Label.init()");
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

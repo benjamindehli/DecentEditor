@@ -13,6 +13,9 @@ export class Color {
         this.hiNote = props?.hiNote;
         this.color = props?.color;
     }
+    init(decentSampler) {
+        console.log("Color.init()");
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

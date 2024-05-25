@@ -48,6 +48,12 @@ export class Tab {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("Tab.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

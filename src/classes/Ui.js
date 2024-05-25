@@ -37,6 +37,12 @@ export class Ui {
                 .filter((childElement) => childElement) ||
             [];
     }
+    init(decentSampler) {
+        console.log("UI.init()");
+        this.childElements?.forEach((childElement) => {
+            !!childElement?.init && childElement.init(decentSampler);
+        });
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {
