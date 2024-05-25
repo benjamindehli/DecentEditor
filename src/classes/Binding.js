@@ -58,6 +58,13 @@ export class Binding {
         this.seqLoopMode = props?.seqLoopMode;
     }
     init(decentSampler) {
+        // Both AMP_VOLUME and TAG_VOLUME are valid parameters, but TAG_VOLUME is used in documentation
+        if (this.type === "amp" && this.level === "tag" && this.parameter === "AMP_VOLUME") {
+            console.log("converting AMP_VOLUME to TAG_VOLUME")
+            this.parameter = "TAG_VOLUME";
+        }
+
+        // Use named indexes instead of position
         if (this.type !== undefined && this.level !== undefined && this.parameter !== undefined) {
             this.controllableParameterRef = this.getControllableParameterRef(decentSampler);
             if (this.controllableParameterRef.hasAdditionalParam("controlIndex")) {
@@ -70,6 +77,7 @@ export class Binding {
                 this.groupIndex = this.groupIndex || this.position;
             }
         }
+        
 
         if (this.groupIndex !== undefined) {
             this.groupRef = this.getGroupRefFromGroupIndex(decentSampler);
