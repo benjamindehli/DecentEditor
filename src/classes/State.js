@@ -34,6 +34,9 @@ export class State {
     getBindingItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Binding);
     }
+    getBindingItemByIndex(index) {
+        return this.getBindingItems()[index];
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

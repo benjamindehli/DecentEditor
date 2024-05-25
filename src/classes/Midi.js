@@ -42,6 +42,9 @@ export class Midi {
     getNoteItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Note);
     }
+    getNoteItemByIndex(index) {
+        return this.getNoteItems()[index];
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

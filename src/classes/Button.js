@@ -40,6 +40,9 @@ export class Button {
     getStateItems() {
         return this.childElements?.filter((childElement) => childElement instanceof State);
     }
+    getStateItemByIndex(index) {
+        return this.getStateItems()[index];
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {
