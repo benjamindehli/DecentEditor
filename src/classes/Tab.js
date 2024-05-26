@@ -9,6 +9,7 @@ import { Image } from "./Image";
 import { Control } from "./Control";
 import { Label } from "./Label";
 import { LabeledKnob } from "./LabeledKnob";
+import { State } from "./State";
 
 export class Tab {
     constructor(props, childElements, elementType, parentHierarchyPath) {
@@ -74,6 +75,11 @@ export class Tab {
     }
     getButtonItems() {
         return this.childElements.filter((childElement) => childElement instanceof Button);
+    }
+    getButtonItemsWithStates() {
+        return this.getButtonItems().filter((button) =>
+            button.childElements.some((childElement) => childElement instanceof State)
+        );
     }
     getControlItems() {
         return this.childElements.filter((childElement) => childElement instanceof Control);

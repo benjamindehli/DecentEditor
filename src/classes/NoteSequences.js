@@ -30,6 +30,9 @@ export class NoteSequences {
     getSequenceItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Sequence);
     }
+    getSequenceItemByIndex(index) {
+        return this.getSequenceItems()[index];
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;
