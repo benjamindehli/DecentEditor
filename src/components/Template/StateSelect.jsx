@@ -7,8 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Chip, Grid, Icon } from "@mui/material";
-import { ToggleOn } from "@mui/icons-material";
+import { Chip, Collapse, FormHelperText, Grid, Icon, IconButton, InputAdornment } from "@mui/material";
+import { Help, ToggleOn } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Functions
@@ -20,6 +20,14 @@ import DecentSamplerContext from "@/store/DecentSamplerContext";
 export default function StateSelect({ stateBinding, onChange, open }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
     const [value, setValue] = useState(stateBinding || "");
+
+    const [showHelperText, setShowHelperText] = useState(false);
+
+    const handleClickShowHelperText = () => setShowHelperText((showHelperText) => !showHelperText);
+
+    const handleMouseDownShowHelperText = (event) => {
+        event.preventDefault();
+    };
 
     const theme = useTheme();
 
@@ -81,6 +89,10 @@ export default function StateSelect({ stateBinding, onChange, open }) {
         onChange(event.target.value);
     }
 
+    const helperTextId = "state-select-helper-text";
+    const helperText = "Select a state from one of the controls";
+    const hasHelperText = !!helperText?.length;
+
     return (
         open &&
         optionElements?.length && ( // Prevent warning with unmounted component
@@ -95,9 +107,33 @@ export default function StateSelect({ stateBinding, onChange, open }) {
                         label="State"
                         labelId="state-select-label"
                         onChange={handleOnChange}
+                        endAdornment={
+                            hasHelperText && (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowHelperText}
+                                        onMouseDown={handleMouseDownShowHelperText}
+                                        edge="end"
+                                    >
+                                        <Help color={showHelperText ? "primary" : "inherit"} />
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }
+                        sx={{
+                            "& .MuiSelect-icon": hasHelperText && {
+                                marginRight: 5
+                            }
+                        }}
                     >
                         {optionElements}
                     </Select>
+                    {hasHelperText && (
+                        <Collapse in={showHelperText}>
+                            <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
+                        </Collapse>
+                    )}
                 </FormControl>
             </div>
         )
