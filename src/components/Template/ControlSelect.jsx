@@ -16,10 +16,11 @@ import { getColorForElementType } from "@/functions/styles";
 
 // Store
 import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { capitalizeFirstLetter } from "@/functions/helpers";
 
-export default function ControlSelect({ id, name, label, getDefaultValue, controlRef, onChange, open, helperText }) {
+export default function ControlSelect({ controlBinding, onChange, open }) {
     const decentSamplerContext = useContext(DecentSamplerContext);
+    const [value, setValue] = useState(controlBinding || "");
+
     const [showHelperText, setShowHelperText] = useState(false);
 
     const handleClickShowHelperText = () => setShowHelperText((showHelperText) => !showHelperText);
@@ -39,8 +40,6 @@ export default function ControlSelect({ id, name, label, getDefaultValue, contro
         "labeled-knob": tabItem?.getLabeledKnobItems(),
         menu: tabItem?.getMenuItems()
     };
-
-    const defaultValue = controlRef || "";
 
     const optionElements = renderSelectChildElements(tabChildItems);
 
@@ -118,11 +117,11 @@ export default function ControlSelect({ id, name, label, getDefaultValue, contro
                     );
 
                     elements.forEach((element) => {
-                        const containsDefaultValue = element?.id === defaultValue?.id;
-                        const value = containsDefaultValue ? defaultValue : element;
+                        const containsDefaultValue = element?.id === value?.id;
+                        const optionValue = containsDefaultValue ? value : element;
                         const chipLabel = getChipLabelForElementType(elementType, element);
                         selectChildElements.push(
-                            <MenuItem key={element.id} value={value}>
+                            <MenuItem key={element.id} value={optionValue}>
                                 <Grid container spacing={1} alignItems="center">
                                     <Grid item>
                                         <Icon>{getIconForElementType(elementType)}</Icon>
@@ -143,12 +142,12 @@ export default function ControlSelect({ id, name, label, getDefaultValue, contro
     }
 
     function handleOnChange(event) {
+        setValue(event.target.value);
         onChange(event.target.value);
     }
 
-    const labelWithFallback = label || capitalizeFirstLetter(name);
-    const idWithFallback = id || name;
-    const helperTextId = `${idWithFallback}-helper-text`;
+    const helperTextId = `control-select-helper-text`;
+    const helperText = "Select a control to bind to the parameter";
     const hasHelperText = !!helperText?.length;
 
     return (
@@ -156,10 +155,10 @@ export default function ControlSelect({ id, name, label, getDefaultValue, contro
         optionElements?.length && ( // Prevent warning with unmounted component
             <FormControl margin="dense" fullWidth variant="outlined">
                 <InputLabel id="control-select-label" htmlFor="control-select">
-                    Controls
+                    Control
                 </InputLabel>
                 <Select
-                    defaultValue={defaultValue}
+                    value={value}
                     id="control-select"
                     label="Control"
                     labelId="control-select-label"
