@@ -10,6 +10,7 @@ import { formatXml, jsonToXml } from "@/functions/converters";
 
 // Classes
 import { Group } from "./Group";
+import { Button } from "./Button";
 
 export class Binding {
     constructor(props, elementType, parentHierarchyPath) {
@@ -49,6 +50,7 @@ export class Binding {
         this.translationTable = props?.translationTable;
         this.translationValue = props?.translationValue;
         this.seqIndex = props?.seqIndex;
+        this.seqRef = props?.seqRef;
         this.seqTriggerBehavior = props?.seqTriggerBehavior;
         this.seqPlayerIdentifier = props?.seqPlayerIdentifier;
         this.seqTrackMidiInputVelocity = props?.seqTrackMidiInputVelocity;
@@ -60,7 +62,6 @@ export class Binding {
     init(decentSampler) {
         // Both AMP_VOLUME and TAG_VOLUME are valid parameters, but TAG_VOLUME is used in documentation
         if (this.type === "amp" && this.level === "tag" && this.parameter === "AMP_VOLUME") {
-            console.log("converting AMP_VOLUME to TAG_VOLUME")
             this.parameter = "TAG_VOLUME";
         }
 
@@ -77,7 +78,6 @@ export class Binding {
                 this.groupIndex = this.groupIndex || this.position;
             }
         }
-        
 
         if (this.groupIndex !== undefined) {
             this.groupRef = this.getGroupRefFromGroupIndex(decentSampler);
@@ -208,6 +208,15 @@ export class Binding {
     getStateBindingIndexFromBindingRef(stateRef, bindingRef) {
         return stateRef?.getBindingItems()?.findIndex((binding) => binding.id === bindingRef.id);
     }
+    getSeqRefFromSeqIndex(decentSampler) {
+        return decentSampler?.getFirstNoteSequencesItem()?.getSequenceItemByIndex(this.seqIndex);
+    }
+    getSeqIndexFromSeqRef(decentSampler, seqRef) {
+        return decentSampler
+            ?.getFirstNoteSequencesItem()
+            ?.getSequenceItems()
+            ?.findIndex((seq) => seq.id === seqRef.id);
+    }
 
     getTags() {
         return this.tags?.split(",");
@@ -257,7 +266,7 @@ export class Binding {
                 translationReversed: this.translationReversed,
                 translationTable: this.translationTable,
                 translationValue: this.translationValue,
-                seqIndex: this.seqIndex,
+                seqIndex: this.seqRef ? this.getSeqIndexFromSeqRef(decentSampler, this.seqRef) : this.seqIndex,
                 seqTriggerBehavior: this.seqTriggerBehavior,
                 seqPlayerIdentifier: this.seqPlayerIdentifier,
                 seqTrackMidiInputVelocity: this.seqTrackMidiInputVelocity,
