@@ -1,33 +1,33 @@
 // Dependencies
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
-import { FormControl, FormControlLabel, FormHelperText, Icon, Switch } from "@mui/material";
-import { Palette } from "@mui/icons-material";
+import { FormControl, FormControlLabel, FormHelperText, Switch } from "@mui/material";
 
 // Template
 import BindingParameterSelect from "@/components/Template/BindingParameterSelect";
 import { DefaultTextField } from "@/components/Template/DefaultTextField";
 
 // Classes
-import { Binding } from "@/classes/Binding";
 import GroupEffectSelect from "@/components/Template/GroupEffectSelect";
 import ControlSelect from "@/components/Template/ControlSelect";
 import { DefaultItemDialog } from "@/components/Template/DefaultItemDialog";
 import { IconControllableParameter } from "@/components/Template/Icons/IconControllableParameter";
+import StateSelect from "@/components/Template/StateSelect";
 
-export function EditBindingItemDialog({
-    bindingItem,
-    open,
-    onClose
-}) {
-    const previewItem = useRef(new Binding(bindingItem));
+export function EditBindingItemDialog({ bindingItem, open, onClose }) {
     const [enabled, setEnabled] = useState(bindingItem.enabled !== "0");
     const [selectedBindingParameter, setSelectedBindingParameter] = useState(bindingItem.controllableParameterRef);
+    const [stateBinding, setStateBinding] = useState(
+        bindingItem?.controlRef && bindingItem?.stateRef
+            ? { controlRef: bindingItem.controlRef, stateRef: bindingItem.stateRef }
+            : ""
+    );
+    const [controlBinding, setControlBinding] = useState(bindingItem?.controlRef);
 
     function handleEnabledOnChange(event) {
+        bindingItem.enabled = event.target.checked ? "1" : "0";
         setEnabled(event.target.checked);
-        previewItem.current.enabled = event.target.checked ? "1" : "0";
     }
 
     function handleBindingParameterChange(value) {
@@ -45,7 +45,14 @@ export function EditBindingItemDialog({
 
     function handleControlSelectOnChange(value) {
         console.log("handleControlSelectOnChange", value);
-        //previewItem.current.enabled = event.target.checked ? "1" : "0";
+        setControlBinding(value);
+        bindingItem.controlRef = value;
+    }
+
+    function handleStateSelectOnChange(value) {
+        setStateBinding(value);
+        bindingItem.controlRef = value.controlRef;
+        bindingItem.stateRef = value.stateRef;
     }
 
     function getElementItemValue(name) {
@@ -104,11 +111,8 @@ export function EditBindingItemDialog({
                         open={open}
                         onChange={handleGroupEffectSelectOnChange}
                     />
-                    <ControlSelect
-                        controlRef={bindingItem?.controlRef}
-                        open={open}
-                        onChange={handleControlSelectOnChange}
-                    />
+                    <ControlSelect controlBinding={controlBinding} open={open} onChange={handleControlSelectOnChange} />
+                    <StateSelect stateBinding={stateBinding} open={open} onChange={handleStateSelectOnChange} />
 
                     <DefaultTextField
                         name="volume"
@@ -123,11 +127,7 @@ export function EditBindingItemDialog({
         }
     ];
 
-    const dialogIcon = (
-        <IconControllableParameter
-            controllableParameter={selectedBindingParameter}
-        />
-    );
+    const dialogIcon = <IconControllableParameter controllableParameter={selectedBindingParameter} />;
     const dialogTitle = "Edit binding";
 
     return (
