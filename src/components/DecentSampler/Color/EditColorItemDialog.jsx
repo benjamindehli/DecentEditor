@@ -1,37 +1,38 @@
 // Dependencies
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Icon,
-    Slider,
-    Typography
-} from "@mui/material";
+import { Box, Slider, Typography } from "@mui/material";
 import { Palette } from "@mui/icons-material";
 
 // Template
 import { DefaultColorField } from "@/components/Template/DefaultColorField";
+import { DefaultItemDialog } from "@/components/Template/DefaultItemDialog";
 
 // Classes
 import midiNotes from "@/data/midiNotes";
 
 export function EditColorItemDialog({ colorItem, open, onClose }) {
-    const [previewXmlCode, setPreviewXmlCode] = useState(false);
-
     const [keyRangeValue, setKeyRangeValue] = useState([parseInt(colorItem.loNote), parseInt(colorItem.hiNote)]);
 
-    const handleKeyRangeChange = (event, newValue) => {
-        setKeyRangeValue(newValue);
+    const handleKeyRangeChange = (event, keyRangeValue) => {
+        setKeyRangeValue(keyRangeValue);
+        colorItem.loNote = keyRangeValue[0];
+        colorItem.hiNote = keyRangeValue[1];
     };
 
     function valuetext(value) {
         return `${value}°C`;
+    }
+
+    function getElementItemValue(name) {
+        return colorItem?.[name] || "";
+    }
+
+    function setElementItemValue(event) {
+        const fieldName = event.target.name;
+        const fieldValue = event.target.value;
+        colorItem[fieldName] = fieldValue;
     }
 
     const marks = [
@@ -71,40 +72,18 @@ export function EditColorItemDialog({ colorItem, open, onClose }) {
         return `${midiNoteName} (${value})`;
     }
 
-    function handleTogglePreviewXmlCode() {
-        setPreviewXmlCode(!previewXmlCode);
-    }
-
-    return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            PaperProps={{
-                component: "form",
-                onSubmit: (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.currentTarget);
-                    const formJson = Object.fromEntries(formData.entries());
-                    colorItem.color = formJson.color.replace("#", "FF");
-                    colorItem.loNote = keyRangeValue[0];
-                    colorItem.hiNote = keyRangeValue[1];
-                    onClose();
-                }
-            }}
-        >
-            <DialogTitle>
-                <Icon>
-                    <Palette />
-                </Icon>{" "}
-                Edit Color
-            </DialogTitle>
-
-            {previewXmlCode ? (
-                <DialogContent>hoy</DialogContent>
-            ) : (
-                <DialogContent>
-                    <DefaultColorField autoFocus required name="color" defaultValue={colorItem.color} />
-
+    const tabs = [
+        {
+            label: "GENERAL",
+            children: (
+                <Fragment key="general-tab">
+                    <DefaultColorField
+                        autoFocus
+                        required
+                        name="color"
+                        onChange={setElementItemValue}
+                        getValue={getElementItemValue}
+                    />
                     <Box sx={{ mt: 2 }}>
                         <Typography id="track-false-slider" gutterBottom>
                             Key range: {valueLabelFormat(keyRangeValue[0])} - {valueLabelFormat(keyRangeValue[1])}
@@ -124,14 +103,25 @@ export function EditColorItemDialog({ colorItem, open, onClose }) {
                             />
                         </Box>
                     </Box>
-                </DialogContent>
-            )}
+                </Fragment>
+            )
+        }
+    ];
 
-            <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleTogglePreviewXmlCode}>Preview code</Button>
-                <Button type="submit">Save</Button>
-            </DialogActions>
-        </Dialog>
+    const dialogIcon = <Palette />;
+    const dialogTitle = "Edit color";
+
+    return (
+        !!colorItem && (
+            <DefaultItemDialog
+                elementItem={colorItem}
+                dialogIcon={dialogIcon}
+                dialogTitle={dialogTitle}
+                contentHeight="564px"
+                tabs={tabs}
+                open={open}
+                onClose={onClose}
+            />
+        )
     );
 }
