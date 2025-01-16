@@ -44,7 +44,6 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
             children: (
                 <Fragment key="general-tab">
                     <FormControl margin="dense">
-                        {groupItem.tags}
                         <FormControlLabel
                             value="1"
                             name="enabled"
