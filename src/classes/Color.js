@@ -2,6 +2,9 @@
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Color {
     constructor(props, elementType, parentHierarchyPath) {
         const id = props.id || uuidv4();
@@ -13,10 +16,10 @@ export class Color {
         this.hiNote = props?.hiNote;
         this.color = props?.color;
     }
-    init(decentSampler) {
+    init() {
         console.log("Color.init()");
     }
-    toJson(decentSampler) {
+    toJson() {
         const jsonObject = {
             $: {
                 loNote: this.loNote,
@@ -29,7 +32,7 @@ export class Color {
     }
     toXml() {
         const xmlBody = jsonToXml(this.toJson());
-        const xmlDoc = createXmlDoc(xmlBody);
+        const xmlDoc = formatXml(xmlBody);
         return xmlDoc;
     }
 }
