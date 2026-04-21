@@ -52,7 +52,7 @@ export function DefaultTextField({
                 type={type}
                 name={name}
                 value={value}
-                inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
+                slotProps={{ input: { ...inputProps, "aria-label": labelWithFallback } }}
                 aria-describedby={helperTextId}
                 autoFocus={autoFocus}
                 required={required}

@@ -53,20 +53,22 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, conten
             <Dialog
                 open={open}
                 onClose={handleOnClose}
-                PaperProps={{
-                    component: "form",
-                    onSubmit: (event) => {
-                        event.preventDefault();
-                        handleOnClose();
+                slotProps={{
+                    paper: {
+                        component: "form",
+                        onSubmit: (event) => {
+                            event.preventDefault();
+                            handleOnClose();
+                        }
                     }
                 }}
             >
                 <DialogTitle>
                     <Grid container>
-                        <Grid item sx={{ display: "flex", mr: 1 }}>
+                        <Grid sx={{ display: "flex", mr: 1 }}>
                             {dialogIcon}
                         </Grid>
-                        <Grid item>{dialogTitle}</Grid>
+                        <Grid>{dialogTitle}</Grid>
                     </Grid>
                 </DialogTitle>
 
@@ -78,8 +80,8 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, conten
                             textColor="inherit"
                             variant="fullWidth"
                             onChange={handleTabChange}
-                            TabIndicatorProps={{
-                                sx: { backgroundColor: elementColor }
+                            slotProps={{
+                                indicator: { sx: { backgroundColor: elementColor } }
                             }}
                             aria-label={`tabs for editing ${elementItem.elementType}`}
                         >

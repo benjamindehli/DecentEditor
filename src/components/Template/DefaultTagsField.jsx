@@ -228,11 +228,7 @@ export default function DefaultTagsField({ id, name, label, defaultValue, getVal
                 aria-describedby={helperTextId}
                 options={getTagsInUse()}
                 onChange={handleOnChange}
-                renderTags={(value, getTagProps) =>
-                    value.map((tag, index) => (
-                        <Chip {...getTagProps({ index })} key={index} variant="outlined" label={tag} />
-                    ))
-                }
+                slotProps={{ chip: { variant: "outlined" } }}
                 renderInput={(params) => <TextField {...params} label={labelWithFallback} />}
             />
             <FormHelperText id={helperTextId}>{helperText}</FormHelperText>

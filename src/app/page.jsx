@@ -90,15 +90,15 @@ export default function Home() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
                         DecentEditor{selectedFileName ? `: ${selectedFileName}` : ""}
                     </Typography>
-                    <Grid flexBasis="fit-content" container flexDirection="row" justifyContent="right">
+                    <Stack direction="row" sx={{ flexBasis: "fit-content", justifyContent: "right" }}>
                         <ListItemButton dense component="label" onClick={toggleXmlPreview} disabled={!decentSamplerContext?.decentSampler}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 {showXmlPreview ? <CodeOff /> : <Code />}
                                 <ListItemText sx={{ my: 0 }} primary={showXmlPreview ? "Hide XML" : "Show XML"} />
                             </Stack>
                         </ListItemButton>
                         <ListItemButton dense component="label" onClick={colorMode.toggleColorMode}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
                                 <ListItemText
                                     sx={{ my: 0 }}
@@ -108,25 +108,25 @@ export default function Home() {
                         </ListItemButton>
                         <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 2 }} />
                         <ListItemButton dense component="label" role={undefined} tabIndex={-1}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 <OpenInBrowser />
                                 <ListItemText sx={{ my: 0 }} primary="Open preset" />
                             </Stack>
                             <VisuallyHiddenInput type="file" onChange={handleFileInputChange} />
                         </ListItemButton>
                         <ListItemButton dense component="label" onClick={handleCreateNewPresetClick}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 <NoteAdd />
                                 <ListItemText sx={{ my: 0 }} primary="New preset" />
                             </Stack>
                         </ListItemButton>
                         <ListItemButton dense component="label" onClick={handleSavePresetClick} disabled={!decentSamplerContext?.decentSampler}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 <Save />
                                 <ListItemText sx={{ my: 0 }} primary="Save preset" />
                             </Stack>
                         </ListItemButton>
-                    </Grid>
+                    </Stack>
                 </Toolbar>
             </AppBar>
 
@@ -136,13 +136,10 @@ export default function Home() {
             <Grid
                 container
                 component="main"
-                sx={{ mx: 0, px: 0 }}
+                sx={{ mx: 0, px: 0, flexDirection: "row", justifyContent: !showXmlPreview ? "center" : "space-between" }}
                 columnSpacing={0}
-                direction="row"
-                justifyContent={!showXmlPreview ? "center" : "space-between"}
             >
                 <Grid
-                    item
                     sx={{
                         width: elementSectionWidth,
                         height: "calc(100vh - 64px)",
@@ -158,7 +155,7 @@ export default function Home() {
                     )}
                 </Grid>
                 {showXmlPreview && (
-                    <Grid item sx={{ width: `calc(100% - ${elementSectionWidth})`, mt: 0, mb: 0 }}>
+                    <Grid sx={{ width: `calc(100% - ${elementSectionWidth})`, mt: 0, mb: 0 }}>
                         <Paper
                             sx={{
                                 p: 0,
