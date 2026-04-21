@@ -32,9 +32,9 @@ export default function StateSelect({ stateBinding, onChange, open }) {
     const theme = useTheme();
 
     const buttonsWithStates = decentSamplerContext.decentSampler
-        .getFirstUiItem()
-        .getFirstTabItem()
-        .getButtonItemsWithStates();
+        ?.getFirstUiItem()
+        ?.getFirstTabItem()
+        ?.getButtonItemsWithStates() || [];
 
     const optionElements = renderSelectChildElements(buttonsWithStates);
 
