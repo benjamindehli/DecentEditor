@@ -1,10 +1,10 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Pin } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Pin } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -12,50 +12,47 @@ import { BindingItemComponent } from "../Binding/BindingItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
+import { IconControllableParameter } from "@/components/Template/Icons/IconControllableParameter";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
 // Data
 import midiCcDescription from "@/data/midiCcDescription";
 
-export function CcItemComponent({ ccItem }) {
+export function CcItemComponent({ ccItem, onRemoveItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfBindings, setNumberOfBindings] = useState(ccItem?.childElements?.length || 0);
+
+    function handleOnRemoveBinding(bindingId) {
+        ccItem.removeChildElementById(bindingId);
+        setNumberOfBindings((n) => n - 1);
+    }
+
+    function handleAddBinding() {
+        ccItem.addBindingItem({});
+        setIsExpanded(true);
+        setNumberOfBindings((n) => n + 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
+            <MenuItem onClick={handleAddBinding} disableRipple>
+                <IconAdd><IconControllableParameter /></IconAdd>
+                Add binding
             </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(ccItem.id)} disableRipple>
+                    <IconRemove><Pin /></IconRemove>
+                    Remove CC
+                </MenuItem>
+            )}
         </Fragment>
     );
 
@@ -63,37 +60,34 @@ export function CcItemComponent({ ccItem }) {
         return !!ccItem?.childElements?.length;
     }
 
-    function renderSecondaryText() {
-        if (ccItem?.childElements?.length) {
-            return (
-                <ListItemSecondaryText>
-                    {ccItem?.childElements?.length || 0} {ccItem?.childElements?.length === 1 ? "binding" : "bindings"}
-                </ListItemSecondaryText>
-            );
-        } else {
-            return <ListItemSecondaryText>No bindings</ListItemSecondaryText>;
-        }
-    }
-
     let primaryInfoText;
     if (ccItem?.number !== undefined) {
-        if (!!midiCcDescription[ccItem.number]) {
-            primaryInfoText = (
-                <Chip component="span" label={`${ccItem.number}: ${midiCcDescription[ccItem.number]}`} size="small" />
-            );
-        } else {
-            primaryInfoText = <Chip component="span" label={ccItem.number} size="small" />;
-        }
+        const ccLabel = midiCcDescription[ccItem.number]
+            ? `${ccItem.number}: ${midiCcDescription[ccItem.number]}`
+            : String(ccItem.number);
+        primaryInfoText = <Chip component="span" label={ccLabel} size="small" />;
     }
 
     const primaryText = <Fragment>CC {primaryInfoText}</Fragment>;
 
-    const secondaryText = renderSecondaryText();
+    const secondaryText = (
+        <ListItemSecondaryText>
+            {numberOfBindings > 0
+                ? `${numberOfBindings} ${numberOfBindings === 1 ? "binding" : "bindings"}`
+                : "No bindings"}
+        </ListItemSecondaryText>
+    );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "binding":
-                return <BindingItemComponent key={childElement.id} bindingItem={childElement} />;
+                return (
+                    <BindingItemComponent
+                        key={childElement.id}
+                        bindingItem={childElement}
+                        onRemoveItem={handleOnRemoveBinding}
+                    />
+                );
             default:
                 return null;
         }
@@ -104,7 +98,7 @@ export function CcItemComponent({ ccItem }) {
             <DefaultListItem
                 elementItem={ccItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(ccItem, hasChildren()) }}

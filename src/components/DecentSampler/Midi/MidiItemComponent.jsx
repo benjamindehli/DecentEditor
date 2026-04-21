@@ -4,11 +4,13 @@ import { Fragment, useContext, useState } from "react";
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, ListAlt } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, ListAlt, MusicNote, Pin, Speed } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
 import { NoteItemComponent } from "../Note/NoteItemComponent";
+import { CcItemComponent } from "../Cc/CcItemComponent";
+import { VelocityItemComponent } from "../Velocity/VelocityItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
@@ -19,86 +21,108 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-import { CcItemComponent } from "../Cc/CcItemComponent";
-
 export function MidiItemComponent({ midiItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [childCount, setChildCount] = useState(midiItem?.childElements?.length || 0);
 
-    const settingsMenuItems = (
-        <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
-        </Fragment>
-    );
+    function handleOnRemoveChildElement(id) {
+        midiItem.removeChildElementById(id);
+        setChildCount((n) => n - 1);
+    }
 
     function hasChildren() {
         return !!midiItem?.childElements?.length;
     }
 
-    function renderNumberOfItemsForTypeString(type, numberOfItemsForType) {
-        if (!numberOfItemsForType) {
-            return null;
-        } else {
-            return `${numberOfItemsForType} ${type}${numberOfItemsForType > 1 ? "s" : ""}`;
-        }
+    const settingsMenuItems = (
+        <Fragment>
+            <MenuItem
+                onClick={() => {
+                    midiItem.addCcItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><Pin /></IconAdd>
+                Add CC
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    midiItem.addNoteItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><MusicNote /></IconAdd>
+                Add note
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    midiItem.addVelocityItem();
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><Speed /></IconAdd>
+                Add velocity
+            </MenuItem>
+        </Fragment>
+    );
+
+    function renderNumberOfItemsForTypeString(type, count) {
+        if (!count) return null;
+        return `${count} ${type}${count > 1 ? "s" : ""}`;
     }
 
-    function renderSecondaryTextString(midiItem) {
-        const childElementTypes = {
-            cc: 0,
-            note: 0
-        };
+    function renderSecondaryTextString() {
+        const types = { cc: 0, note: 0, velocity: 0 };
         midiItem.childElements?.forEach((childElement) => {
-            if (childElementTypes[childElement.elementType] !== undefined) {
-                childElementTypes[childElement.elementType]++;
+            if (types[childElement.elementType] !== undefined) {
+                types[childElement.elementType]++;
             }
         });
         return (
-            Object.keys(childElementTypes)
-                .map((type) => {
-                    const numberOfItemsForType = childElementTypes[type];
-                    return renderNumberOfItemsForTypeString(type, numberOfItemsForType);
-                })
-                ?.filter((numberOfItemsForTypeString) => numberOfItemsForTypeString)
-                ?.join(", ") || ""
+            Object.keys(types)
+                .map((type) => renderNumberOfItemsForTypeString(type, types[type]))
+                .filter(Boolean)
+                .join(", ") || ""
         );
     }
 
-    const primaryText = "Midi";
-    const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString(midiItem)}</ListItemSecondaryText>;
+    const primaryText = "MIDI";
+    const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString()}</ListItemSecondaryText>;
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "cc":
-                return <CcItemComponent key={childElement.id} ccItem={childElement} />;
+                return (
+                    <CcItemComponent
+                        key={childElement.id}
+                        ccItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             case "note":
-                return <NoteItemComponent key={childElement.id} noteItem={childElement} />;
+                return (
+                    <NoteItemComponent
+                        key={childElement.id}
+                        noteItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
+            case "velocity":
+                return (
+                    <VelocityItemComponent
+                        key={childElement.id}
+                        velocityItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             default:
                 return null;
         }
@@ -109,7 +133,7 @@ export function MidiItemComponent({ midiItem }) {
             <DefaultListItem
                 elementItem={midiItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(midiItem, hasChildren()) }}
