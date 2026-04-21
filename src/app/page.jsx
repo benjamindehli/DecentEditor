@@ -12,7 +12,7 @@ import Paper from "@mui/material/Paper";
 import styled from "@emotion/styled";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { Code, CodeOff, NoteAdd, OpenInBrowser } from "@mui/icons-material";
+import { Code, CodeOff, NoteAdd, OpenInBrowser, Save } from "@mui/icons-material";
 
 // Components
 import { DecentSamplerItemComponent } from "@/components/DecentSampler/DecentSamplerItemComponent";
@@ -55,6 +55,18 @@ export default function Home() {
 
     function handleCreateNewPresetClick() {
         decentSamplerContext.initDecentSampler();
+    }
+
+    function handleSavePresetClick() {
+        const xmlString = decentSamplerContext?.decentSampler?.toXml();
+        if (!xmlString) return;
+        const blob = new Blob([xmlString], { type: "application/xml" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = selectedFileName || "preset.dspreset";
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     const VisuallyHiddenInput = styled("input")({
@@ -106,6 +118,12 @@ export default function Home() {
                             <Stack flexDirection="column" alignItems="center">
                                 <NoteAdd />
                                 <ListItemText sx={{ my: 0 }} primary="New preset" />
+                            </Stack>
+                        </ListItemButton>
+                        <ListItemButton dense component="label" onClick={handleSavePresetClick} disabled={!decentSamplerContext?.decentSampler}>
+                            <Stack flexDirection="column" alignItems="center">
+                                <Save />
+                                <ListItemText sx={{ my: 0 }} primary="Save preset" />
                             </Stack>
                         </ListItemButton>
                     </Grid>
