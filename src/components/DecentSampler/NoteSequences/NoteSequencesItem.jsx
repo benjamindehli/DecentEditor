@@ -1,10 +1,10 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Topic } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Piano, Topic } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -19,57 +19,53 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
 export function NoteSequencesItemComponent({ noteSequencesItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfSequences, setNumberOfSequences] = useState(noteSequencesItem?.childElements?.length || 0);
 
-    const settingsMenuItems = (
-        <Fragment>
-            <MenuItem
-                onClick={() => {
-                    console.log("Add note sequence");
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add group
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    console.log("Add multiple note sequences");
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple groups
-            </MenuItem>
-        </Fragment>
-    );
+    function handleOnRemoveSequence(sequenceId) {
+        noteSequencesItem.removeChildElementById(sequenceId);
+        setNumberOfSequences((n) => n - 1);
+    }
+
+    function handleAddSequence() {
+        noteSequencesItem.addSequenceItem({});
+        setIsExpanded(true);
+        setNumberOfSequences((n) => n + 1);
+    }
 
     function hasChildren() {
         return !!noteSequencesItem?.childElements?.length;
     }
 
+    const settingsMenuItems = (
+        <Fragment>
+            <MenuItem onClick={handleAddSequence} disableRipple>
+                <IconAdd><Piano /></IconAdd>
+                Add sequence
+            </MenuItem>
+        </Fragment>
+    );
+
     const primaryText = "Note sequences";
     const secondaryText = (
         <ListItemSecondaryText>
-            {noteSequencesItem?.childElements?.length || 0}{" "}
-            {noteSequencesItem?.childElements?.length === 1 ? "sequence" : "sequences"}
+            {numberOfSequences} {numberOfSequences === 1 ? "sequence" : "sequences"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "sequence":
-                return <SequenceItemComponent key={childElement.id} sequenceItem={childElement} />;
+                return (
+                    <SequenceItemComponent
+                        key={childElement.id}
+                        sequenceItem={childElement}
+                        onRemoveItem={handleOnRemoveSequence}
+                    />
+                );
             default:
                 return null;
         }
@@ -80,7 +76,7 @@ export function NoteSequencesItemComponent({ noteSequencesItem }) {
             <DefaultListItem
                 elementItem={noteSequencesItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(noteSequencesItem, hasChildren()) }}
