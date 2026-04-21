@@ -1,5 +1,6 @@
 // Dependencies
 import { Fragment, useState } from "react";
+import React from "react";
 
 // Material UI
 import { IconButton } from "@mui/material";
@@ -42,14 +43,11 @@ export function SettingsMenu({ elementItem, menuItems = [] }) {
                 anchorEl={settingsAnchorEl}
                 open={settingsOpen}
                 onClose={handleSettingsClose}
+                onClick={handleSettingsClose}
             >
-                {menuItemElements.map((menuItem, index) => {
-                    return (
-                        <div key={index} onClick={handleSettingsClose}>
-                            {menuItem}
-                        </div>
-                    );
-                })}
+                {menuItemElements.filter(Boolean).map((menuItem, index) =>
+                    React.cloneElement(menuItem, { key: menuItem.key ?? index })
+                )}
             </StyledMenu>
             <IconButton
                 edge="end"
