@@ -3,11 +3,7 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { ChevronRight, ExpandMore, Web } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { ChevronRight, ExpandMore, Tab, Web } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -15,6 +11,7 @@ import { KeyboardItemComponent } from "../Keyboard/KeyboardItemComponent";
 import { TabItemComponent } from "../Tab/TabItemComponent";
 
 // Template
+import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
@@ -22,10 +19,15 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
+// Classes
+import { Keyboard } from "@/classes/Keyboard";
+import { Tab as TabClass } from "@/classes/Tab";
+
 export function UiItemComponent({ uiItem }) {
     const theme = useTheme();
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [childCount, setChildCount] = useState(uiItem?.childElements?.length || 0);
 
     function hasChildren() {
         return !!uiItem?.childElements?.length;
@@ -33,26 +35,30 @@ export function UiItemComponent({ uiItem }) {
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem disableRipple>
-                <EditIcon />
-                Edit
-            </MenuItem>
-            <MenuItem disableRipple>
-                <FileCopyIcon />
-                Duplicate
-            </MenuItem>
             <MenuItem
                 onClick={() => {
-                    handleAddGroup();
+                    const hasKeyboard = uiItem.childElements.some((el) => el instanceof Keyboard);
+                    if (!hasKeyboard) {
+                        uiItem.childElements.unshift(new Keyboard({}, null, "keyboard", uiItem.hierarchyPath));
+                        setIsExpanded(true);
+                        setChildCount((n) => n + 1);
+                    }
                 }}
                 disableRipple
             >
-                <ArchiveIcon />
-                Add group
+                <IconAdd><Web /></IconAdd>
+                Add keyboard
             </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
+            <MenuItem
+                onClick={() => {
+                    uiItem.childElements.push(new TabClass({}, null, "tab", uiItem.hierarchyPath));
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><Tab /></IconAdd>
+                Add tab
             </MenuItem>
         </Fragment>
     );
@@ -60,7 +66,7 @@ export function UiItemComponent({ uiItem }) {
     const primaryText = "UI";
     const secondaryText = uiItem?.width && uiItem?.height && (
         <ListItemSecondaryText>
-            {uiItem?.width}px x {uiItem?.height}px
+            {uiItem?.width}px × {uiItem?.height}px
         </ListItemSecondaryText>
     );
 
@@ -80,7 +86,7 @@ export function UiItemComponent({ uiItem }) {
             <DefaultListItem
                 elementItem={uiItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("click")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(uiItem, hasChildren()) }}
