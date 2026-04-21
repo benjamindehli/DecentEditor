@@ -1,10 +1,10 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, FormatOverline } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, FormatOverline } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -12,6 +12,8 @@ import { BindingItemComponent } from "../Binding/BindingItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
+import { IconControllableParameter } from "@/components/Template/Icons/IconControllableParameter";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
@@ -19,40 +21,35 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
-export function LabeledKnobItemComponent({ labeledKnobItem }) {
+export function LabeledKnobItemComponent({ labeledKnobItem, onRemoveItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfBindings, setNumberOfBindings] = useState(labeledKnobItem?.childElements?.length || 0);
+
+    function handleOnRemoveBinding(bindingId) {
+        labeledKnobItem.removeChildElementById(bindingId);
+        setNumberOfBindings((n) => n - 1);
+    }
+
+    function handleAddBinding() {
+        labeledKnobItem.addBindingItem({});
+        setIsExpanded(true);
+        setNumberOfBindings((n) => n + 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
+            <MenuItem onClick={handleAddBinding} disableRipple>
+                <IconAdd><IconControllableParameter /></IconAdd>
+                Add binding
             </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(labeledKnobItem.id)} disableRipple>
+                    <IconRemove><FormatOverline /></IconRemove>
+                    Remove labeled knob
+                </MenuItem>
+            )}
         </Fragment>
     );
 
@@ -71,15 +68,20 @@ export function LabeledKnobItemComponent({ labeledKnobItem }) {
 
     const secondaryText = (
         <ListItemSecondaryText>
-            {labeledKnobItem?.childElements?.length || 0}{" "}
-            {labeledKnobItem?.childElements?.length === 1 ? "binding" : "bindings"}
+            {numberOfBindings} {numberOfBindings === 1 ? "binding" : "bindings"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "binding":
-                return <BindingItemComponent key={childElement.id} bindingItem={childElement} />;
+                return (
+                    <BindingItemComponent
+                        key={childElement.id}
+                        bindingItem={childElement}
+                        onRemoveItem={handleOnRemoveBinding}
+                    />
+                );
             default:
                 return null;
         }
@@ -90,7 +92,7 @@ export function LabeledKnobItemComponent({ labeledKnobItem }) {
             <DefaultListItem
                 elementItem={labeledKnobItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(labeledKnobItem, hasChildren()) }}
