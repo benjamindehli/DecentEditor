@@ -8,15 +8,16 @@ import { FormControl } from "@mui/material";
 // Helpers
 import { capitalizeFirstLetter } from "@/functions/helpers";
 
-export function DefaultColorField({ id, name, label, defaultValue, inputProps }) {
+export function DefaultColorField({ id, name, label, inputProps, onChange, getValue }) {
     const labelWithFallback = label || capitalizeFirstLetter(name);
     const idWithFallback = id || name;
 
-    const [color, setColor] = useState(convertColorValueToHex(defaultValue));
+    const [value, setValue] = useState(convertColorValueToHex(getValue(name)));
 
-    const handleChange = (color) => {
-        setColor(color);
-    };
+    function handleOnChange(value) {
+        setValue(value);
+        onChange({ target: { name: name, value: value.replace("#", "FF") } });
+    }
 
     function convertColorValueToHex(colorValue) {
         return `#${colorValue.substring(2)}`;
@@ -24,15 +25,14 @@ export function DefaultColorField({ id, name, label, defaultValue, inputProps })
 
     return (
         <Fragment>
-            {/* <InputLabel htmlFor={id || name}>{labelWithFallback}</InputLabel> */}
             <FormControl margin="dense" fullWidth variant="outlined">
                 <MuiColorInput
                     id={idWithFallback}
                     name={name}
                     isAlphaHidden
                     format="hex"
-                    onChange={handleChange}
-                    value={color}
+                    onChange={handleOnChange}
+                    value={value}
                     inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
                 />
             </FormControl>
