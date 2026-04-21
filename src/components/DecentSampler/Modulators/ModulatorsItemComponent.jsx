@@ -3,11 +3,7 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { ChevronRight, ExpandMore, SwapCalls } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { ChevronRight, ExpandMore, ShowChart, SwapCalls, Water } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -15,6 +11,7 @@ import { LfoItemComponent } from "../Lfo/LfoItemComponent";
 import { EnvelopeItemComponent } from "../Envelope/EnvelopeItemComponent";
 
 // Template
+import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
@@ -26,6 +23,12 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
     const theme = useTheme();
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [childCount, setChildCount] = useState(modulatorsItem?.childElements?.length || 0);
+
+    function handleOnRemoveChildElement(id) {
+        modulatorsItem.removeChildElementById(id);
+        setChildCount((n) => n - 1);
+    }
 
     function hasChildren() {
         return !!modulatorsItem?.childElements?.length;
@@ -33,69 +36,72 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem disableRipple>
-                <EditIcon />
-                Edit
-            </MenuItem>
-            <MenuItem disableRipple>
-                <FileCopyIcon />
-                Duplicate
-            </MenuItem>
             <MenuItem
                 onClick={() => {
-                    handleAddGroup();
+                    modulatorsItem.addLfoItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
                 }}
                 disableRipple
             >
-                <ArchiveIcon />
-                Add group
+                <IconAdd><Water /></IconAdd>
+                Add LFO
             </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
+            <MenuItem
+                onClick={() => {
+                    modulatorsItem.addEnvelopeItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><ShowChart /></IconAdd>
+                Add envelope
             </MenuItem>
         </Fragment>
     );
 
     function renderNumberOfItemsForTypeString(type, numberOfItemsForType) {
-        if (!numberOfItemsForType) {
-            return null;
-        } else {
-            return `${numberOfItemsForType} ${type}${numberOfItemsForType > 1 ? "s" : ""}`;
-        }
+        if (!numberOfItemsForType) return null;
+        return `${numberOfItemsForType} ${type}${numberOfItemsForType > 1 ? "s" : ""}`;
     }
 
-    function renderSecondaryTextString(modulatorsItem) {
-        const childElementTypes = {
-            envelope: 0,
-            lfo: 0
-        };
+    function renderSecondaryTextString() {
+        const types = { envelope: 0, lfo: 0 };
         modulatorsItem.childElements?.forEach((childElement) => {
-            if (childElementTypes[childElement.elementType] !== undefined) {
-                childElementTypes[childElement.elementType]++;
+            if (types[childElement.elementType] !== undefined) {
+                types[childElement.elementType]++;
             }
         });
         return (
-            Object.keys(childElementTypes)
-                .map((type) => {
-                    const numberOfItemsForType = childElementTypes[type];
-                    return renderNumberOfItemsForTypeString(type, numberOfItemsForType);
-                })
-                ?.filter((numberOfItemsForTypeString) => numberOfItemsForTypeString)
-                ?.join(", ") || ""
+            Object.keys(types)
+                .map((type) => renderNumberOfItemsForTypeString(type, types[type]))
+                .filter(Boolean)
+                .join(", ") || ""
         );
     }
 
     const primaryText = "Modulators";
-
-    const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString(modulatorsItem)}</ListItemSecondaryText>;
+    const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString()}</ListItemSecondaryText>;
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "lfo":
-                return <LfoItemComponent key={childElement.id} lfoItem={childElement} />;
+                return (
+                    <LfoItemComponent
+                        key={childElement.id}
+                        lfoItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             case "envelope":
-                return <EnvelopeItemComponent key={childElement.id} envelopeItem={childElement} />;
+                return (
+                    <EnvelopeItemComponent
+                        key={childElement.id}
+                        envelopeItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             default:
                 return null;
         }
@@ -103,11 +109,10 @@ export function ModulatorsItemComponent({ modulatorsItem }) {
 
     return (
         <Fragment>
-            {/* <UiItemSettingsComponent uiItem={uiItem} onUpdateUiItem={handleUpdateUiItem} />*/}
             <DefaultListItem
                 elementItem={modulatorsItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(modulatorsItem, hasChildren()) }}
