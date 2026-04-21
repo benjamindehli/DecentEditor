@@ -92,13 +92,13 @@ export default function Home() {
                     </Typography>
                     <Stack direction="row" sx={{ flexBasis: "fit-content", justifyContent: "right" }}>
                         <ListItemButton dense component="label" onClick={toggleXmlPreview} disabled={!decentSamplerContext?.decentSampler}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 {showXmlPreview ? <CodeOff /> : <Code />}
                                 <ListItemText sx={{ my: 0 }} primary={showXmlPreview ? "Hide XML" : "Show XML"} />
                             </Stack>
                         </ListItemButton>
                         <ListItemButton dense component="label" onClick={colorMode.toggleColorMode}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
                                 <ListItemText
                                     sx={{ my: 0 }}
@@ -108,20 +108,20 @@ export default function Home() {
                         </ListItemButton>
                         <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 2 }} />
                         <ListItemButton dense component="label" role={undefined} tabIndex={-1}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 <OpenInBrowser />
                                 <ListItemText sx={{ my: 0 }} primary="Open preset" />
                             </Stack>
                             <VisuallyHiddenInput type="file" onChange={handleFileInputChange} />
                         </ListItemButton>
                         <ListItemButton dense component="label" onClick={handleCreateNewPresetClick}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 <NoteAdd />
                                 <ListItemText sx={{ my: 0 }} primary="New preset" />
                             </Stack>
                         </ListItemButton>
                         <ListItemButton dense component="label" onClick={handleSavePresetClick} disabled={!decentSamplerContext?.decentSampler}>
-                            <Stack flexDirection="column" alignItems="center">
+                            <Stack direction="column" sx={{ alignItems: "center" }}>
                                 <Save />
                                 <ListItemText sx={{ my: 0 }} primary="Save preset" />
                             </Stack>
