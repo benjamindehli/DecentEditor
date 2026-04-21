@@ -79,6 +79,10 @@ export function IconControllableParameter({ controllableParameter }) {
         }
     }
 
+    if (!controllableParameter) {
+        return <Tune />;
+    }
+
     return (
         <Stack direction="row" spacing={0}>
             {renderParameterLevelIcon(controllableParameter?.level)}
