@@ -1,10 +1,10 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, FolderSpecial } from "@mui/icons-material";
+import { AutoAwesome, ChevronRight, ExpandMore, FolderSpecial } from "@mui/icons-material";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
 // Components
@@ -19,56 +19,64 @@ import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryTe
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
 export function EffectsItemComponent({ effectsItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfEffectItems, setNumberOfEffectItems] = useState(effectsItem?.childElements?.length || 0);
+
+    function handleOnRemoveChildElement(itemId) {
+        effectsItem.removeChildElementById(itemId);
+        setNumberOfEffectItems((n) => n - 1);
+    }
+
+    function handleAddEffect(type) {
+        effectsItem.addEffectItem({ type });
+        setIsExpanded(true);
+        setNumberOfEffectItems((n) => n + 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    {
-                        /*
-                    if (!effectsItem.groups.length) {
-                        // Automatically expand the group if it's the first group
-                        setIsExpanded(true);
-                    }
-                    groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
-                    decentSamplerContext.updateGroupsItem(groupsItem);
-                */
-                    }
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add group
+            <MenuItem onClick={() => handleAddEffect("reverb")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add reverb
             </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    {
-                        /*
-
-                    if (!groupsItem.groups.length) {
-                        // Automatically expand the group if it's the first group
-                        setIsExpanded(true);
-                    }
-                    groupsItem.newGroup(); // This is a method from the Groups class. It's not available in
-                    decentSamplerContext.updateGroupsItem(groupsItem);
-                */
-                    }
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple groups
+            <MenuItem onClick={() => handleAddEffect("delay")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add delay
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("chorus")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add chorus
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("phaser")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add phaser
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("convolution")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add convolution
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("lowpass")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add low-pass filter
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("highpass")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add high-pass filter
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("gain")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add gain
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("wave_folder")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add wave folder
+            </MenuItem>
+            <MenuItem onClick={() => handleAddEffect("wave_shaper")} disableRipple>
+                <IconAdd><AutoAwesome /></IconAdd>
+                Add wave shaper
             </MenuItem>
         </Fragment>
     );
@@ -80,14 +88,20 @@ export function EffectsItemComponent({ effectsItem }) {
     const primaryText = "Effects";
     const secondaryText = (
         <ListItemSecondaryText>
-            {effectsItem?.childElements?.length || 0} {effectsItem?.childElements?.length === 1 ? "effect" : "effects"}
+            {numberOfEffectItems} {numberOfEffectItems === 1 ? "effect" : "effects"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "effect":
-                return <EffectItemComponent key={childElement.id} effectItem={childElement} />;
+                return (
+                    <EffectItemComponent
+                        key={childElement.id}
+                        effectItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             default:
                 return null;
         }

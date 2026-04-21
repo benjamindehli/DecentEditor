@@ -3,19 +3,16 @@ import { Fragment, useEffect, useState } from "react";
 
 // Material UI
 import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AutoAwesome } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
-//import { EditSampleItemDialog } from "./Dialogs/EditSampleItemDialog";
+import { EditEffectItemDialog } from "./Dialogs/EditEffectItemDialog";
 
 // Template
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
@@ -24,80 +21,42 @@ import { getColorForElementType } from "@/functions/styles";
 // Data
 import effectTypesData from "@/data/effectTypes";
 
-export function EffectItemComponent({ effectItem }) {
+export function EffectItemComponent({ effectItem, onRemoveItem }) {
     const theme = useTheme();
 
     const [effectTypeForEffectItem, setEffectTypeForEffectItem] = useState(null);
-
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [editSampleItemDialogIsOpen, setEditSampleItemDialogIsOpen] = useState(false);
-
-    function getEffectTypeForEffectItem(type) {
-        return effectTypesData.find((effectType) => {
-            return effectType.type === type.type;
-        });
-    }
+    const [editEffectItemDialogIsOpen, setEditEffectItemDialogIsOpen] = useState(false);
 
     useEffect(() => {
-        const effectType = getEffectTypeForEffectItem(effectItem);
-        setEffectTypeForEffectItem(effectType);
-        if (!effectType) {
-            console.log("noMatch", effectType);
-        }
+        const effectType = effectTypesData.find((et) => et.type === effectItem?.type);
+        setEffectTypeForEffectItem(effectType || null);
     }, [effectItem]);
-
-    const handleClickOpenEditSampleItemDialog = () => {
-        setEditSampleItemDialogIsOpen(true);
-    };
-
-    const handleCloseEditSampleItemDialog = () => {
-        setEditSampleItemDialogIsOpen(false);
-    };
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem onClick={() => console.log("Edit clicked")} disableRipple>
-                <EditIcon />
-                Edit
-            </MenuItem>
-            <MenuItem disableRipple>
-                <FileCopyIcon />
-                Duplicate
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    // handleAddGroup();
-                }}
-                disableRipple
-            >
-                <ArchiveIcon />
-                Add group
-            </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(effectItem.id)} disableRipple>
+                    <IconRemove><AutoAwesome /></IconRemove>
+                    Remove effect
+                </MenuItem>
+            )}
         </Fragment>
     );
 
-    function getFileNameFromPath(path) {
-        return path?.split("/").pop();
-    }
-
-    const primaryText = "Effect";
-
-    const secondaryText = <ListItemSecondaryText>{effectTypeForEffectItem?.description}</ListItemSecondaryText>;
+    const primaryText = effectTypeForEffectItem?.description || "Effect";
+    const secondaryText = effectItem?.type && (
+        <ListItemSecondaryText>{effectItem.type}</ListItemSecondaryText>
+    );
 
     return (
         <Fragment>
             <DefaultListItem
                 elementItem={effectItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={handleClickOpenEditSampleItemDialog}
+                onEditButtonClick={() => setEditEffectItemDialogIsOpen(true)}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(effectItem, false) }}
-                    onClick={() => setIsExpanded(!isExpanded)}
                 >
                     <ListItemIcon
                         sx={{
@@ -110,13 +69,11 @@ export function EffectItemComponent({ effectItem }) {
                     <ListItemText primary={primaryText} secondary={secondaryText} />
                 </ListItemButton>
             </DefaultListItem>
-            {/*
-            <EditSampleItemDialog
-                sampleItem={sampleItem}
-                open={editSampleItemDialogIsOpen}
-                onClose={handleCloseEditSampleItemDialog}
+            <EditEffectItemDialog
+                effectItem={effectItem}
+                open={editEffectItemDialogIsOpen}
+                onClose={() => setEditEffectItemDialogIsOpen(false)}
             />
-            */}
         </Fragment>
     );
 }
