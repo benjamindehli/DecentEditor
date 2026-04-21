@@ -27,6 +27,8 @@ export class Midi {
                             return new Cc(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
                         case "note":
                             return new Note(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
+                        case "velocity":
+                            return new Velocity(childElement.$, childElement.$$, childElement["#name"], hierarchyPath);
                         default:
                             return null;
                     }
@@ -81,5 +83,11 @@ export class Midi {
 
 Midi.propTypes = {
     id: PropTypes.string,
-    childElements: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.instanceOf(Cc), PropTypes.instanceOf(Note)]))
+    childElements: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.instanceOf(Cc),
+            PropTypes.instanceOf(Note),
+            PropTypes.instanceOf(Velocity)
+        ])
+    )
 };
