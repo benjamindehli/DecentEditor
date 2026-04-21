@@ -1,14 +1,14 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { Folder, Image as ImageIcon } from "@mui/icons-material";
+import { Image as ImageIcon } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Template
-import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
@@ -16,47 +16,24 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
-export function ImageItemComponent({ imageItem }) {
+export function ImageItemComponent({ imageItem, onRemoveItem }) {
     const theme = useTheme();
-
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
-    const [isExpanded, setIsExpanded] = useState(false);
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(imageItem.id)} disableRipple>
+                    <IconRemove><ImageIcon /></IconRemove>
+                    Remove image
+                </MenuItem>
+            )}
         </Fragment>
     );
 
     const primaryText = "Image";
     const secondaryText = (
         <ListItemSecondaryText>
-            {imageItem?.path?.length ? imageItem?.path : "No image path added"}
+            {imageItem?.path?.length ? imageItem.path : "No image path set"}
         </ListItemSecondaryText>
     );
 
@@ -65,9 +42,9 @@ export function ImageItemComponent({ imageItem }) {
             <DefaultListItem
                 elementItem={imageItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
-                <ListItemButton sx={{ pl: getIndentSize(imageItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton sx={{ pl: getIndentSize(imageItem, false) }}>
                     <ListItemIcon
                         sx={{
                             minWidth: "32px",
