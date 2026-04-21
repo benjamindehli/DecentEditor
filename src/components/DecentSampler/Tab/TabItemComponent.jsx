@@ -1,10 +1,10 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Tab } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Image, Label, SmartButton, Tab, Tune } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -24,96 +24,120 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
 export function TabItemComponent({ tabItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [childCount, setChildCount] = useState(tabItem?.childElements?.length || 0);
+
+    function handleOnRemoveChildElement(id) {
+        tabItem.removeChildElementById(id);
+        setChildCount((n) => n - 1);
+    }
+
+    function hasChildren() {
+        return !!tabItem?.childElements?.length;
+    }
 
     const settingsMenuItems = (
         <Fragment>
             <MenuItem
                 onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
+                    tabItem.addControlItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
                 }}
                 disableRipple
             >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
+                <IconAdd><Tune /></IconAdd>
+                Add control
             </MenuItem>
             <MenuItem
                 onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
+                    tabItem.addButtonItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
                 }}
                 disableRipple
             >
-                <Folder />
-                Add multiple colors
+                <IconAdd><SmartButton /></IconAdd>
+                Add button
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addLabelItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><Label /></IconAdd>
+                Add label
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addImageItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><Image /></IconAdd>
+                Add image
             </MenuItem>
         </Fragment>
     );
 
-    function hasChildren() {
-        return !!tabItem?.childElements?.length;
-    }
-    function renderNumberOfItemsForTypeString(type, numberOfItemsForType) {
-        if (!numberOfItemsForType) {
-            return null;
-        } else {
-            return `${numberOfItemsForType} ${type}${numberOfItemsForType > 1 ? "s" : ""}`;
-        }
+    function renderNumberOfItemsForTypeString(type, count) {
+        if (!count) return null;
+        return `${count} ${type}${count > 1 ? "s" : ""}`;
     }
 
-    function renderSecondaryTextString(tabItem) {
-        const childElementTypes = {
-            button: 0,
-            control: 0,
-            image: 0,
-            label: 0,
-            ["labeled-knob"]: 0,
-            menu: 0
-        };
+    function renderSecondaryTextString() {
+        const types = { button: 0, control: 0, image: 0, label: 0, "labeled-knob": 0, menu: 0 };
         tabItem.childElements.forEach((childElement) => {
-            if (childElementTypes[childElement.elementType] !== undefined) {
-                childElementTypes[childElement.elementType]++;
+            if (types[childElement.elementType] !== undefined) {
+                types[childElement.elementType]++;
             }
         });
         return (
-            Object.keys(childElementTypes)
-                .map((type) => {
-                    const numberOfItemsForType = childElementTypes[type];
-                    return renderNumberOfItemsForTypeString(type, numberOfItemsForType);
-                })
-                ?.filter((numberOfItemsForTypeString) => numberOfItemsForTypeString)
-                ?.join(", ") || ""
+            Object.keys(types)
+                .map((type) => renderNumberOfItemsForTypeString(type, types[type]))
+                .filter(Boolean)
+                .join(", ") || ""
         );
     }
 
-    const primaryText = "Tab";
-    const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString(tabItem)}</ListItemSecondaryText>;
+    const tabName = tabItem?.name ? ` "${tabItem.name}"` : "";
+    const primaryText = `Tab${tabName}`;
+    const secondaryText = <ListItemSecondaryText>{renderSecondaryTextString()}</ListItemSecondaryText>;
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "button":
-                return <ButtonItemComponent key={childElement.id} buttonItem={childElement} />;
+                return (
+                    <ButtonItemComponent
+                        key={childElement.id}
+                        buttonItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             case "control":
-                return <ControlItemComponent key={childElement.id} controlItem={childElement} />;
+                return (
+                    <ControlItemComponent
+                        key={childElement.id}
+                        controlItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             case "image":
-                return <ImageItemComponent key={childElement.id} imageItem={childElement} />;
+                return <ImageItemComponent key={childElement.id} imageItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
             case "label":
-                return <LabelItemComponent key={childElement.id} labelItem={childElement} />;
+                return <LabelItemComponent key={childElement.id} labelItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
             case "labeled-knob":
-                return <LabeledKnobItemComponent key={childElement.id} labeledKnobItem={childElement} />;
+                return <LabeledKnobItemComponent key={childElement.id} labeledKnobItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
             case "menu":
-                return <MenuItemComponent key={childElement.id} menuItem={childElement} />;
+                return <MenuItemComponent key={childElement.id} menuItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
             default:
                 return null;
         }
@@ -124,7 +148,7 @@ export function TabItemComponent({ tabItem }) {
             <DefaultListItem
                 elementItem={tabItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(tabItem, hasChildren()) }}
