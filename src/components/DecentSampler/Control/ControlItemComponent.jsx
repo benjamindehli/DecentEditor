@@ -1,58 +1,57 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Tune } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Tune } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
 import { BindingItemComponent } from "../Binding/BindingItemComponent";
+import { EditControlItemDialog } from "./Dialogs/EditControlItemDialog";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
+import { IconControllableParameter } from "@/components/Template/Icons/IconControllableParameter";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
-export function ControlItemComponent({ controlItem }) {
+export function ControlItemComponent({ controlItem, onRemoveItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [editControlItemDialogIsOpen, setEditControlItemDialogIsOpen] = useState(false);
+    const [numberOfBindings, setNumberOfBindings] = useState(controlItem?.childElements?.length || 0);
+
+    function handleOnRemoveBinding(bindingId) {
+        controlItem.removeChildElementById(bindingId);
+        setNumberOfBindings((n) => n - 1);
+    }
+
+    function handleAddBinding() {
+        controlItem.addBindingItem({});
+        setIsExpanded(true);
+        setNumberOfBindings((n) => n + 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
+            <MenuItem onClick={handleAddBinding} disableRipple>
+                <IconAdd><IconControllableParameter /></IconAdd>
+                Add binding
             </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(controlItem.id)} disableRipple>
+                    <IconRemove><Tune /></IconRemove>
+                    Remove control
+                </MenuItem>
+            )}
         </Fragment>
     );
 
@@ -71,15 +70,20 @@ export function ControlItemComponent({ controlItem }) {
 
     const secondaryText = (
         <ListItemSecondaryText>
-            {controlItem?.childElements?.length || 0}{" "}
-            {controlItem?.childElements?.length === 1 ? "binding" : "bindings"}
+            {numberOfBindings} {numberOfBindings === 1 ? "binding" : "bindings"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "binding":
-                return <BindingItemComponent key={childElement.id} bindingItem={childElement} />;
+                return (
+                    <BindingItemComponent
+                        key={childElement.id}
+                        bindingItem={childElement}
+                        onRemoveItem={handleOnRemoveBinding}
+                    />
+                );
             default:
                 return null;
         }
@@ -90,7 +94,7 @@ export function ControlItemComponent({ controlItem }) {
             <DefaultListItem
                 elementItem={controlItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+                onEditButtonClick={() => setEditControlItemDialogIsOpen(true)}
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(controlItem, hasChildren()) }}
@@ -116,6 +120,11 @@ export function ControlItemComponent({ controlItem }) {
                     </List>
                 </Collapse>
             )}
+            <EditControlItemDialog
+                controlItem={controlItem}
+                open={editControlItemDialogIsOpen}
+                onClose={() => setEditControlItemDialogIsOpen(false)}
+            />
         </Fragment>
     );
 }
