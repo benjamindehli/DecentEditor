@@ -3,17 +3,14 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { ChevronRight, Discount, ExpandMore } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { ChevronRight, Discount, ExpandMore, LocalOffer } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
 import { TagItemComponent } from "../Tag/TagItemComponent";
 
 // Template
+import { IconAdd } from "@/components/Template/Icons/IconAdd";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
@@ -25,6 +22,18 @@ export function TagsItemComponent({ tagsItem }) {
     const theme = useTheme();
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfTags, setNumberOfTags] = useState(tagsItem?.childElements?.length || 0);
+
+    function handleAddTag() {
+        tagsItem.addTagItem({});
+        setIsExpanded(true);
+        setNumberOfTags((n) => n + 1);
+    }
+
+    function handleOnRemoveTag(tagId) {
+        tagsItem.removeChildElementById(tagId);
+        setNumberOfTags((n) => n - 1);
+    }
 
     function hasChildren() {
         return !!tagsItem?.childElements?.length;
@@ -32,26 +41,9 @@ export function TagsItemComponent({ tagsItem }) {
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem disableRipple>
-                <EditIcon />
-                Edit
-            </MenuItem>
-            <MenuItem disableRipple>
-                <FileCopyIcon />
-                Duplicate
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    handleAddGroup();
-                }}
-                disableRipple
-            >
-                <ArchiveIcon />
-                Add group
-            </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
+            <MenuItem onClick={handleAddTag} disableRipple>
+                <IconAdd><LocalOffer /></IconAdd>
+                Add tag
             </MenuItem>
         </Fragment>
     );
@@ -60,14 +52,20 @@ export function TagsItemComponent({ tagsItem }) {
 
     const secondaryText = (
         <ListItemSecondaryText>
-            {tagsItem?.childElements?.length || 0} {tagsItem?.childElements?.length === 1 ? "tag" : "tags"}
+            {numberOfTags} {numberOfTags === 1 ? "tag" : "tags"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "tag":
-                return <TagItemComponent key={childElement.id} tagItem={childElement} />;
+                return (
+                    <TagItemComponent
+                        key={childElement.id}
+                        tagItem={childElement}
+                        onRemoveItem={handleOnRemoveTag}
+                    />
+                );
             default:
                 return null;
         }
@@ -78,7 +76,7 @@ export function TagsItemComponent({ tagsItem }) {
             <DefaultListItem
                 elementItem={tagsItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(tagsItem, hasChildren()) }}

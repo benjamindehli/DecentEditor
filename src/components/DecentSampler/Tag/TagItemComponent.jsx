@@ -1,16 +1,13 @@
 // Dependencies
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 // Material UI
 import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { LocalOffer, LocalOfferOutlined } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Template
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
@@ -18,43 +15,17 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-export function TagItemComponent({ tagItem }) {
+export function TagItemComponent({ tagItem, onRemoveItem }) {
     const theme = useTheme();
-
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [editTagItemDialogIsOpen, setEditTagItemDialogIsOpen] = useState(false);
-
-    const handleClickOpenEditTagItemDialog = () => {
-        setEditTagItemDialogIsOpen(true);
-    };
-
-    const handleCloseEditTagItemDialog = () => {
-        setEditTafItemDialogIsOpen(false);
-    };
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem onClick={() => console.log("Edit clicked")} disableRipple>
-                <EditIcon />
-                Edit
-            </MenuItem>
-            <MenuItem disableRipple>
-                <FileCopyIcon />
-                Duplicate
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    console.log("add color");
-                }}
-                disableRipple
-            >
-                <ArchiveIcon />
-                Add group
-            </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(tagItem.id)} disableRipple>
+                    <IconRemove><LocalOffer /></IconRemove>
+                    Remove tag
+                </MenuItem>
+            )}
         </Fragment>
     );
 
@@ -66,9 +37,9 @@ export function TagItemComponent({ tagItem }) {
             <DefaultListItem
                 elementItem={tagItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={handleClickOpenEditTagItemDialog}
+
             >
-                <ListItemButton sx={{ pl: getIndentSize(tagItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton sx={{ pl: getIndentSize(tagItem, false) }}>
                     <ListItemIcon
                         sx={{
                             minWidth: "32px",
