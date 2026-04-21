@@ -51,6 +51,15 @@ export class Modulators {
     getEnvelopeItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Envelope);
     }
+    addLfoItem(props) {
+        this.childElements.push(new Lfo(props || {}, null, "lfo", this.hierarchyPath));
+    }
+    addEnvelopeItem(props) {
+        this.childElements.push(new Envelope(props || {}, null, "envelope", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

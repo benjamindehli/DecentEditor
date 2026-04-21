@@ -49,6 +49,21 @@ export class Midi {
     getNoteItemByIndex(index) {
         return this.getNoteItems()[index];
     }
+    getVelocityItems() {
+        return this.childElements?.filter((childElement) => childElement instanceof Velocity);
+    }
+    addCcItem(props) {
+        this.childElements.push(new Cc(props || {}, null, "cc", this.hierarchyPath));
+    }
+    addNoteItem(props) {
+        this.childElements.push(new Note(props || {}, null, "note", this.hierarchyPath));
+    }
+    addVelocityItem() {
+        this.childElements.push(new Velocity({}, null, "velocity", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

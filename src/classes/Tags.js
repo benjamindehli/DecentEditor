@@ -33,6 +33,12 @@ export class Tags {
     getTagItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Tag);
     }
+    addTagItem(props) {
+        this.childElements.push(new Tag(props || {}, "tag", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

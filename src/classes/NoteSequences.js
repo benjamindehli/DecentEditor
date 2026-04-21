@@ -36,6 +36,12 @@ export class NoteSequences {
     getSequenceItemByIndex(index) {
         return this.getSequenceItems()[index];
     }
+    addSequenceItem(props) {
+        this.childElements.push(new Sequence(props || {}, null, "sequence", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {};
         jsonObject["#name"] = this.elementType;

@@ -5,6 +5,9 @@ import PropTypes from "prop-types";
 // Classes
 import { Color } from "./Color";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Keyboard {
     constructor(props, childElements, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
@@ -51,7 +54,10 @@ export class Keyboard {
         return this.getColorItems()[index];
     }
     addColorItem(props) {
-        this.childElements.push(new Color(props, "group", this.hierarchyPath));
+        this.childElements.push(new Color(props || {}, "color", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
     }
     toXml(decentSampler) {
         const xmlBody = jsonToXml(this.toJson(decentSampler));

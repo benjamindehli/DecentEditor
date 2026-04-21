@@ -47,6 +47,12 @@ export class Note {
     getBindingItemByIndex(index) {
         return this.getBindingItems()[index];
     }
+    addBindingItem(props) {
+        this.childElements.push(new Binding(props || {}, "binding", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

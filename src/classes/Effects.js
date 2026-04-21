@@ -37,7 +37,10 @@ export class Effects {
         return this.getEffectItems()[index];
     }
     addEffectItem(props) {
-        this.childElements.push(new Effect(props, null, "effect", this.hierarchyPath));
+        this.childElements.push(new Effect(props || {}, "effect", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
     }
     toJson(decentSampler) {
         const jsonObject = {};

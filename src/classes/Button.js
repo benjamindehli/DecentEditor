@@ -52,6 +52,12 @@ export class Button {
     getStateItemByIndex(index) {
         return this.getStateItems()[index];
     }
+    addStateItem(props) {
+        this.childElements.push(new State(props || {}, null, "state", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

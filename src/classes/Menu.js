@@ -45,6 +45,12 @@ export class Menu {
     getOptionItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Option);
     }
+    addOptionItem(props) {
+        this.childElements.push(new Option(props || {}, null, "option", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {

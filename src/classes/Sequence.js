@@ -36,6 +36,12 @@ export class Sequence {
     getNoteItems() {
         return this.childElements?.filter((childElement) => childElement instanceof Note);
     }
+    addNoteItem(props) {
+        this.childElements.push(new Note(props || {}, null, "note", this.hierarchyPath));
+    }
+    removeChildElementById(id) {
+        this.childElements = this.childElements.filter((childElement) => childElement.id !== id);
+    }
     toJson(decentSampler) {
         const jsonObject = {
             $: {
