@@ -142,7 +142,6 @@ export default function Home() {
                 justifyContent={!showXmlPreview ? "center" : "space-between"}
             >
                 <Grid
-                    item
                     sx={{
                         width: elementSectionWidth,
                         height: "calc(100vh - 64px)",
