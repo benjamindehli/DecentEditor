@@ -16,7 +16,8 @@ export class Note {
         this.hierarchyPath = hierarchyPath;
         this.elementType = props?.elementType || elementType;
         this.enabled = props?.enabled;
-        this.note = props?.number;
+        this.note = props?.note;
+        this.swallowNotes = props?.swallowNotes;
         this.position = props?.position;
         this.velocity = props?.velocity;
         this.length = props?.length;
@@ -58,6 +59,7 @@ export class Note {
             $: {
                 enabled: this.enabled,
                 note: this.note,
+                swallowNotes: this.swallowNotes,
                 position: this.position,
                 velocity: this.velocity,
                 length: this.length
