@@ -1,58 +1,57 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
-import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, ShowChart } from "@mui/icons-material";
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { ChevronRight, ExpandMore, ShowChart } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
 import { BindingItemComponent } from "../Binding/BindingItemComponent";
+import { EditEnvelopeItemDialog } from "./Dialogs/EditEnvelopeItemDialog";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
+import { IconControllableParameter } from "@/components/Template/Icons/IconControllableParameter";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
-export function EnvelopeItemComponent({ envelopeItem }) {
+export function EnvelopeItemComponent({ envelopeItem, onRemoveItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [editEnvelopeItemDialogIsOpen, setEditEnvelopeItemDialogIsOpen] = useState(false);
+    const [numberOfBindings, setNumberOfBindings] = useState(envelopeItem?.childElements?.length || 0);
+
+    function handleOnRemoveBinding(bindingId) {
+        envelopeItem.removeChildElementById(bindingId);
+        setNumberOfBindings((n) => n - 1);
+    }
+
+    function handleAddBinding() {
+        envelopeItem.addBindingItem({});
+        setIsExpanded(true);
+        setNumberOfBindings((n) => n + 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
+            <MenuItem onClick={handleAddBinding} disableRipple>
+                <IconAdd><IconControllableParameter /></IconAdd>
+                Add binding
             </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(envelopeItem.id)} disableRipple>
+                    <IconRemove><ShowChart /></IconRemove>
+                    Remove envelope
+                </MenuItem>
+            )}
         </Fragment>
     );
 
@@ -60,21 +59,24 @@ export function EnvelopeItemComponent({ envelopeItem }) {
         return !!envelopeItem?.childElements?.length;
     }
 
-    const stateName = envelopeItem?.scope?.length && <Chip component="span" label={envelopeItem.scope} size="small" />;
-
-    const primaryText = <Fragment>Envelope {stateName}</Fragment>;
+    const primaryText = "Envelope";
 
     const secondaryText = (
         <ListItemSecondaryText>
-            {envelopeItem?.childElements?.length || 0}{" "}
-            {envelopeItem?.childElements?.length === 1 ? "binding" : "bindings"}
+            {numberOfBindings} {numberOfBindings === 1 ? "binding" : "bindings"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "binding":
-                return <BindingItemComponent key={childElement.id} bindingItem={childElement} />;
+                return (
+                    <BindingItemComponent
+                        key={childElement.id}
+                        bindingItem={childElement}
+                        onRemoveItem={handleOnRemoveBinding}
+                    />
+                );
             default:
                 return null;
         }
@@ -82,7 +84,11 @@ export function EnvelopeItemComponent({ envelopeItem }) {
 
     return (
         <Fragment>
-            <DefaultListItem elementItem={envelopeItem} settingsMenuItems={settingsMenuItems}>
+            <DefaultListItem
+                elementItem={envelopeItem}
+                settingsMenuItems={settingsMenuItems}
+                onEditButtonClick={() => setEditEnvelopeItemDialogIsOpen(true)}
+            >
                 <ListItemButton
                     sx={{ pl: getIndentSize(envelopeItem, hasChildren()) }}
                     onClick={() => setIsExpanded(!isExpanded)}
@@ -107,6 +113,11 @@ export function EnvelopeItemComponent({ envelopeItem }) {
                     </List>
                 </Collapse>
             )}
+            <EditEnvelopeItemDialog
+                envelopeItem={envelopeItem}
+                open={editEnvelopeItemDialogIsOpen}
+                onClose={() => setEditEnvelopeItemDialogIsOpen(false)}
+            />
         </Fragment>
     );
 }
