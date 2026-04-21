@@ -6,6 +6,9 @@ import PropTypes from "prop-types";
 import { Keyboard } from "./Keyboard";
 import { Tab } from "./Tab";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Ui {
     constructor(props, childElements, elementType) {
         const id = props?.id || uuidv4();
@@ -72,6 +75,11 @@ export class Ui {
     }
     getFirstTabItem() {
         return this.childElements.find((childElement) => childElement instanceof Tab);
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

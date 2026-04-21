@@ -2,6 +2,9 @@
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Tag {
     constructor(props, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
@@ -25,6 +28,11 @@ export class Tag {
         };
         jsonObject["#name"] = this.elementType;
         return jsonObject;
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

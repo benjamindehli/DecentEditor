@@ -53,6 +53,11 @@ export class Keyboard {
     addColorItem(props) {
         this.childElements.push(new Color(props, "group", this.hierarchyPath));
     }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
+    }
 }
 
 Keyboard.propTypes = {

@@ -5,6 +5,9 @@ import PropTypes from "prop-types";
 // Classes
 import { Note } from "./Note";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Sequence {
     constructor(props, childElements, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
@@ -46,6 +49,11 @@ export class Sequence {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

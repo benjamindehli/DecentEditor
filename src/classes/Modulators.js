@@ -6,6 +6,9 @@ import PropTypes from "prop-types";
 import { Lfo } from "./Lfo";
 import { Envelope } from "./Envelope";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Modulators {
     constructor(props, childElements, elementType, decentSampler) {
         const id = props?.id || uuidv4();
@@ -55,6 +58,11 @@ export class Modulators {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

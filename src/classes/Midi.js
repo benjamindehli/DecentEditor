@@ -5,6 +5,10 @@ import PropTypes from "prop-types";
 // Classes
 import { Cc } from "./Cc";
 import { Note } from "./Note";
+import { Velocity } from "./Velocity";
+
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
 
 export class Midi {
     constructor(props, childElements, elementType) {
@@ -52,6 +56,11 @@ export class Midi {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

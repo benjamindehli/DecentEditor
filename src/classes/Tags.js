@@ -5,6 +5,9 @@ import PropTypes from "prop-types";
 // Classes
 import { Tag } from "./Tag";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Tags {
     constructor(props, childElements, elementType) {
         const id = props?.id || uuidv4();
@@ -37,6 +40,11 @@ export class Tags {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

@@ -7,6 +7,9 @@ import { Group } from "./Group";
 import { Effects } from "./Effects";
 import { Sample } from "./Sample";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Groups {
     constructor(props, childElements, elementType) {
         const id = props?.id || uuidv4();
@@ -89,6 +92,11 @@ export class Groups {
             jsonObject.$$ = this.childElements?.map((childElement) => childElement.toJson(decentSampler));
         }
         return jsonObject;
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 

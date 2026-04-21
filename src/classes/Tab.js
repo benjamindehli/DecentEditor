@@ -11,6 +11,9 @@ import { Label } from "./Label";
 import { LabeledKnob } from "./LabeledKnob";
 import { State } from "./State";
 
+// Functions
+import { formatXml, jsonToXml } from "@/functions/converters";
+
 export class Tab {
     constructor(props, childElements, elementType, parentHierarchyPath) {
         const id = props?.id || uuidv4();
@@ -116,6 +119,11 @@ export class Tab {
     }
     addMenuItem(props) {
         this.childElements.push(new Menu(props, null, "menu", this.hierarchyPath));
+    }
+    toXml(decentSampler) {
+        const xmlBody = jsonToXml(this.toJson(decentSampler));
+        const xmlDoc = formatXml(xmlBody);
+        return xmlDoc;
     }
 }
 
