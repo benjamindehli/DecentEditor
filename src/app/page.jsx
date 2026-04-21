@@ -136,10 +136,8 @@ export default function Home() {
             <Grid
                 container
                 component="main"
-                sx={{ mx: 0, px: 0 }}
+                sx={{ mx: 0, px: 0, flexDirection: "row", justifyContent: !showXmlPreview ? "center" : "space-between" }}
                 columnSpacing={0}
-                direction="row"
-                justifyContent={!showXmlPreview ? "center" : "space-between"}
             >
                 <Grid
                     sx={{
