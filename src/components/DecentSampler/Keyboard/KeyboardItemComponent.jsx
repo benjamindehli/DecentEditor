@@ -4,7 +4,7 @@ import { Fragment, useContext, useState } from "react";
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, Piano } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, Palette, Piano } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -39,19 +39,9 @@ export function KeyboardItemComponent({ keyboardItem }) {
                 disableRipple
             >
                 <IconAdd>
-                    <Folder />
+                    <Palette />
                 </IconAdd>
                 Add color
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    keyboardItem.newColor();
-                    decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
             </MenuItem>
         </Fragment>
     );
