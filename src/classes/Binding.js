@@ -251,9 +251,9 @@ export class Binding {
                         : this.stateIndex,
                 bindingIndex: this.bindingRef
                     ? this.stateRef // If stateRef exists, then it's a button control
-                        ? this.getStateBindingRefFromBindingIndex(this.stateRef)
+                        ? this.getStateBindingIndexFromBindingRef(this.stateRef, this.bindingRef)
                         : this.noteRef // Else if noteRef exists, then it's a note
-                        ? this.getNoteBindingRefFromBindingIndex(this.noteRef)
+                        ? this.getNoteBindingIndexFromBindingRef(this.noteRef, this.bindingRef)
                         : this.bindingIndex
                     : this.bindingIndex,
                 tags: this.tags,
