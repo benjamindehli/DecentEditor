@@ -68,13 +68,13 @@ export class Binding {
         // Use named indexes instead of position
         if (this.type !== undefined && this.level !== undefined && this.parameter !== undefined) {
             this.controllableParameterRef = this.getControllableParameterRef(decentSampler);
-            if (this.controllableParameterRef.hasAdditionalParam("controlIndex")) {
+            if (this.controllableParameterRef?.hasAdditionalParam("controlIndex")) {
                 this.controlIndex = this.controlIndex || this.position;
             }
-            if (this.controllableParameterRef.hasAdditionalParam("effectIndex")) {
+            if (this.controllableParameterRef?.hasAdditionalParam("effectIndex")) {
                 this.effectIndex = this.effectIndex || this.position;
             }
-            if (this.controllableParameterRef.hasAdditionalParam("groupIndex")) {
+            if (this.controllableParameterRef?.hasAdditionalParam("groupIndex")) {
                 this.groupIndex = this.groupIndex || this.position;
             }
         }
