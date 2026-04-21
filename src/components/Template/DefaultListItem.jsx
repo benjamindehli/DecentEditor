@@ -19,22 +19,24 @@ export function DefaultListItem({ elementItem, settingsMenuItems, onEditButtonCl
             disablePadding
             secondaryAction={
                 <Fragment>
-                    <IconButton
-                        edge="start"
-                        aria-label={`edit ${elementItem?.elementType}`}
-                        id={`${elementItem?.id}-edit-button`}
-                        onClick={onEditButtonClick}
-                        sx={{
-                            "&:hover, &:focus": { "& svg": { opacity: open ? 1 : 0 } }
-                        }}
-                    >
-                        <EditIcon
+                    {onEditButtonClick && (
+                        <IconButton
+                            edge="start"
+                            aria-label={`edit ${elementItem?.elementType}`}
+                            id={`${elementItem?.id}-edit-button`}
+                            onClick={onEditButtonClick}
                             sx={{
-                                opacity: 0,
-                                transition: "0.2s"
+                                "&:hover, &:focus": { "& svg": { opacity: open ? 1 : 0 } }
                             }}
-                        />
-                    </IconButton>
+                        >
+                            <EditIcon
+                                sx={{
+                                    opacity: 0,
+                                    transition: "0.2s"
+                                }}
+                            />
+                        </IconButton>
+                    )}
                     <SettingsMenu elementItem={elementItem} menuItems={settingsMenuItems}></SettingsMenu>
                 </Fragment>
             }
