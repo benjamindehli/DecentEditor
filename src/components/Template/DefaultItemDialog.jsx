@@ -53,11 +53,13 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, conten
             <Dialog
                 open={open}
                 onClose={handleOnClose}
-                PaperProps={{
-                    component: "form",
-                    onSubmit: (event) => {
-                        event.preventDefault();
-                        handleOnClose();
+                slotProps={{
+                    paper: {
+                        component: "form",
+                        onSubmit: (event) => {
+                            event.preventDefault();
+                            handleOnClose();
+                        }
                     }
                 }}
             >
@@ -78,8 +80,8 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, conten
                             textColor="inherit"
                             variant="fullWidth"
                             onChange={handleTabChange}
-                            TabIndicatorProps={{
-                                sx: { backgroundColor: elementColor }
+                            slotProps={{
+                                indicator: { sx: { backgroundColor: elementColor } }
                             }}
                             aria-label={`tabs for editing ${elementItem.elementType}`}
                         >

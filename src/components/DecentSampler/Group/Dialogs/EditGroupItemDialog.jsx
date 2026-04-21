@@ -51,7 +51,7 @@ export function EditGroupItemDialog({ groupItem, open, onClose }) {
                                 <Switch
                                     checked={enabled}
                                     onChange={handleEnabledOnChange}
-                                    inputProps={{ "aria-label": "controlled" }}
+                                    slotProps={{ input: { "aria-label": "controlled" } }}
                                     color="primary"
                                     sx={{ ml: 1 }}
                                 />

@@ -37,8 +37,8 @@ export function SettingsMenu({ elementItem, menuItems = [] }) {
         <Fragment>
             <StyledMenu
                 id={menuId}
-                MenuListProps={{
-                    "aria-labelledby": menuButtonId
+                slotProps={{
+                    list: { "aria-labelledby": menuButtonId }
                 }}
                 anchorEl={settingsAnchorEl}
                 open={settingsOpen}
