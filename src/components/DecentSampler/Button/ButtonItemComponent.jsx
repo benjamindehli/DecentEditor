@@ -1,10 +1,10 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, SmartButton } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, SmartButton, ToggleOn } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -12,6 +12,7 @@ import { StateItemComponent } from "../State/StateItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
 
@@ -19,40 +20,35 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
-export function ButtonItemComponent({ buttonItem }) {
+export function ButtonItemComponent({ buttonItem, onRemoveItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfStates, setNumberOfStates] = useState(buttonItem?.childElements?.length || 0);
+
+    function handleOnRemoveState(stateId) {
+        buttonItem.removeChildElementById(stateId);
+        setNumberOfStates((n) => n - 1);
+    }
+
+    function handleAddState() {
+        buttonItem.addStateItem({});
+        setIsExpanded(true);
+        setNumberOfStates((n) => n + 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
+            <MenuItem onClick={handleAddState} disableRipple>
+                <IconAdd><ToggleOn /></IconAdd>
+                Add state
             </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(buttonItem.id)} disableRipple>
+                    <IconRemove><SmartButton /></IconRemove>
+                    Remove button
+                </MenuItem>
+            )}
         </Fragment>
     );
 
@@ -60,26 +56,32 @@ export function ButtonItemComponent({ buttonItem }) {
         return !!buttonItem?.childElements?.length;
     }
 
-    const chipLabel =
-        buttonItem?.mainImage ||
-        buttonItem?.style ||
-        (buttonItem?.x && buttonItem?.y && `x: ${buttonItem.x}, y: ${buttonItem.y}`);
+    const chipLabel = buttonItem?.style || buttonItem?.mainImage ||
+        (buttonItem?.x !== undefined && buttonItem?.y !== undefined
+            ? `x: ${buttonItem.x}, y: ${buttonItem.y}`
+            : null);
 
-    let primaryInfoText;
-    if (!!chipLabel.length) {
-        primaryInfoText = <Chip component="span" label={chipLabel} size="small" />;
-    }
-    const primaryText = <Fragment>Button {primaryInfoText}</Fragment>;
+    const primaryText = (
+        <Fragment>
+            Button {chipLabel ? <Chip component="span" label={chipLabel} size="small" /> : null}
+        </Fragment>
+    );
     const secondaryText = (
         <ListItemSecondaryText>
-            {buttonItem?.childElements?.length || 0} {buttonItem?.childElements?.length === 1 ? "state" : "states"}
+            {numberOfStates} {numberOfStates === 1 ? "state" : "states"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "state":
-                return <StateItemComponent key={childElement.id} stateItem={childElement} />;
+                return (
+                    <StateItemComponent
+                        key={childElement.id}
+                        stateItem={childElement}
+                        onRemoveItem={handleOnRemoveState}
+                    />
+                );
             default:
                 return null;
         }
@@ -90,7 +92,7 @@ export function ButtonItemComponent({ buttonItem }) {
             <DefaultListItem
                 elementItem={buttonItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(buttonItem, hasChildren()) }}
