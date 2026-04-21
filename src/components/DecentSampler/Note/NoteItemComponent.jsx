@@ -1,10 +1,10 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Chip, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Folder, MusicNote } from "@mui/icons-material";
+import { ChevronRight, ExpandMore, MusicNote } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
@@ -12,47 +12,47 @@ import { BindingItemComponent } from "../Binding/BindingItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
+import { IconControllableParameter } from "@/components/Template/Icons/IconControllableParameter";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
+// Data
+import midiNotes from "@/data/midiNotes";
 
-export function NoteItemComponent({ noteItem }) {
+export function NoteItemComponent({ noteItem, onRemoveItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfBindings, setNumberOfBindings] = useState(noteItem?.childElements?.length || 0);
+
+    function handleOnRemoveBinding(bindingId) {
+        noteItem.removeChildElementById(bindingId);
+        setNumberOfBindings((n) => n - 1);
+    }
+
+    function handleAddBinding() {
+        noteItem.addBindingItem({});
+        setIsExpanded(true);
+        setNumberOfBindings((n) => n + 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem
-                onClick={() => {
-                    // keyboardItem.newColor();
-                    // decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <IconAdd>
-                    <Folder />
-                </IconAdd>
-                Add color
+            <MenuItem onClick={handleAddBinding} disableRipple>
+                <IconAdd><IconControllableParameter /></IconAdd>
+                Add binding
             </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    //   keyboardItem.newColor();
-                    //   decentSamplerContext.updateKeyboardItem(keyboardItem);
-                }}
-                disableRipple
-            >
-                <Folder />
-                Add multiple colors
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(noteItem.id)} disableRipple>
+                    <IconRemove><MusicNote /></IconRemove>
+                    Remove note
+                </MenuItem>
+            )}
         </Fragment>
     );
 
@@ -60,36 +60,36 @@ export function NoteItemComponent({ noteItem }) {
         return !!noteItem?.childElements?.length;
     }
 
-    function renderSecondaryText() {
-        if (noteItem?.childElements?.length) {
-            return (
-                <ListItemSecondaryText>
-                    {noteItem?.childElements?.length || 0}{" "}
-                    {noteItem?.childElements?.length === 1 ? "binding" : "bindings"}
-                </ListItemSecondaryText>
-            );
-        } else if (noteItem?.position || noteItem?.name || noteItem?.note || noteItem?.velocity) {
-            const noteItemInfo = [];
-            if (noteItem?.position) noteItemInfo.push(`Position: ${noteItem.position}`);
-            if (noteItem?.note) noteItemInfo.push(`Note: ${noteItem.note}`);
-            if (noteItem?.velocity) noteItemInfo.push(`Velocity: ${noteItem.velocity}`);
-            if (noteItem?.length) noteItemInfo.push(`Length: ${noteItem.length}`);
-            return <ListItemSecondaryText>{noteItemInfo.join(", ")}</ListItemSecondaryText>;
-        } else {
-            return <ListItemSecondaryText>No bindings</ListItemSecondaryText>;
+    function getNoteLabel() {
+        const noteNum = parseInt(noteItem?.note);
+        if (!isNaN(noteNum) && midiNotes[noteNum]) {
+            return `${midiNotes[noteNum].name}${midiNotes[noteNum].octave} (${noteNum})`;
         }
+        return noteItem?.note ?? "";
     }
 
-    const stateName = noteItem?.name?.length && <Chip component="span" label={noteItem.name} size="small" />;
+    const noteLabel = getNoteLabel();
+    const primaryInfoText = noteLabel ? <Chip component="span" label={noteLabel} size="small" /> : null;
+    const primaryText = <Fragment>Note {primaryInfoText}</Fragment>;
 
-    const primaryText = <Fragment>Note {stateName}</Fragment>;
-
-    const secondaryText = renderSecondaryText();
+    const secondaryText = (
+        <ListItemSecondaryText>
+            {numberOfBindings > 0
+                ? `${numberOfBindings} ${numberOfBindings === 1 ? "binding" : "bindings"}`
+                : "No bindings"}
+        </ListItemSecondaryText>
+    );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "binding":
-                return <BindingItemComponent key={childElement.id} bindingItem={childElement} />;
+                return (
+                    <BindingItemComponent
+                        key={childElement.id}
+                        bindingItem={childElement}
+                        onRemoveItem={handleOnRemoveBinding}
+                    />
+                );
             default:
                 return null;
         }
@@ -100,7 +100,7 @@ export function NoteItemComponent({ noteItem }) {
             <DefaultListItem
                 elementItem={noteItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(noteItem, hasChildren()) }}
