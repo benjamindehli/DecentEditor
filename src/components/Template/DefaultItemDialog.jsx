@@ -63,10 +63,10 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, conten
             >
                 <DialogTitle>
                     <Grid container>
-                        <Grid item sx={{ display: "flex", mr: 1 }}>
+                        <Grid sx={{ display: "flex", mr: 1 }}>
                             {dialogIcon}
                         </Grid>
-                        <Grid item>{dialogTitle}</Grid>
+                        <Grid>{dialogTitle}</Grid>
                     </Grid>
                 </DialogTitle>
 

@@ -66,15 +66,15 @@ export default function StateSelect({ stateBinding, onChange, open }) {
                         const optionValue = containsSelectedValue ? value : { controlRef: button, stateRef: state };
                         selectChildElements.push(
                             <MenuItem key={state.id} value={optionValue}>
-                                <Grid container spacing={1} alignItems="center">
-                                    <Grid item>
+                                <Grid container spacing={1} sx={{ alignItems: "center" }}>
+                                    <Grid>
                                         <Icon>
                                             <ToggleOn
                                                 sx={{ color: getColorForElementType("state")[theme.palette.mode] }}
                                             />
                                         </Icon>
                                     </Grid>
-                                    <Grid item>{state?.name}</Grid>
+                                    <Grid>{state?.name}</Grid>
                                 </Grid>
                             </MenuItem>
                         );

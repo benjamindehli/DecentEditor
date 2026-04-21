@@ -57,11 +57,11 @@ export default function BindingParameterSelect({ onChange, defaultValue }) {
 
                 return (
                     <li {...props} key={option.id}>
-                        <Grid container alignItems="center">
-                            <Grid item sx={{ display: "flex", width: 64 }}>
+                        <Grid container sx={{ alignItems: "center" }}>
+                            <Grid sx={{ display: "flex", width: 64 }}>
                                 <IconControllableParameter controllableParameter={option} />
                             </Grid>
-                            <Grid item sx={{ width: "calc(100% - 64px)", wordWrap: "break-word" }}>
+                            <Grid sx={{ width: "calc(100% - 64px)", wordWrap: "break-word" }}>
                                 {descriptionParts.map((part, index) => (
                                     <Box
                                         key={index}
@@ -86,7 +86,7 @@ export default function BindingParameterSelect({ onChange, defaultValue }) {
                                 )}
 
                                 <Grid container>
-                                    <Grid item xs={4}>
+                                    <Grid size={{ xs: 4 }}>
                                         {!!levelParts?.length && (
                                             <Typography variant="body2" color="text.secondary">
                                                 Level:{" "}
@@ -105,7 +105,7 @@ export default function BindingParameterSelect({ onChange, defaultValue }) {
                                             </Typography>
                                         )}
                                     </Grid>
-                                    <Grid item xs={8}>
+                                    <Grid size={{ xs: 8 }}>
                                         {!!typeParts?.length && (
                                             <Typography variant="body2" color="text.secondary">
                                                 Type:{" "}

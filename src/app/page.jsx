@@ -90,7 +90,7 @@ export default function Home() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
                         DecentEditor{selectedFileName ? `: ${selectedFileName}` : ""}
                     </Typography>
-                    <Grid flexBasis="fit-content" container flexDirection="row" justifyContent="right">
+                    <Stack direction="row" sx={{ flexBasis: "fit-content", justifyContent: "right" }}>
                         <ListItemButton dense component="label" onClick={toggleXmlPreview} disabled={!decentSamplerContext?.decentSampler}>
                             <Stack flexDirection="column" alignItems="center">
                                 {showXmlPreview ? <CodeOff /> : <Code />}
@@ -126,7 +126,7 @@ export default function Home() {
                                 <ListItemText sx={{ my: 0 }} primary="Save preset" />
                             </Stack>
                         </ListItemButton>
-                    </Grid>
+                    </Stack>
                 </Toolbar>
             </AppBar>
 
@@ -158,7 +158,7 @@ export default function Home() {
                     )}
                 </Grid>
                 {showXmlPreview && (
-                    <Grid item sx={{ width: `calc(100% - ${elementSectionWidth})`, mt: 0, mb: 0 }}>
+                    <Grid sx={{ width: `calc(100% - ${elementSectionWidth})`, mt: 0, mb: 0 }}>
                         <Paper
                             sx={{
                                 p: 0,

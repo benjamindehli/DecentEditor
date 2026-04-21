@@ -66,15 +66,15 @@ export default function GroupEffectSelect({ groupRef, effectRef, onChange, open 
                         const value = containsDefaultValue ? defaultValue : { groupRef: group, effectRef: effect };
                         selectChildElements.push(
                             <MenuItem key={effect.id} value={value}>
-                                <Grid container spacing={1} alignItems="center">
-                                    <Grid item>
+                                <Grid container spacing={1} sx={{ alignItems: "center" }}>
+                                    <Grid>
                                         <Icon>
                                             <Tune
                                                 sx={{ color: getColorForElementType("effect")[theme.palette.mode] }}
                                             />
                                         </Icon>
                                     </Grid>
-                                    <Grid item>{getEffectTypeForEffectItem(effect).description}</Grid>
+                                    <Grid>{getEffectTypeForEffectItem(effect).description}</Grid>
                                 </Grid>
                             </MenuItem>
                         );

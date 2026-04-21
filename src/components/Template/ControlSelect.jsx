@@ -122,11 +122,11 @@ export default function ControlSelect({ controlBinding, onChange, open }) {
                         const chipLabel = getChipLabelForElementType(elementType, element);
                         selectChildElements.push(
                             <MenuItem key={element.id} value={optionValue}>
-                                <Grid container spacing={1} alignItems="center">
-                                    <Grid item>
+                                <Grid container spacing={1} sx={{ alignItems: "center" }}>
+                                    <Grid>
                                         <Icon>{getIconForElementType(elementType)}</Icon>
                                     </Grid>
-                                    <Grid item>
+                                    <Grid>
                                         {getLabelForElementType(elementType)}{" "}
                                         {!!chipLabel?.length && (
                                             <Chip component="span" size="small" label={chipLabel} />
