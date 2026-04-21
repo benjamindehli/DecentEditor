@@ -1,5 +1,5 @@
 // Dependencies
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useState } from "react";
 
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
@@ -19,22 +19,24 @@ import { DefaultListItem } from "@/components/Template/DefaultListItem";
 import { getIndentSize } from "@/functions/helpers";
 import { getColorForElementType } from "@/functions/styles";
 
-// Store
-import DecentSamplerContext from "@/store/DecentSamplerContext";
-
 export function KeyboardItemComponent({ keyboardItem }) {
     const theme = useTheme();
 
-    const decentSamplerContext = useContext(DecentSamplerContext);
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [numberOfColorItems, setNumberOfColorItems] = useState(keyboardItem?.childElements?.length || 0);
+
+    function handleOnRemoveChildElement(itemId) {
+        keyboardItem.removeChildElementById(itemId);
+        setNumberOfColorItems((n) => n - 1);
+    }
 
     const settingsMenuItems = (
         <Fragment>
             <MenuItem
                 onClick={() => {
-                    keyboardItem.newColor();
-                    decentSamplerContext.updateKeyboardItem(keyboardItem);
+                    keyboardItem.addColorItem({});
+                    setIsExpanded(true);
+                    setNumberOfColorItems((n) => n + 1);
                 }}
                 disableRipple
             >
@@ -53,14 +55,20 @@ export function KeyboardItemComponent({ keyboardItem }) {
     const primaryText = "Keyboard";
     const secondaryText = (
         <ListItemSecondaryText>
-            {keyboardItem?.childElements?.length || 0} {keyboardItem?.childElements?.length === 1 ? "color" : "colors"}
+            {numberOfColorItems} {numberOfColorItems === 1 ? "color" : "colors"}
         </ListItemSecondaryText>
     );
 
     function renderChildElement(childElement) {
         switch (childElement?.elementType) {
             case "color":
-                return <ColorItemComponent key={childElement.id} colorItem={childElement} />;
+                return (
+                    <ColorItemComponent
+                        key={childElement.id}
+                        colorItem={childElement}
+                        onRemoveItem={handleOnRemoveChildElement}
+                    />
+                );
             default:
                 return null;
         }
@@ -71,7 +79,7 @@ export function KeyboardItemComponent({ keyboardItem }) {
             <DefaultListItem
                 elementItem={keyboardItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={() => console.log("onClick")}
+
             >
                 <ListItemButton
                     sx={{ pl: getIndentSize(keyboardItem, hasChildren()) }}
