@@ -3,10 +3,6 @@ import { Fragment, useState } from "react";
 
 // Material UI
 import { ListItemButton, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 // Components
 import { EditColorItemDialog } from "./EditColorItemDialog";
@@ -15,6 +11,7 @@ import { EditColorItemDialog } from "./EditColorItemDialog";
 import { IconColor } from "@/components/Template/Icons/IconColor";
 import { ListItemSecondaryText } from "@/components/Template/ListItemSecondaryText";
 import { DefaultListItem } from "@/components/Template/DefaultListItem";
+import { IconRemove } from "@/components/Template/Icons/IconRemove";
 
 // Functions
 import { getIndentSize } from "@/functions/helpers";
@@ -22,54 +19,32 @@ import { getIndentSize } from "@/functions/helpers";
 // Data
 import midiNotes from "@/data/midiNotes";
 
-export function ColorItemComponent({ colorItem }) {
-    const [isExpanded, setIsExpanded] = useState(false);
+export function ColorItemComponent({ colorItem, onRemoveItem }) {
     const [editColorItemDialogIsOpen, setEditColorItemDialogIsOpen] = useState(false);
-
-    const handleClickOpenEditColorItemDialog = () => {
-        setEditColorItemDialogIsOpen(true);
-    };
-
-    const handleCloseEditColorItemDialog = () => {
-        setEditColorItemDialogIsOpen(false);
-    };
 
     const settingsMenuItems = (
         <Fragment>
-            <MenuItem onClick={() => console.log("Edit clicked")} disableRipple>
-                <EditIcon />
-                Edit
-            </MenuItem>
-            <MenuItem disableRipple>
-                <FileCopyIcon />
-                Duplicate
-            </MenuItem>
-            <MenuItem
-                onClick={() => {
-                    console.log("add color");
-                }}
-                disableRipple
-            >
-                <ArchiveIcon />
-                Add group
-            </MenuItem>
-            <MenuItem disableRipple>
-                <MoreHorizIcon />
-                More
-            </MenuItem>
+            {onRemoveItem && (
+                <MenuItem onClick={() => onRemoveItem(colorItem.id)} disableRipple>
+                    <IconRemove><span style={{ width: 24, height: 24, display: "inline-block", borderRadius: "50%", background: convertColorValueToHex(colorItem.color) }} /></IconRemove>
+                    Remove color
+                </MenuItem>
+            )}
         </Fragment>
     );
 
     function convertColorValueToHex(hexColor) {
+        if (!hexColor) return "#000000";
         return `#${hexColor.substring(2, 8)}`;
     }
 
+    const loNote = parseInt(colorItem.loNote);
+    const hiNote = parseInt(colorItem.hiNote);
+
     const primaryText = "Color";
-    const secondaryText = (
+    const secondaryText = midiNotes[loNote] && midiNotes[hiNote] && (
         <ListItemSecondaryText>
-            Key {colorItem.loNote}({midiNotes[colorItem.loNote].name}
-            {midiNotes[colorItem.loNote].octave}) to key {colorItem.hiNote}({midiNotes[colorItem.hiNote].name}
-            {midiNotes[colorItem.hiNote].octave})
+            Key {loNote} ({midiNotes[loNote].name}{midiNotes[loNote].octave}) to key {hiNote} ({midiNotes[hiNote].name}{midiNotes[hiNote].octave})
         </ListItemSecondaryText>
     );
 
@@ -78,9 +53,9 @@ export function ColorItemComponent({ colorItem }) {
             <DefaultListItem
                 elementItem={colorItem}
                 settingsMenuItems={settingsMenuItems}
-                onEditButtonClick={handleClickOpenEditColorItemDialog}
+                onEditButtonClick={() => setEditColorItemDialogIsOpen(true)}
             >
-                <ListItemButton sx={{ pl: getIndentSize(colorItem, false) }} onClick={() => setIsExpanded(!isExpanded)}>
+                <ListItemButton sx={{ pl: getIndentSize(colorItem, false) }}>
                     <ListItemIcon sx={{ minWidth: "32px" }}>
                         <IconColor color={convertColorValueToHex(colorItem.color)} />
                     </ListItemIcon>
@@ -90,7 +65,7 @@ export function ColorItemComponent({ colorItem }) {
             <EditColorItemDialog
                 colorItem={colorItem}
                 open={editColorItemDialogIsOpen}
-                onClose={handleCloseEditColorItemDialog}
+                onClose={() => setEditColorItemDialogIsOpen(false)}
             />
         </Fragment>
     );

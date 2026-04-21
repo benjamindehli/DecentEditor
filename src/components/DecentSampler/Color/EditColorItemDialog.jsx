@@ -13,7 +13,10 @@ import { DefaultItemDialog } from "@/components/Template/DefaultItemDialog";
 import midiNotes from "@/data/midiNotes";
 
 export function EditColorItemDialog({ colorItem, open, onClose }) {
-    const [keyRangeValue, setKeyRangeValue] = useState([parseInt(colorItem.loNote), parseInt(colorItem.hiNote)]);
+    const [keyRangeValue, setKeyRangeValue] = useState([
+        parseInt(colorItem.loNote) || 0,
+        parseInt(colorItem.hiNote) || 127
+    ]);
 
     const handleKeyRangeChange = (event, keyRangeValue) => {
         setKeyRangeValue(keyRangeValue);
@@ -68,8 +71,8 @@ export function EditColorItemDialog({ colorItem, open, onClose }) {
 
     function valueLabelFormat(value) {
         const midiNote = midiNotes[value];
-        const midiNoteName = `${midiNote.name}${midiNote.octave}`;
-        return `${midiNoteName} (${value})`;
+        if (!midiNote) return String(value);
+        return `${midiNote.name}${midiNote.octave} (${value})`;
     }
 
     const tabs = [
