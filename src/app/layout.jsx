@@ -1,6 +1,6 @@
 // Material UI
 import { CssBaseline } from "@mui/material";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 
 // Store
 import { DecentSamplerContextProvider } from "@/store/DecentSamplerContext";
