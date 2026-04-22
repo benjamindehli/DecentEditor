@@ -50,19 +50,13 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, conten
 
     return (
         open && (
-            <Dialog
-                open={open}
-                onClose={handleOnClose}
-                slotProps={{
-                    paper: {
-                        component: "form",
-                        onSubmit: (event) => {
-                            event.preventDefault();
-                            handleOnClose();
-                        }
-                    }
-                }}
-            >
+            <Dialog open={open} onClose={handleOnClose}>
+                <form
+                    onSubmit={(event) => {
+                        event.preventDefault();
+                        handleOnClose();
+                    }}
+                >
                 <DialogTitle>
                     <Grid container>
                         <Grid sx={{ display: "flex", mr: 1 }}>
@@ -126,6 +120,7 @@ export function DefaultItemDialog({ elementItem, dialogIcon, dialogTitle, conten
                     </Button>
                     <Button type="submit">Close</Button>
                 </DialogActions>
+                </form>
             </Dialog>
         )
     );
