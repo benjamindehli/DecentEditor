@@ -1,7 +1,7 @@
 "use client";
 
 // Depenedencies
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import xml2js from "xml2js";
 
 // Material UI
@@ -29,10 +29,20 @@ export default function Home() {
 
     const [showXmlPreview, setShowXmlPreview] = useState(false);
     const [selectedFileName, setSelectedFileName] = useState(null);
+    const [xmlPreviewString, setXmlPreviewString] = useState("");
 
     function toggleXmlPreview() {
         setShowXmlPreview(!showXmlPreview);
     }
+
+    useEffect(() => {
+        if (!showXmlPreview || !decentSamplerContext?.decentSampler) return;
+        setXmlPreviewString(decentSamplerContext.decentSampler.toXml());
+        const interval = setInterval(() => {
+            setXmlPreviewString(decentSamplerContext.decentSampler.toXml());
+        }, 2500);
+        return () => clearInterval(interval);
+    }, [showXmlPreview, decentSamplerContext?.decentSampler]);
 
     function handleFileInputChange(e) {
         const file = e.target.files[0];
@@ -164,7 +174,7 @@ export default function Home() {
                                 height: "calc(100vh - 64px)"
                             }}
                         >
-                            <XmlPreview xmlString={decentSamplerContext?.decentSampler?.toXml()} />
+                            <XmlPreview xmlString={xmlPreviewString} />
                         </Paper>
                     </Grid>
                 )}
