@@ -56,7 +56,6 @@ export function GroupsItemComponent({ groupsItem }) {
             </MenuItem>
             <MenuItem
                 onClick={() => {
-                    console.log("Add multiple groups");
                 }}
                 disableRipple
             >

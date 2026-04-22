@@ -31,7 +31,6 @@ export function EditBindingItemDialog({ bindingItem, open, onClose }) {
     }
 
     function handleBindingParameterChange(value) {
-        console.log("handleBindingParameterChange", value);
         bindingItem.level = value.level;
         bindingItem.type = value.type;
         bindingItem.parameter = value.parameter;
@@ -39,12 +38,9 @@ export function EditBindingItemDialog({ bindingItem, open, onClose }) {
         setSelectedBindingParameter(value);
     }
 
-    function handleGroupEffectSelectOnChange(value) {
-        console.log("handleGroupEffectSelectOnChange", value);
-    }
+    function handleGroupEffectSelectOnChange(value) {}
 
     function handleControlSelectOnChange(value) {
-        console.log("handleControlSelectOnChange", value);
         setControlBinding(value);
         bindingItem.controlRef = value;
     }
@@ -90,7 +86,6 @@ export function EditBindingItemDialog({ bindingItem, open, onClose }) {
                             Whether or not this binding is enabled. Possible values: true, false. Default: true
                         </FormHelperText>
                     </FormControl>
-
                     <BindingParameterSelect
                         onChange={handleBindingParameterChange}
                         defaultValue={selectedBindingParameter}
