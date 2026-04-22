@@ -9,7 +9,7 @@ const effectTypesData = [
                 key: "resonance",
                 inputProps: {
                     minValue: "0",
-                    maxValue: "1",
+                    maxValue: "5",
                     step: "0.01",
                     type: "number"
                 },
@@ -42,7 +42,7 @@ const effectTypesData = [
                 key: "resonance",
                 inputProps: {
                     minValue: "0",
-                    maxValue: "1",
+                    maxValue: "5",
                     step: "0.01",
                     type: "number"
                 },
@@ -75,7 +75,7 @@ const effectTypesData = [
                 key: "resonance",
                 inputProps: {
                     minValue: "0",
-                    maxValue: "1",
+                    maxValue: "5",
                     step: "0.01",
                     type: "number"
                 },
@@ -108,7 +108,7 @@ const effectTypesData = [
                 key: "resonance",
                 inputProps: {
                     minValue: "0",
-                    maxValue: "1",
+                    maxValue: "5",
                     step: "0.01",
                     type: "number"
                 },
@@ -141,7 +141,7 @@ const effectTypesData = [
                 key: "resonance",
                 inputProps: {
                     minValue: "0",
-                    maxValue: "1",
+                    maxValue: "5",
                     step: "0.01",
                     type: "number"
                 },
