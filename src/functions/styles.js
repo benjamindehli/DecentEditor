@@ -20,24 +20,31 @@ const elementTypes = [
     "label",
     "labeled-knob",
     "lfo",
+    "line",
     "menu",
     "midi",
     "modulators",
+    "multiFrameImage",
     "note",
     "noteSequences",
     "option",
+    "oscilloscope",
+    "rectangle",
     "sample",
     "sequence",
     "state",
     "tab",
     "tag",
     "tags",
-    "ui"
+    "ui",
+    "x",
+    "xyPad",
+    "y"
 ];
 
 const hueValuesForElementTypes = [
-    296, 77, 154, 90, 347, 13, 64, 167, 321, 244, 26, 231, 180, 257, 39, 334, 129, 193, 283, 309, 51, 103, 206, 219,
-    116, 141, 270, 0
+    296, 77, 154, 90, 347, 13, 64, 167, 321, 244, 26, 231, 180, 257, 39, 22, 334, 129, 193, 55, 283, 309, 51, 88, 177,
+    103, 206, 219, 116, 141, 270, 0, 210, 240, 330
 ];
 
 const hueValuesForBindingTypes = [5, 38, 70, 103, 136, 169, 201, 234, 267, 300, 332];
