@@ -39,20 +39,21 @@ export default function GroupEffectSelect({ groupRef, effectRef, onChange, open 
 
     function renderSelectChildElements(groups) {
         const selectChildElements = [];
-        groups?.length &&
+        groups?.length > 0 &&
             groups.forEach((group, groupIndex) => {
                 const effects = group?.getFirstEffectsItem()?.getEffectItems();
 
-                if (!!effects?.length) {
-                    const tagList = !!group?.tags?.length ? (
-                        <Fragment>
-                            {group.tags.split(",").map((tag) => {
-                                return <Chip component="span" label={tag} key={tag} size="small" />;
-                            })}
-                        </Fragment>
-                    ) : (
-                        ""
-                    );
+                if (effects?.length > 0) {
+                    const tagList =
+                        group?.tags?.length > 0 ? (
+                            <Fragment>
+                                {group.tags.split(",").map((tag) => {
+                                    return <Chip component="span" label={tag} key={tag} size="small" />;
+                                })}
+                            </Fragment>
+                        ) : (
+                            ""
+                        );
 
                     selectChildElements.push(
                         <ListSubheader key={group.id}>
@@ -90,7 +91,7 @@ export default function GroupEffectSelect({ groupRef, effectRef, onChange, open 
 
     return (
         open &&
-        optionElements?.length && ( // Prevent warning with unmounted component
+        optionElements?.length > 0 && ( // Prevent warning with unmounted component
             <div>
                 <FormControl margin="dense" fullWidth variant="outlined">
                     <InputLabel id="group-effect-select-label" htmlFor="group-effect-select">
