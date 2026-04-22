@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: "/DecentEditor",
+    basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/DecentEditor",
     output: "export"
 };
 
