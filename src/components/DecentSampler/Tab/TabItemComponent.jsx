@@ -4,16 +4,21 @@ import { Fragment, useState } from "react";
 // Material UI
 import MenuItem from "@mui/material/MenuItem";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { ChevronRight, ExpandMore, Image, Label, SmartButton, Tab, Tune } from "@mui/icons-material";
+import { BurstMode, ChevronRight, CropSquare, ExpandMore, GraphicEq, HorizontalRule, Image, Label, ListAlt, OpenWith, SmartButton, Tab, Tune } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
 // Components
 import { ButtonItemComponent } from "../Button/ButtonItemComponent";
-import { ImageItemComponent } from "../Image/ImageItemComponent";
-import { MenuItemComponent } from "../Menu/MenuItemComponent";
 import { ControlItemComponent } from "../Control/ControlItemComponent";
+import { ImageItemComponent } from "../Image/ImageItemComponent";
 import { LabelItemComponent } from "../Label/LabelItemComponent";
 import { LabeledKnobItemComponent } from "../LabeledKnob/LabeledKnobItemComponent";
+import { LineItemComponent } from "../Line/LineItemComponent";
+import { MenuItemComponent } from "../Menu/MenuItemComponent";
+import { MultiFrameImageItemComponent } from "../MultiFrameImage/MultiFrameImageItemComponent";
+import { OscilloscopeItemComponent } from "../Oscilloscope/OscilloscopeItemComponent";
+import { RectangleItemComponent } from "../Rectangle/RectangleItemComponent";
+import { XyPadItemComponent } from "../XyPad/XyPadItemComponent";
 
 // Template
 import { IconAdd } from "@/components/Template/Icons/IconAdd";
@@ -85,6 +90,72 @@ export function TabItemComponent({ tabItem }) {
                 <IconAdd><Image /></IconAdd>
                 Add image
             </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addMultiFrameImageItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><BurstMode /></IconAdd>
+                Add multi-frame image
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addRectangleItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><CropSquare /></IconAdd>
+                Add rectangle
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addLineItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><HorizontalRule /></IconAdd>
+                Add line
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addOscilloscopeItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><GraphicEq /></IconAdd>
+                Add oscilloscope
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addMenuItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><ListAlt /></IconAdd>
+                Add menu
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    tabItem.addXyPadItem({});
+                    setIsExpanded(true);
+                    setChildCount((n) => n + 1);
+                }}
+                disableRipple
+            >
+                <IconAdd><OpenWith /></IconAdd>
+                Add XY pad
+            </MenuItem>
         </Fragment>
     );
 
@@ -94,7 +165,10 @@ export function TabItemComponent({ tabItem }) {
     }
 
     function renderSecondaryTextString() {
-        const types = { button: 0, control: 0, image: 0, label: 0, "labeled-knob": 0, menu: 0 };
+        const types = {
+            button: 0, control: 0, image: 0, label: 0, "labeled-knob": 0,
+            line: 0, menu: 0, multiFrameImage: 0, oscilloscope: 0, rectangle: 0, xyPad: 0
+        };
         tabItem.childElements.forEach((childElement) => {
             if (types[childElement.elementType] !== undefined) {
                 types[childElement.elementType]++;
@@ -136,8 +210,18 @@ export function TabItemComponent({ tabItem }) {
                 return <LabelItemComponent key={childElement.id} labelItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
             case "labeled-knob":
                 return <LabeledKnobItemComponent key={childElement.id} labeledKnobItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
+            case "line":
+                return <LineItemComponent key={childElement.id} lineItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
             case "menu":
                 return <MenuItemComponent key={childElement.id} menuItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
+            case "multiFrameImage":
+                return <MultiFrameImageItemComponent key={childElement.id} multiFrameImageItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
+            case "oscilloscope":
+                return <OscilloscopeItemComponent key={childElement.id} oscilloscopeItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
+            case "rectangle":
+                return <RectangleItemComponent key={childElement.id} rectangleItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
+            case "xyPad":
+                return <XyPadItemComponent key={childElement.id} xyPadItem={childElement} onRemoveItem={handleOnRemoveChildElement} />;
             default:
                 return null;
         }
