@@ -31,7 +31,6 @@ export class Keyboard {
             [];
     }
     init(decentSampler) {
-        console.log("Keyboard.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

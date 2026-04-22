@@ -37,7 +37,6 @@ export class Note {
             [];
     }
     init(decentSampler) {
-        console.log("Note.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

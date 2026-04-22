@@ -53,7 +53,6 @@ export class Tab {
             [];
     }
     init(decentSampler) {
-        console.log("Tab.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

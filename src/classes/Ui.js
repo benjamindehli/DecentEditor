@@ -41,7 +41,6 @@ export class Ui {
             [];
     }
     init(decentSampler) {
-        console.log("UI.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

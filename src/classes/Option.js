@@ -32,7 +32,6 @@ export class Option {
             [];
     }
     init(decentSampler) {
-        console.log("Option.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

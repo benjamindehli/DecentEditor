@@ -53,7 +53,6 @@ export class LabeledKnob {
             [];
     }
     init(decentSampler) {
-        console.log("LabeledKnob.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

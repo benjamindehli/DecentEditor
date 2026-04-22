@@ -24,7 +24,6 @@ export class Label {
         this.visible = props?.visible;
     }
     init(decentSampler) {
-        console.log("Label.init()");
     }
     toJson(decentSampler) {
         const jsonObject = {

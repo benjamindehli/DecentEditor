@@ -37,7 +37,6 @@ export class Envelope {
             [];
     }
     init(decentSampler) {
-        console.log("Envelope.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

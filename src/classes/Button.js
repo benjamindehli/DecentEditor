@@ -41,7 +41,6 @@ export class Button {
             [];
     }
     init(decentSampler) {
-        console.log("Button.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

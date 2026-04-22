@@ -37,7 +37,6 @@ export class Midi {
             [];
     }
     init(decentSampler) {
-        console.log("Midi.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

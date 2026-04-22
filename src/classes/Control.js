@@ -52,7 +52,6 @@ export class Control {
             [];
     }
     init(decentSampler) {
-        console.log("Binding.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

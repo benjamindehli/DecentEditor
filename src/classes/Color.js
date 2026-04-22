@@ -17,7 +17,6 @@ export class Color {
         this.color = props?.color;
     }
     init() {
-        console.log("Color.init()");
     }
     toJson() {
         const jsonObject = {

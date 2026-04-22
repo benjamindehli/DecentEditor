@@ -21,7 +21,6 @@ export class Image {
         this.visible = props?.visible;
     }
     init(decentSampler) {
-        console.log("Image.init()");
     }
     toJson(decentSampler) {
         const jsonObject = {

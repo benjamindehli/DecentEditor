@@ -34,7 +34,6 @@ export class Modulators {
             [];
     }
     init(decentSampler) {
-        console.log("Modulators.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

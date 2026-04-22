@@ -35,7 +35,6 @@ export class State {
             [];
     }
     init(decentSampler) {
-        console.log("State.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

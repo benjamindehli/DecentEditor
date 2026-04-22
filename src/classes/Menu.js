@@ -37,7 +37,6 @@ export class Menu {
             [];
     }
     init(decentSampler) {
-        console.log("Menu.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

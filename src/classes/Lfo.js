@@ -35,7 +35,6 @@ export class Lfo {
             [];
     }
     init(decentSampler) {
-        console.log("Lfo.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });

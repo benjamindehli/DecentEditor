@@ -32,7 +32,6 @@ export class Cc {
             [];
     }
     init(decentSampler) {
-        console.log("Cc.init()");
         this.childElements?.forEach((childElement) => {
             !!childElement?.init && childElement.init(decentSampler);
         });
