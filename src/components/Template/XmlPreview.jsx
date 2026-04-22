@@ -24,7 +24,7 @@ export function XmlPreview({ xmlString, wrapText }) {
     }, [xmlString]);
     return (
         <div className={classNameArrayToClassNameString(["code", theme.palette.mode])}>
-            <pre dangerouslySetInnerHTML={xmlData && { __html: xmlData }} className={!!wrapText && "wrap-text"}></pre>
+            <pre dangerouslySetInnerHTML={xmlData && { __html: xmlData }} className={wrapText ? "wrap-text" : undefined}></pre>
         </div>
     );
 }
