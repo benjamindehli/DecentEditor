@@ -33,7 +33,7 @@ export function DefaultColorField({ id, name, label, inputProps, onChange, getVa
                     format="hex"
                     onChange={handleOnChange}
                     value={value}
-                    inputProps={{ ...inputProps, "aria-label": labelWithFallback }}
+                    slotProps={{ htmlInput: { ...inputProps, "aria-label": labelWithFallback } }}
                 />
             </FormControl>
         </Fragment>
