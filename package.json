@@ -12,25 +12,25 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@headlessui/react": "^2.2.10",
-    "@mui/icons-material": "^9.0.0",
-    "@mui/material": "^9.0.0",
-    "@mui/material-nextjs": "^9.0.0",
+    "@mui/icons-material": "^9.0.1",
+    "@mui/material": "^9.0.1",
+    "@mui/material-nextjs": "^9.0.1",
     "autosuggest-highlight": "^3.3.4",
     "highlight.js": "^11.11.1",
-    "mui-color-input": "^8.0.0",
-    "next": "16.2.4",
+    "mui-color-input": "^9.0.0",
+    "next": "16.2.6",
     "prop-types": "^15.8.1",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "sass": "^1.99.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sass": "^1.100.0",
     "uuid": "^14.0.0",
     "xml-formatter": "^3.7.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
-    "eslint": "^10.2.1",
-    "eslint-config-next": "16.2.4"
+    "eslint": "^10.4.1",
+    "eslint-config-next": "16.2.6"
   },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }
